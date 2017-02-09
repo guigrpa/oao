@@ -1,0 +1,32 @@
+# GIT-NPM common
+# --------------
+# All projects
+logs
+*.log
+npm-debug.log*
+pids
+*.pid
+*.seed
+node_modules
+/coverage
+/.nyc_output
+/.nyc_tmp
+*.sublime-project
+*.sublime-workspace
+
+# Project-specific
+
+
+# NPM-specific
+# ------------
+# All projects
+/src
+/tools
+/test
+/package.coffee
+/ROADMAP.md
+/.travis.yml
+/.npmignore
+
+# Project-specific
+/docs

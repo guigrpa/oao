@@ -1,0 +1,51 @@
+parser: babel-eslint
+extends: airbnb
+rules:
+  eqeqeq: ['error', 'allow-null']
+  no-unused-expressions:
+    - error
+    - allowShortCircuit: true
+  no-use-before-define: off
+  no-multi-spaces: off
+  no-nested-ternary: off
+  no-cond-assign: ['error', 'except-parens']
+  no-underscore-dangle: off
+  comma-dangle:
+    - error
+    - arrays: always-multiline
+      objects: always-multiline
+      imports: always-multiline
+      exports: always-multiline
+      functions: ignore
+  no-plusplus:
+    - error
+    - allowForLoopAfterthoughts: true
+  no-continue: off
+  no-await-in-loop: off
+  key-spacing:
+    - warn
+    - beforeColon: false
+      afterColon: true
+      mode: 'minimum'
+  object-property-newline: off
+  class-methods-use-this: off
+  arrow-parens: ['error', 'always']
+  react/sort-comp: off
+  react/jsx-first-prop-new-line: off
+  react/jsx-indent: off
+  react/jsx-indent-props: off
+  react/jsx-closing-bracket-location: off
+  react/jsx-filename-extension: off
+  react/forbid-prop-types: off
+  react/prop-types: off
+  react/require-extension: off
+  react/require-default-props: off
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies: true
+      peerDependencies: true
+      optionalDependencies: false
+  import/prefer-default-export: off
+  jsx-a11y/no-static-element-interactions: off
+globals:
+  chrome: false
