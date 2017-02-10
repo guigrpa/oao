@@ -1,7 +1,7 @@
 import path from 'path';
 import { merge } from 'timm';
 import semver from 'semver';
-import { mainStory, chalk } from './utils/storyboard';
+import { mainStory, chalk } from 'storyboard';
 import readAllSpecs, { ROOT_PACKAGE } from './utils/readAllSpecs';
 import writeSpecs from './utils/writeSpecs';
 import { cp } from './utils/helpers';
@@ -12,8 +12,8 @@ const COPY_SPECS = [
   'homepage', 'bugs', 'repository',
 ];
 
-const run = async () => {
-  const allSpecs = await readAllSpecs();
+const run = async ({ src: srcPatterns }) => {
+  const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
   const rootSpecs = allSpecs[ROOT_PACKAGE].specs;
 
@@ -58,6 +58,8 @@ const run = async () => {
     const nextSpecs = merge(prevSpecs, commonSpecs);
     writeSpecs(specPath, nextSpecs);
   }
+
+  mainStory.warn('Please make sure you commit all changes before you attempt "oao publish"');
 };
 
 export default run;

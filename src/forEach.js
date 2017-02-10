@@ -1,8 +1,8 @@
 import listPaths from './utils/listPaths';
 import { exec } from './utils/helpers';
 
-const run = async (cmd) => {
-  const pkgPaths = await listPaths();
+const run = async (cmd, { src: srcPatterns }) => {
+  const pkgPaths = await listPaths(srcPatterns);
   for (let i = 0; i < pkgPaths.length; i += 1) {
     await exec(cmd, { cwd: pkgPaths[i] });
   }

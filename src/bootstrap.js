@@ -1,13 +1,13 @@
 import { omit, set as timmSet } from 'timm';
-import { mainStory, chalk } from './utils/storyboard';
+import { mainStory, chalk } from 'storyboard';
 import readAllSpecs, { ROOT_PACKAGE } from './utils/readAllSpecs';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/helpers';
 
 const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-const run = async () => {
-  const allSpecs = await readAllSpecs();
+const run = async ({ src: srcPatterns }) => {
+  const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
 
   // Pass 1: register each package with yarn, and install external deps

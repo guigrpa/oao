@@ -1,92 +1,187 @@
 import semver from 'semver';
 import inquirer from 'inquirer';
-import { exec } from './utils/helpers';
+import { mainStory, chalk } from 'storyboard';
 import readAllSpecs, { ROOT_PACKAGE } from './utils/readAllSpecs';
-import { mainStory, chalk } from './utils/storyboard';
+import writeSpecs from './utils/writeSpecs';
+import { exec } from './utils/helpers';
+import {
+  gitLastTag,
+  gitCurBranch,
+  gitUncommittedChanges,
+  gitUnpulledChanges,
+  gitDiffSinceIn,
+  gitCommitChanges,
+  gitAddTag,
+  gitPushWithTags,
+} from './utils/git';
 
-const run = async () => {
-  const allSpecs = await readAllSpecs();
-  const pkgNames = Object.keys(allSpecs);
+const DEBUG_SKIP_CHECKS = true;
+
+const run = async ({ src: srcPatterns }) => {
+  const allSpecs = await readAllSpecs(srcPatterns);
 
   // Confirm that we have run build
   const { confirmBuild } = await inquirer.prompt([{
     name: 'confirmBuild',
     type: 'confirm',
-    message: `Have you run ${chalk.cyan.bold('yarn run build')}?`,
+    message: 'Have you built all your packages for production?',
     default: false,
   }]);
   if (!confirmBuild) process.exit(0);
 
-  // Check current branch
-  let { stdout: branch } = await exec('git symbolic-ref --short HEAD', { logLevel: 'trace' });
-  branch = branch.trim();
-  if (branch !== 'master') {
-    mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
-    process.exit(1);
-  }
-  mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);
+  // Prepublish checks
+  await prepublishChecks();
 
-  // Check that the branch is clean
-  let { stdout: pending } = await exec('git status --porcelain', { logLevel: 'trace' });
-  pending = pending.trim();
-  if (pending !== '') {
-    mainStory.error(`Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(pending)}`);
-    process.exit(1);
+  // Get last tag and find packages requiring updates
+  const lastTag = await gitLastTag();
+  const dirty = await findPackagesToUpdate(allSpecs, lastTag);
+  if (!dirty.length) {
+    mainStory.info('No packages need to be published');
+    process.exit(0);
   }
-  mainStory.info('No uncommitted changes');
 
-  // Check remote history
-  // Ripped off from: https://github.com/sindresorhus/np/blob/master/lib/git.js
-  let { stdout: pulls } = await exec('git rev-list --count --left-only @{u}...HEAD', { logLevel: 'trace' });
-  pulls = pulls.trim();
-  if (pulls !== '0') {
-    mainStory.error('Remote history differs. Please pull changes');
-    process.exit(1);
-  }
-  mainStory.info('Remote history matches local history');
-
-  // Determine which packages need publishing
-  mainStory.info('Determining which packages need publishing...');
-  const dirtyPackages = {};
-  for (let i = 0; i < pkgNames.length; i++) {
-    const pkgName = pkgNames[i];
-    if (pkgName === ROOT_PACKAGE) continue;
-    const { specs } = allSpecs[pkgName];
-    if (specs.private) continue;
-    const { version } = specs;
-    try {
-      let { stdout: publishedVersion } = await exec(`npm show ${pkgName} version`, { logLevel: 'info' });
-      publishedVersion = publishedVersion.trim();
-      if (semver.gt(version, publishedVersion)) {
-        dirtyPackages[pkgName] = publishedVersion;
-      } else if (semver.lt(version, publishedVersion)) {
-        mainStory.error(`New version for ${pkgName} (${chalk.bold(version)}) < published version (${chalk.bold(publishedVersion)})!`);
-        process.exit(1);
-      }
-    } catch (err) {
-      dirtyPackages[pkgName] = 'unknown (not published?)';
-    }
-  }
-  const dirtyPkgNames = Object.keys(dirtyPackages);
-  dirtyPkgNames.forEach((name) => {
-    mainStory.info(`  - ${name}: ${chalk.cyan.bold(dirtyPackages[name])} -> ${chalk.cyan.bold(allSpecs[name].specs.version)}`);
-  });
+  // Determine a suitable version number
+  const masterVersion = await getMasterVersion(allSpecs, lastTag);
+  const nextVersion = await getNextVersion(masterVersion);
 
   // Confirm before publishing
   const { confirmPublish } = await inquirer.prompt([{
     name: 'confirmPublish',
     type: 'confirm',
-    message: 'Confirm publish?',
+    message: `Confirm publish (${chalk.yellow.bold(dirty.length)} package/s, ` +
+      `v${chalk.cyan.bold(nextVersion)})?`,
     default: false,
   }]);
   if (!confirmPublish) process.exit(0);
 
+  // Update package.json's for dirty packages AND THE ROOT PACKAGE
+  const dirtyPlusRoot = dirty.concat(ROOT_PACKAGE);
+  for (let i = 0; i < dirtyPlusRoot.length; i++) {
+    const pkgName = dirtyPlusRoot[i];
+    const { specPath, specs } = allSpecs[pkgName];
+    specs.version = nextVersion;
+    writeSpecs(specPath, specs);
+  }
+
+  // Commit, tag and push
+  await gitCommitChanges(`v${nextVersion}`);
+  await gitAddTag(`v${nextVersion}`);
+  await gitPushWithTags();
+
   // Publish
-  for (let i = 0; i < dirtyPkgNames.length; i++) {
-    const pkgName = dirtyPkgNames[i];
+  for (let i = 0; i < dirty.length; i++) {
+    const pkgName = dirty[i];
     const { pkgPath } = allSpecs[pkgName];
     await exec('npm publish', { cwd: pkgPath });
   }
 };
 
+// ------------------------------------------------
+// Helpers
+// ------------------------------------------------
+const prepublishChecks = async () => {
+  if (DEBUG_SKIP_CHECKS) mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
+
+  // Check current branch
+  const branch = await gitCurBranch();
+  if (branch !== 'master') {
+    mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
+    if (!DEBUG_SKIP_CHECKS) process.exit(1);
+  }
+  mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);
+
+  // Check that the branch is clean
+  const uncommitted = await gitUncommittedChanges();
+  if (uncommitted !== '') {
+    mainStory.error(`Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(uncommitted)}`);
+    if (!DEBUG_SKIP_CHECKS) process.exit(1);
+  }
+  mainStory.info('No uncommitted changes');
+
+  // Check remote history
+  const unpulled = await gitUnpulledChanges();
+  if (unpulled !== '0') {
+    mainStory.error('Remote history differs. Please pull changes');
+    if (!DEBUG_SKIP_CHECKS) process.exit(1);
+  }
+  mainStory.info('Remote history matches local history');
+};
+
+const findPackagesToUpdate = async (allSpecs, lastTag) => {
+  const pkgNames = Object.keys(allSpecs);
+  const dirty = [];
+  for (let i = 0; i < pkgNames.length; i++) {
+    const pkgName = pkgNames[i];
+    if (pkgName === ROOT_PACKAGE) continue;
+    const { pkgPath, specs } = allSpecs[pkgName];
+    if (specs.private) continue;
+    const diff = await gitDiffSinceIn(lastTag, pkgPath);
+    if (diff !== '') {
+      const numChanges = diff.split('\n').length;
+      mainStory.info(`- Package ${pkgName} (currently ${chalk.cyan.bold(specs.version)}) has changed (#files: ${numChanges})`);
+      dirty.push(pkgName);
+    }
+  }
+  return dirty;
+};
+
+const getMasterVersion = async (allSpecs, lastTag) => {
+  let masterVersion = allSpecs[ROOT_PACKAGE].specs.version;
+  if (lastTag != null) {
+    const tagVersion = semver.clean(lastTag);
+    mainStory.info(`Last tag found: ${chalk.yellow.bold(lastTag)}`);
+    if (tagVersion !== masterVersion) {
+      mainStory.warn(`Last tagged version ${chalk.cyan.bold(tagVersion)} does not match package.json version ${chalk.cyan.bold(masterVersion)}`);
+      mainStory.warn('This may cause inaccuracies when determining which packages ' +
+        'need to be released, since oao uses tags to detect package changes');
+      const { confirm } = await inquirer.prompt([{
+        name: 'confirm',
+        type: 'confirm',
+        message: 'Continue?',
+        default: false,
+      }]);
+      if (!confirm) process.exit(0);
+      if (semver.valid(tagVersion) && semver.gt(tagVersion, masterVersion)) {
+        masterVersion = tagVersion;
+      }
+      mainStory.warn(`Using ${chalk.cyan.bold(masterVersion)} as reference (the highest one of both)`);
+    }
+  } else {
+    mainStory.warn('Repo has no tags yet');
+  }
+  if (!semver.valid(masterVersion)) {
+    mainStory.error(`Master version ${chalk.cyan.bold(masterVersion)} is invalid. Please correct it manually`);
+    process.exit(1);
+  }
+  return masterVersion;
+};
+
+const getNextVersion = async (prevVersion) => {
+  const major = semver.inc(prevVersion, 'major');
+  const minor = semver.inc(prevVersion, 'minor');
+  const patch = semver.inc(prevVersion, 'patch');
+  const premajor = semver.inc(prevVersion, 'premajor');
+  const rc = prevVersion.indexOf('rc') < 0 ? `${major}-rc.0` : premajor;
+  const beta = prevVersion.indexOf('beta') < 0 ? `${major}-beta.0` : premajor;
+  const alpha = prevVersion.indexOf('alpha') < 0 ? `${major}-alpha.0` : premajor;
+  const { nextVersion } = await inquirer.prompt([{
+    name: 'nextVersion',
+    type: 'list',
+    message: `Current version is ${chalk.cyan.bold(prevVersion)}. Next one?`,
+    choices: [
+      { name: `Major (${chalk.cyan.bold(major)})`, value: major },
+      { name: `Minor (${chalk.cyan.bold(minor)})`, value: minor },
+      { name: `Patch (${chalk.cyan.bold(patch)})`, value: patch },
+      { name: `Release candidate (${chalk.cyan.bold(rc)})`, value: rc },
+      { name: `Beta (${chalk.cyan.bold(beta)})`, value: beta },
+      { name: `Alpha (${chalk.cyan.bold(alpha)})`, value: alpha },
+    ],
+    defaultValue: 2,
+  }]);
+  return nextVersion;
+};
+
+// ------------------------------------------------
+// Public
+// ------------------------------------------------
 export default run;

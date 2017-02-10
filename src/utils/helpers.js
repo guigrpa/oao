@@ -3,7 +3,7 @@
 import path from 'path';
 import shell from 'shelljs';
 import split from 'split';
-import { mainStory, chalk } from './storyboard';
+import { mainStory, chalk } from 'storyboard';
 
 const cd = (dir, { story = mainStory } = {}) => {
   story.trace(`Changing working directory to ${chalk.cyan.bold(dir)}...`);

@@ -1,12 +1,12 @@
 import path from 'path';
 import fs from 'fs';
-import { mainStory } from './storyboard';
+import { mainStory } from 'storyboard';
 import listPaths from './listPaths';
 
 const ROOT_PACKAGE = '__ROOT_PACKAGE__';
 
-const readAllSpecs = async () => {
-  const pkgPaths = await listPaths();
+const readAllSpecs = async (srcPatterns) => {
+  const pkgPaths = await listPaths(srcPatterns);
   pkgPaths.push('.');
   const allSpecs = {};
   mainStory.info('Reading all package.json files...');

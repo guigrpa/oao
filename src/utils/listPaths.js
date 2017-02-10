@@ -1,5 +1,5 @@
 import globby from 'globby';
 
-const listPaths = () => globby('packages/*');
+const listPaths = (srcPatterns) => globby(srcPatterns);
 
 export default listPaths;
