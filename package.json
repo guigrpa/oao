@@ -1,7 +1,7 @@
 {
   "name": "oao",
-  "version": "0.1.0",
-  "description": "An opinionated monorepo management tool",
+  "version": "0.2.0",
+  "description": "A Yarn-based, opinionated monorepo management tool",
   "bin": {
     "oao": "lib/index.js"
   },
@@ -17,7 +17,10 @@
   "keywords": [
     "monorepo",
     "lerna",
-    "mono-repo"
+    "mono-repo",
+    "yarn",
+    "publish",
+    "git"
   ],
   "author": "Guillermo Grau Panea",
   "license": "MIT",
