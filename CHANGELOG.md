@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (Feb. 12, 2017)
+## 0.3.0, 0.3.1 (Feb. 12, 2017)
 
 * Add configuration parameters to `oao publish`:
     - `--no-master` (allow publishing from non-`master` branches)

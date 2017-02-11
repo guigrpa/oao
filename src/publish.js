@@ -15,7 +15,7 @@ import {
   gitPushWithTags,
 } from './utils/git';
 
-const DEBUG_SKIP_CHECKS = true;
+const DEBUG_SKIP_CHECKS = false;
 
 const run = async ({
   src: srcPatterns,
@@ -91,12 +91,14 @@ const prepublishChecks = async ({ master }) => {
   if (DEBUG_SKIP_CHECKS) mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
 
   // Check current branch
-  if (master) {
-    const branch = await gitCurBranch();
-    if (branch !== 'master') {
+  const branch = await gitCurBranch();
+  if (branch !== 'master') {
+    if (master) {
       mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
       if (!DEBUG_SKIP_CHECKS) process.exit(1);
     }
+    mainStory.warn(`Publishing from a non-master branch: ${chalk.red.bold(branch)}`);
+  } else {
     mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);
   }
 
