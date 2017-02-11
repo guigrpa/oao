@@ -172,10 +172,10 @@ const getNextVersion = async (prevVersion) => {
   const major = semver.inc(prevVersion, 'major');
   const minor = semver.inc(prevVersion, 'minor');
   const patch = semver.inc(prevVersion, 'patch');
-  const premajor = semver.inc(prevVersion, 'premajor');
-  const rc = prevVersion.indexOf('rc') < 0 ? `${major}-rc.0` : premajor;
-  const beta = prevVersion.indexOf('beta') < 0 ? `${major}-beta.0` : premajor;
-  const alpha = prevVersion.indexOf('alpha') < 0 ? `${major}-alpha.0` : premajor;
+  const prerelease = semver.inc(prevVersion, 'prerelease');
+  const rc = prevVersion.indexOf('rc') < 0 ? `${major}-rc.0` : prerelease;
+  const beta = prevVersion.indexOf('beta') < 0 ? `${major}-beta.0` : prerelease;
+  const alpha = prevVersion.indexOf('alpha') < 0 ? `${major}-alpha.0` : prerelease;
   const { nextVersion } = await inquirer.prompt([{
     name: 'nextVersion',
     type: 'list',
