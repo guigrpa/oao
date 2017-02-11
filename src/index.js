@@ -29,6 +29,8 @@ createCommand('prepublish',
 
 createCommand('publish',
   'Publish updated packages')
+.option('--no-master', 'Allow publishing from a non-master branch')
+.option('--no-confirm', 'Do not ask for confirmation before publishing')
 .action((cmd) => publish(cmd.opts()));
 
 createCommand('reset-all-versions <version>',
@@ -40,4 +42,3 @@ createCommand('all <command>',
 .action((command, cmd) => { forEach(command, cmd.opts()); });
 
 program.parse(process.argv);
-

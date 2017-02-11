@@ -17,20 +17,26 @@ import {
 
 const DEBUG_SKIP_CHECKS = true;
 
-const run = async ({ src: srcPatterns }) => {
+const run = async ({
+  src: srcPatterns,
+  master,
+  confirm,
+}) => {
   const allSpecs = await readAllSpecs(srcPatterns);
 
   // Confirm that we have run build
-  const { confirmBuild } = await inquirer.prompt([{
-    name: 'confirmBuild',
-    type: 'confirm',
-    message: 'Have you built all your packages for production?',
-    default: false,
-  }]);
-  if (!confirmBuild) process.exit(0);
+  if (confirm) {
+    const { confirmBuild } = await inquirer.prompt([{
+      name: 'confirmBuild',
+      type: 'confirm',
+      message: 'Have you built all your packages for production?',
+      default: false,
+    }]);
+    if (!confirmBuild) process.exit(0);
+  }
 
   // Prepublish checks
-  await prepublishChecks();
+  await prepublishChecks({ master });
 
   // Get last tag and find packages requiring updates
   const lastTag = await gitLastTag();
@@ -45,14 +51,16 @@ const run = async ({ src: srcPatterns }) => {
   const nextVersion = await getNextVersion(masterVersion);
 
   // Confirm before publishing
-  const { confirmPublish } = await inquirer.prompt([{
-    name: 'confirmPublish',
-    type: 'confirm',
-    message: `Confirm publish (${chalk.yellow.bold(dirty.length)} package/s, ` +
-      `v${chalk.cyan.bold(nextVersion)})?`,
-    default: false,
-  }]);
-  if (!confirmPublish) process.exit(0);
+  if (confirm) {
+    const { confirmPublish } = await inquirer.prompt([{
+      name: 'confirmPublish',
+      type: 'confirm',
+      message: `Confirm publish (${chalk.yellow.bold(dirty.length)} package/s, ` +
+        `v${chalk.cyan.bold(nextVersion)})?`,
+      default: false,
+    }]);
+    if (!confirmPublish) process.exit(0);
+  }
 
   // Update package.json's for dirty packages AND THE ROOT PACKAGE
   const dirtyPlusRoot = dirty.concat(ROOT_PACKAGE);
@@ -79,16 +87,18 @@ const run = async ({ src: srcPatterns }) => {
 // ------------------------------------------------
 // Helpers
 // ------------------------------------------------
-const prepublishChecks = async () => {
+const prepublishChecks = async ({ master }) => {
   if (DEBUG_SKIP_CHECKS) mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
 
   // Check current branch
-  const branch = await gitCurBranch();
-  if (branch !== 'master') {
-    mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
-    if (!DEBUG_SKIP_CHECKS) process.exit(1);
+  if (master) {
+    const branch = await gitCurBranch();
+    if (branch !== 'master') {
+      mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
+      if (!DEBUG_SKIP_CHECKS) process.exit(1);
+    }
+    mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);
   }
-  mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);
 
   // Check that the branch is clean
   const uncommitted = await gitUncommittedChanges();
