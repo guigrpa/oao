@@ -31,6 +31,7 @@ createCommand('publish',
   'Publish updated packages')
 .option('--no-master', 'Allow publishing from a non-master branch')
 .option('--no-confirm', 'Do not ask for confirmation before publishing')
+.option('--publish-tag <tag>', 'Publish with a custom tag (instead of `latest`)')
 .action((cmd) => publish(cmd.opts()));
 
 createCommand('reset-all-versions <version>',

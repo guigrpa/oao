@@ -21,6 +21,7 @@ const run = async ({
   src: srcPatterns,
   master,
   confirm,
+  publishTag,
 }) => {
   const allSpecs = await readAllSpecs(srcPatterns);
 
@@ -80,7 +81,9 @@ const run = async ({
   for (let i = 0; i < dirty.length; i++) {
     const pkgName = dirty[i];
     const { pkgPath } = allSpecs[pkgName];
-    await exec('npm publish', { cwd: pkgPath });
+    let cmd = 'npm publish';
+    if (publishTag != null) cmd += ` --tag ${publishTag}`;
+    await exec(cmd, { cwd: pkgPath });
   }
 };
 
