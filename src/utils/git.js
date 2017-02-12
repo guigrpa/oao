@@ -48,8 +48,8 @@ const gitAddTag = async (tag) => {
 };
 
 const gitPushWithTags = async () => {
-  await exec('git push');
-  await exec('git push --tags');
+  await exec('git push --quiet', { logLevel: 'trace' });
+  await exec('git push --tags --quiet', { logLevel: 'trace' });
 };
 
 export {
