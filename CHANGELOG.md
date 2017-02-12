@@ -1,8 +1,11 @@
 # Changelog
 
+## 0.3.2 (Feb. 12, 2017)
+
 * Bugfixes:
-    - Fix prerelease version updates
-    - Move `babel-polyfill` to `dependencies` (#2)
+    - Fix prerelease version updates.
+    - Move `babel-polyfill` to `dependencies` (#2).
+    - Prevent normal `git push` output from being shown as errors.
 
 ## 0.3.0, 0.3.1 (Feb. 12, 2017)
 
