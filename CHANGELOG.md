@@ -1,5 +1,9 @@
 # Changelog
 
+* Bugfixes:
+    - Fix prerelease version updates
+    - Move `babel-polyfill` to `dependencies` (#2)
+
 ## 0.3.0, 0.3.1 (Feb. 12, 2017)
 
 * Add configuration parameters to `oao publish`:
