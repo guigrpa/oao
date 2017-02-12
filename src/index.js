@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'babel-polyfill';
 import program from 'commander';
-import 'storyboard/lib/withConsoleListener';
+import 'storyboard-preset-console';
 import bootstrap from './bootstrap';
 import prepublish from './prepublish';
 import publish from './publish';
