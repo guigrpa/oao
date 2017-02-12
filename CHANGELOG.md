@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0 (Feb. 12, 2017)
+
+* Greatly reduce the number of oao dependencies by bumping `storyboard` to v3 (prerelease).
+* Add configuration parameter to `oao publish`: `--publish-tag <tag>` (publishes with a custom tag, instead of `latest`).
+
 ## 0.3.3 (Feb. 12, 2017)
 
 * Fix bad repo links in `package.json`.
