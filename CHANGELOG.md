@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3 (Feb. 12, 2017)
+
+* Fix bad repo links in `package.json`.
+
 ## 0.3.2 (Feb. 12, 2017)
 
 * Bugfixes:

@@ -1,6 +1,6 @@
 {
   "name": "oao",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A Yarn-based, opinionated monorepo management tool",
   "bin": {
     "oao": "lib/index.js"
@@ -22,9 +22,9 @@
   "author": "Guillermo Grau Panea",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/guigrpa/mono-repo/issues"
+    "url": "https://github.com/guigrpa/oao/issues"
   },
-  "homepage": "https://github.com/guigrpa/mono-repo#readme",
+  "homepage": "https://github.com/guigrpa/oao#readme",
   "dependencies": {
     "commander": "2.9.0",
     "globby": "6.1.0",
