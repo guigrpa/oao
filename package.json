@@ -10,10 +10,7 @@
     "lint": "eslint src",
     "compile": "rm -rf lib && babel src -d lib"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/guigrpa/mono-repo.git"
-  },
+  "repository": "guigrpa/oao",
   "keywords": [
     "monorepo",
     "lerna",
