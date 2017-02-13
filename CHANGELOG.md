@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.4.1 (Feb. 13, 2017)
+
 * Bump `storyboard` (prevents "unmet peer dependency" during installation).
 
 ## 0.4.0 (Feb. 12, 2017)
