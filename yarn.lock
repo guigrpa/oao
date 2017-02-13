@@ -2426,9 +2426,9 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
-storyboard-core@^3.0.0-rc.0:
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/storyboard-core/-/storyboard-core-3.0.0-rc.0.tgz#76fe00a528864831cdeb673aef965898d396a3bc"
+storyboard-core@^3.0.0-rc.2:
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/storyboard-core/-/storyboard-core-3.0.0-rc.2.tgz#860639cba21ef37beba50f39d0876a30f57e64e6"
   dependencies:
     chalk "1.x"
     lodash "4.17.4"
@@ -2436,23 +2436,23 @@ storyboard-core@^3.0.0-rc.0:
     timm "^1.2.3"
     uuid "^3.0.1"
 
-storyboard-listener-console@^3.0.0-rc.0:
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/storyboard-listener-console/-/storyboard-listener-console-3.0.0-rc.1.tgz#1b680b412020b106f4435c5c6862652886a6b72a"
+storyboard-listener-console@^3.0.0-rc.2:
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/storyboard-listener-console/-/storyboard-listener-console-3.0.0-rc.2.tgz#3e854d13af2b7b589699bf0306bb355a38264eb7"
   dependencies:
     timm "^1.2.3"
 
-storyboard-preset-console@^3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/storyboard-preset-console/-/storyboard-preset-console-3.0.0-rc.1.tgz#4ff8cdd646c42ee3bf9e9f2f25d3d2a95ce7ed83"
+storyboard-preset-console@^3.0.0-rc.2:
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/storyboard-preset-console/-/storyboard-preset-console-3.0.0-rc.2.tgz#7dc2984c802a3b7754af48c981d0020aaad68409"
   dependencies:
-    storyboard-listener-console "^3.0.0-rc.0"
+    storyboard-listener-console "^3.0.0-rc.2"
 
-storyboard@^3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/storyboard/-/storyboard-3.0.0-rc.1.tgz#2a90fcd4c11be82b7d100534a9d13a2764cef9cc"
+storyboard@^3.0.0-rc.2:
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/storyboard/-/storyboard-3.0.0-rc.2.tgz#13b39ce9cfc95d8a5a93a7c1157c60adb4753d4a"
   dependencies:
-    storyboard-core "^3.0.0-rc.0"
+    storyboard-core "^3.0.0-rc.2"
 
 string-width@^1.0.1:
   version "1.0.2"

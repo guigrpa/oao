@@ -1,5 +1,7 @@
 # Changelog
 
+* Bump `storyboard` (prevents "unmet peer dependency" during installation).
+
 ## 0.4.0 (Feb. 12, 2017)
 
 * Greatly reduce the number of oao dependencies by bumping `storyboard` to v3 (prerelease).
