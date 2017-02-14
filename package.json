@@ -1,6 +1,6 @@
 {
   "name": "oao",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A Yarn-based, opinionated monorepo management tool",
   "bin": {
     "oao": "lib/index.js"

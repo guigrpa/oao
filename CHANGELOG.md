@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 (Feb. 14, 2017)
+
+* Add **`oao add <sub-package> <deps...>`**
+* Add **`oao remove <sub-package> <deps...>`**
+* Bump `storyboard` yet again (some warnings remained).
+* Fix missing newlines at the end of `package.json` files (#3).
+
 ## 0.4.1 (Feb. 13, 2017)
 
 * Bump `storyboard` (prevents "unmet peer dependency" during installation).
