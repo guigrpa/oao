@@ -6,9 +6,18 @@
     "oao": "lib/index.js"
   },
   "scripts": {
-    "build": "yarn run lint && yarn run compile && yarn run xxl",
+    "build": "yarn lint && yarn compile && yarn test && yarn xxl",
     "lint": "eslint src",
-    "compile": "rm -rf lib && babel src -d lib"
+    "compile": "rm -rf lib && babel src -d lib",
+    "jest": "jest --watch --coverage",
+    "test": "yarn testCovFull",
+    "testFast": "jest",
+    "testCovFull": "yarn _testCovPrepare && yarn _testDev && yarn _testCovReport",
+    "_testCovPrepare": "rm -rf ./coverage .nyc_output .nyc_tmp && mkdir .nyc_tmp",
+    "_testCovReport": "cp -r .nyc_tmp .nyc_output && nyc report --reporter=html --reporter=lcov --reporter=text",
+    "_testDev": "yarn _testCov && mv .nyc_tmp/coverage-final.json .nyc_tmp/coverage-dev.json",
+    "_testCov": "jest --coverage && mv .nyc_output/coverage-final.json .nyc_tmp && rm -rf .nyc_output",
+    "xxl": "xxl"
   },
   "repository": "guigrpa/oao",
   "keywords": [
@@ -41,6 +50,7 @@
     "babel-cli": "6.22.2",
     "babel-core": "6.22.1",
     "babel-eslint": "7.1.1",
+    "babel-jest": "18.0.0",
     "babel-preset-es2015": "6.22.0",
     "babel-preset-react": "6.22.0",
     "babel-preset-stage-2": "6.22.0",
@@ -50,6 +60,23 @@
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
     "eslint-plugin-react": "6.9.0",
+    "jest": "18.1.0",
+    "nyc": "10.1.2",
     "xxl": "^1.0.1"
+  },
+  "jest": {
+    "testRegex": "src/.*__tests__/.*\\.(test|spec)\\.(js|jsx)$",
+    "coverageDirectory": ".nyc_output",
+    "coverageReporters": [
+      "json",
+      "text",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!**/node_modules/**",
+      "!**/__tests__/**",
+      "!**/__mocks__/**"
+    ]
   }
 }
