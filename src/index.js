@@ -3,10 +3,11 @@ import 'babel-polyfill';
 import program from 'commander';
 import 'storyboard-preset-console';
 import bootstrap from './bootstrap';
+import addRemove from './addRemove';
 import prepublish from './prepublish';
 import publish from './publish';
-import forEach from './forEach';
 import resetAllVersions from './resetAllVersions';
+import all from './all';
 
 const pkg = require('../package.json');
 
@@ -16,19 +17,28 @@ program.version(pkg.version);
 
 const createCommand = (syntax, description) =>
   program.command(syntax).description(description)
-  .option('-s --src <pattern>', `Glob pattern for package paths [${DEFAULT_SRC_DIR}]`,
+  .option('-s --src <pattern>', `Glob pattern for sub-package paths [${DEFAULT_SRC_DIR}]`,
     DEFAULT_SRC_DIR);
 
-createCommand('bootstrap',
-  'Install external dependencies and create internal links')
+createCommand('bootstrap', 'Install external dependencies and create internal links')
 .action((cmd) => bootstrap(cmd.opts()));
 
+createCommand('add <sub-package> <deps...>', 'Add dependencies to a sub-package')
+.option('-D --dev', 'add to `devDependencies` instead of `dependencies`')
+.option('-P --peer', 'add to `peerDependencies` instead of `dependencies`')
+.option('-O --optional', 'add to `optionalDependencies` instead of `dependencies`')
+.option('-E --exact', 'install the exact version')
+.option('-T --tilde', 'install the most recent release with the same minor version')
+.action((subpackage, deps, cmd) => addRemove(subpackage, 'add', deps, cmd.opts()));
+
+createCommand('remove <sub-package> <deps...>', 'Remove dependencies from a sub-package')
+.action((subpackage, deps, cmd) => addRemove(subpackage, 'remove', deps, cmd.opts()));
+
 createCommand('prepublish',
-  'Prepare for a release: validate version numbers, copy READMEs and package.json attributes')
+  'Prepare for a release: validate versions, copy READMEs and package.json attrs')
 .action((cmd) => prepublish(cmd.opts()));
 
-createCommand('publish',
-  'Publish updated packages')
+createCommand('publish', 'Publish updated sub-packages')
 .option('--no-master', 'Allow publishing from a non-master branch')
 .option('--no-confirm', 'Do not ask for confirmation before publishing')
 .option('--publish-tag <tag>', 'Publish with a custom tag (instead of `latest`)')
@@ -38,8 +48,7 @@ createCommand('reset-all-versions <version>',
   'Reset all versions (incl. monorepo package) to the specified one')
 .action((version, cmd) => { resetAllVersions(version, cmd.opts()); });
 
-createCommand('all <command>',
-  'Run a given command on all packages')
-.action((command, cmd) => { forEach(command, cmd.opts()); });
+createCommand('all <command>', 'Run a given command on all sub-packages')
+.action((command, cmd) => { all(command, cmd.opts()); });
 
 program.parse(process.argv);

@@ -2,7 +2,7 @@ import path from 'path';
 import { merge } from 'timm';
 import semver from 'semver';
 import { mainStory, chalk } from 'storyboard';
-import readAllSpecs, { ROOT_PACKAGE } from './utils/readAllSpecs';
+import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
 import { cp } from './utils/helpers';
 

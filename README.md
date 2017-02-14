@@ -7,7 +7,7 @@ A Yarn-based, opinionated monorepo management tool.
 
 * Works with **yarn**, hence (relatively) **fast**.
 * **Simple to use** and extend (hope so!).
-* Provides a number of monorepo **workflow enhancers**: installing all dependencies, validating version numbers, determining updated packages, publishing everything at once, etc.
+* Provides a number of monorepo **workflow enhancers**: installing all dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
 
 
@@ -15,10 +15,10 @@ A Yarn-based, opinionated monorepo management tool.
 
 As stated in the tagline, *oao* is somewhat opinionated and makes the following assumptions on your monorepo:
 
-* It uses a **synchronized versioning scheme**. In other words: a *master version* is configured in the root-level `package.json`, and other packages will be in sync with that version (whenever they are updated). Some packages can be *left behind* version-wise if they're not updated, but they'll jump to the master version when they get some love.
+* It uses a **synchronized versioning scheme**. In other words: a *master version* is configured in the root-level `package.json`, and sub-packages will be in sync with that version (whenever they are updated). Some sub-packages can be *left behind* version-wise if they're not updated, but they'll jump to the master version when they get some love.
 * You use **git** for version control and have already initialised your repo.
 * **Git tags** are used for releases (and *only* for releases), and follow semver: `v0.1.3`, `v2.3.5`, `v3.1.0-rc.1` and so on.
-* Some packages may be public, others private (flagged `"private": true` in `package.json`). OK, *no assumption here*: rest assured that no private packages will be published by mistake.
+* Some sub-packages may be public, others private (flagged `"private": true` in `package.json`). OK, *no assumption here*: rest assured that no private sub-packages will be published by mistake.
 
 
 ## Installation
@@ -43,11 +43,13 @@ Usage: oao [options] [command]
 
 Commands:
 
-  bootstrap [options]                     Install external dependencies and create internal links
-  prepublish [options]                    Prepare for a release: validate version numbers, copy READMEs and package.json attributes
-  publish [options]                       Publish updated packages
-  reset-all-versions [options] <version>  Reset all versions (incl. monorepo package) to the specified one
-  all [options] <command>                 Run a given command on all packages
+  bootstrap [options]                       Install external dependencies and create internal links
+  add [options] <sub-package> <deps...>     Add dependencies to a sub-package
+  remove [options] <sub-package> <deps...>  Remove dependencies from a sub-package
+  prepublish [options]                      Prepare for a release: validate versions, copy READMEs and package.json attrs
+  publish [options]                         Publish updated sub-packages
+  reset-all-versions [options] <version>    Reset all versions (incl. monorepo package) to the specified one
+  all [options] <command>                   Run a given command on all sub-packages
 
 Options:
 
@@ -60,12 +62,15 @@ You can also get help from particular commands, which may have additional option
 ```
 Usage: publish [options]
 
-Publish updated packages
+Publish updated sub-packages
 
 Options:
 
-  -h, --help          output usage information
-  -s --src <pattern>  Glob pattern for package paths [packages/*]
+  -h, --help           output usage information
+  -s --src <pattern>   Glob pattern for sub-package paths [packages/*]
+  --no-master          Allow publishing from a non-master branch
+  --no-confirm         Do not ask for confirmation before publishing
+  --publish-tag <tag>  Publish with a custom tag (instead of `latest`)
 ```
 
 
@@ -73,7 +78,22 @@ Options:
 
 ### `oao bootstrap`
 
-Installs all package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself are `yarn link`ed.
+Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself are `yarn link`ed.
+
+
+### `oao add <sub-package> <deps...>`
+
+Adds one or several dependencies to a sub-package. It passes through [`yarn add`'s flags](https://yarnpkg.com/en/docs/cli/add). Examples:
+
+```sh
+$ oao add my-sub-package dep-one dep-two
+$ oao add my-sub-package dep-one --exact --dev
+```
+
+
+### `oao remove <sub-package> <deps...>`
+
+Removes one or several dependencies from a sub-package.
 
 
 ### `oao prepublish`
@@ -81,8 +101,8 @@ Installs all package dependencies using **yarn**. External dependencies are inst
 Carries out a number of chores that are needed before publishing:
 
 * Checks that all version numbers are valid and <= the master version.
-* Copies `<root>/README.md` to the *main* package (the one having the same name as the monorepo).
-* Copies `<root>/README-LINK.md` to all other packages.
+* Copies `<root>/README.md` to the *main* sub-package (the one having the same name as the monorepo).
+* Copies `<root>/README-LINK.md` to all other sub-packages.
 * Copies several fields from the root `package.json` to all other `package.json` files: `description`, `keywords`, `author`, `license`, `homepage`, `bugs`, `repository`.
 
 
@@ -90,21 +110,21 @@ Carries out a number of chores that are needed before publishing:
 
 Carries out a number of steps:
 
-* Asks the user for confirmation that it has *built* all packages for publishing (using something like `yarn build`).
+* Asks the user for confirmation that it has *built* all sub-packages for publishing (using something like `yarn build`).
 * Performs a number of checks:
     - The current branch should be `master`.
     - No uncommitted changes should remain in the working directory.
     - No unpulled changes should remain.
-* Determines which packages need publishing (those which have changed with respect to the last tagged version).
-* Asks the user for an incremented master version (major, minor, patch or pre-release major), that will be used for the root package as well as all updated packages.
+* Determines which sub-packages need publishing (those which have changed with respect to the last tagged version).
+* Asks the user for an incremented master version (major, minor, patch or pre-release major), that will be used for the root package as well as all updated sub-packages.
 * Asks the user for final confirmation before publishing.
 * Updates versions in `package.json` files, commits the updates, adds a tag and pushes all the changes.
-* Publishes updated packages.
+* Publishes updated sub-packages.
 
 
 ### `oao all <command>`
 
-Executes the specified command on all packages (private ones included), with the package's root as *current working directory*. Examples:
+Executes the specified command on all sub-packages (private ones included), with the sub-package's root as *current working directory*. Examples:
 
 ```sh
 $ oao all ls

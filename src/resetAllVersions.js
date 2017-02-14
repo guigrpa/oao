@@ -2,7 +2,7 @@ import { set as timmSet } from 'timm';
 import { mainStory, chalk } from 'storyboard';
 import inquirer from 'inquirer';
 import semver from 'semver';
-import readAllSpecs from './utils/readAllSpecs';
+import { readAllSpecs } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
 
 const run = async (version, { src: srcPatterns }) => {

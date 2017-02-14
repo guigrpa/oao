@@ -1,6 +1,6 @@
-import { omit, set as timmSet } from 'timm';
 import { mainStory, chalk } from 'storyboard';
-import readAllSpecs, { ROOT_PACKAGE } from './utils/readAllSpecs';
+import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
+import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/helpers';
 
@@ -27,13 +27,7 @@ const run = async ({ src: srcPatterns }) => {
 
     // Rewrite package.json without own packages, install, and revert changes
     try {
-      let nextSpecs = prevSpecs;
-      DEP_TYPES.forEach((type) => {
-        const prevDeps = nextSpecs[type];
-        if (prevDeps == null) return;
-        const nextDeps = omit(prevDeps, pkgNames);
-        nextSpecs = timmSet(nextSpecs, type, nextDeps);
-      });
+      const { nextSpecs } = removeInternalLinks(prevSpecs, pkgNames);
       if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
       mainStory.info('  - Installing external dependencies...');
       await exec('yarn install', { cwd: pkgPath, logLevel: 'trace' });
