@@ -1,5 +1,5 @@
 import listPaths from './utils/listPaths';
-import { exec } from './utils/helpers';
+import { exec } from './utils/shell';
 
 const run = async (cmd, { src: srcPatterns }) => {
   const pkgPaths = await listPaths(srcPatterns);

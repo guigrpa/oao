@@ -1,11 +1,12 @@
 import { merge, set as timmSet } from 'timm';
 import { mainStory, chalk } from 'storyboard';
+import kebabCase from 'kebab-case';
 import { readAllSpecs, readOneSpec } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
-import { exec } from './utils/helpers';
+import { exec } from './utils/shell';
 
-const PASS_THROUGH_OPTS = ['dev', 'peer', 'optional', 'exact', 'tilde'];
+const PASS_THROUGH_OPTS = ['dev', 'peer', 'optional', 'exact', 'tilde', 'ignoreEngines'];
 
 const run = async (pkgName, op, deps, opts) => {
   const { src: srcPatterns } = opts;
@@ -22,8 +23,9 @@ const run = async (pkgName, op, deps, opts) => {
   try {
     if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
     mainStory.info(`Installing ${chalk.yellow.bold(deps.join(', '))}...`);
-    let cmd = `yarn ${op} ${deps.join(' ')}`;
-    PASS_THROUGH_OPTS.forEach((key) => { if (opts[key]) cmd += ` --${key}`; });
+    let cmd = `yarn ${op}`;
+    if (deps.length) cmd += ` ${deps.join(' ')}`;
+    PASS_THROUGH_OPTS.forEach((key) => { if (opts[key]) cmd += ` --${kebabCase(key)}`; });
     await exec(cmd, { cwd: pkgPath });
     succeeded = true;
   } catch (err) { /* ignore */ }

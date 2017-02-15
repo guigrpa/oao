@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 import { mainStory, chalk } from 'storyboard';
 import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
-import { exec } from './utils/helpers';
+import { exec } from './utils/shell';
 import {
   gitLastTag,
   gitCurBranch,

@@ -4,7 +4,7 @@ import semver from 'semver';
 import { mainStory, chalk } from 'storyboard';
 import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
-import { cp } from './utils/helpers';
+import { cp } from './utils/shell';
 
 const COPY_SPECS = [
   'description', 'keywords',
@@ -27,11 +27,11 @@ const run = async ({ src: srcPatterns }) => {
     if (specs.private) continue;
     if (!semver.valid(version)) {
       mainStory.error(`Invalid version for ${chalk.bold(pkgName)}: ${chalk.bold(version)}`);
-      process.exit(1);
+      throw new Error('INVALID_VERSION');
     }
     if (semver.gt(version, masterVersion)) {
       mainStory.error(`Version for ${pkgName} (${chalk.bold(version)}) > master version (${chalk.bold(masterVersion)})`);
-      process.exit(1);
+      throw new Error('INVALID_VERSION');
     }
   }
 

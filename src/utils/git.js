@@ -1,4 +1,4 @@
-import { exec } from './helpers';
+import { exec } from './shell';
 
 const gitLastTag = async () => {
   try {

@@ -2,7 +2,7 @@ import { mainStory, chalk } from 'storyboard';
 import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
-import { exec } from './utils/helpers';
+import { exec } from './utils/shell';
 
 const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
