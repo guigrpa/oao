@@ -1,5 +1,8 @@
 # Changelog
 
+* Add **`oao upgrade <sub-package> [deps...]`**
+* Add unit tests.
+
 ## 0.5.0 (Feb. 14, 2017)
 
 * Add **`oao add <sub-package> <deps...>`**

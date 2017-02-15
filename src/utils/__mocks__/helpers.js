@@ -1,3 +1,3 @@
 /* eslint-env jest */
 
-module.exports = jest.genMockFromModule('../helpers');
+module.exports = jest.genMockFromModule('../shell');

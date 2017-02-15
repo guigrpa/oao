@@ -1,4 +1,4 @@
-# oao :package: [![npm version](https://img.shields.io/npm/v/oao.svg)](https://www.npmjs.com/package/oao)
+# oao :package: [![Build Status](https://travis-ci.org/guigrpa/oao.svg?branch=master)](https://travis-ci.org/guigrpa/oao) [![Coverage Status](https://coveralls.io/repos/github/guigrpa/oao/badge.svg?branch=master)](https://coveralls.io/github/guigrpa/oao?branch=master) [![npm version](https://img.shields.io/npm/v/oao.svg)](https://www.npmjs.com/package/oao)
 
 A Yarn-based, opinionated monorepo management tool.
 

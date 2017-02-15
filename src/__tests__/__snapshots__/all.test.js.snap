@@ -1,0 +1,34 @@
+exports[`ALL command executes the specified command on all sub-packages 1`] = `
+Array [
+  Array [
+    "ls",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+    },
+  ],
+]
+`;

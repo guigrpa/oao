@@ -1,0 +1,17 @@
+{
+  "name": "oao-c",
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "timm": "1.x",
+    "oao": "*"
+  },
+  "peerDependencies": {
+    "oao-b": "*"
+  },
+  "devDependencies": {
+    "xxl": "1.x",
+    "oao-b": "*"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,101 @@
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (flags) 1`] = `
+Array [
+  Array [
+    "yarn add mady jest-html --dev --exact",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (multiple packages, no flags) 1`] = `
+Array [
+  Array [
+    "yarn add mady jest-html",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (one package, no flags) 1`] = `
+Array [
+  Array [
+    "yarn add mady",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly 1`] = `
+Array [
+  Array [
+    "yarn remove mady",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (no package, no flags) 1`] = `
+Array [
+  Array [
+    "yarn upgrade",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (one package, flags) 1`] = `
+Array [
+  Array [
+    "yarn upgrade mady --ignore-engines",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (one package, no flags) 1`] = `
+Array [
+  Array [
+    "yarn upgrade mady",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands touches only the correct package.json 1`] = `
+Object {
+  "dependencies": Object {
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-b",
+  "version": "0.1.0",
+}
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands touches only the correct package.json 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-b",
+  "version": "0.1.0",
+}
+`;

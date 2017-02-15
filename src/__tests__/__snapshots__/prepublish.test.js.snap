@@ -1,0 +1,20 @@
+exports[`PREPUBLISH command copies READMEs as appropriate 1`] = `
+Array [
+  Array [
+    "README.md",
+    "test/fixtures/packages/oao/README.md",
+  ],
+  Array [
+    "README-LINK.md",
+    "test/fixtures/packages/oao-b/README.md",
+  ],
+  Array [
+    "README-LINK.md",
+    "test/fixtures/packages/oao-c/README.md",
+  ],
+  Array [
+    "README-LINK.md",
+    "test/fixtures/packages/oao-d/README.md",
+  ],
+]
+`;

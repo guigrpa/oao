@@ -1,0 +1,142 @@
+exports[`BOOTSTRAP command executes the correct \`yarn link\`s and \`yarn install\`s 1`] = `
+Array [
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao-b",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao-b",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao-c",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao-b",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao-c",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;
