@@ -43,13 +43,14 @@ Usage: oao [options] [command]
 
 Commands:
 
-  bootstrap [options]                       Install external dependencies and create internal links
-  add [options] <sub-package> <deps...>     Add dependencies to a sub-package
-  remove [options] <sub-package> <deps...>  Remove dependencies from a sub-package
-  prepublish [options]                      Prepare for a release: validate versions, copy READMEs and package.json attrs
-  publish [options]                         Publish updated sub-packages
-  reset-all-versions [options] <version>    Reset all versions (incl. monorepo package) to the specified one
-  all [options] <command>                   Run a given command on all sub-packages
+  bootstrap [options]                            Install external dependencies and create internal links
+  add [options] <sub-package> <packages...>      Add dependencies to a sub-package
+  remove [options] <sub-package> <packages...>   Remove dependencies from a sub-package
+  upgrade [options] <sub-package> [packages...]  Upgrade some/all dependencies of a package
+  prepublish [options]                           Prepare for a release: validate versions, copy READMEs and package.json attrs
+  publish [options]                              Publish updated sub-packages
+  reset-all-versions [options] <version>         Reset all versions (incl. monorepo package) to the specified one
+  all [options] <command>                        Run a given command on all sub-packages
 
 Options:
 
@@ -94,6 +95,11 @@ $ oao add my-sub-package dep-one --exact --dev
 ### `oao remove <sub-package> <deps...>`
 
 Removes one or several dependencies from a sub-package.
+
+
+### `oao upgrade <sub-package> [deps...]`
+
+Upgrade one/several/all dependencies of a sub-package.
 
 
 ### `oao prepublish`

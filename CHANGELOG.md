@@ -1,7 +1,9 @@
 # Changelog
 
+## 0.5.1 (Feb. 15, 2017)
+
 * Add **`oao upgrade <sub-package> [deps...]`**
-* Add unit tests.
+* Add unit tests, Travis, Coveralls.
 
 ## 0.5.0 (Feb. 14, 2017)
 
