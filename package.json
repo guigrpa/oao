@@ -6,9 +6,10 @@
     "oao": "lib/index.js"
   },
   "scripts": {
-    "build": "yarn lint && yarn compile && yarn test && yarn xxl",
+    "build": "yarn lint && yarn flow && yarn compile && yarn test && yarn xxl",
     "travis": "yarn test",
     "lint": "eslint src",
+    "flow": "flow check || exit 0",
     "compile": "rm -rf lib && babel src -d lib --ignore \"**/__mocks__/**\",\"**/__tests__/**\"",
     "jest": "jest --watch --coverage --verbose",
     "test": "yarn testCovFull",
@@ -63,6 +64,7 @@
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
     "eslint-plugin-react": "6.9.0",
+    "flow-bin": "0.39.0",
     "jest": "18.1.0",
     "nyc": "10.1.2",
     "xxl": "^1.0.1"

@@ -1,3 +1,5 @@
+// @flow
+
 import path from 'path';
 import { merge } from 'timm';
 import semver from 'semver';
@@ -11,8 +13,9 @@ const COPY_SPECS = [
   'author', 'license',
   'homepage', 'bugs', 'repository',
 ];
+type Options = {| src: string |};
 
-const run = async ({ src: srcPatterns }) => {
+const run = async ({ src: srcPatterns }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
   const rootSpecs = allSpecs[ROOT_PACKAGE].specs;

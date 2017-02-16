@@ -1,3 +1,5 @@
+// @flow
+
 import { set as timmSet } from 'timm';
 import { mainStory, chalk } from 'storyboard';
 import inquirer from 'inquirer';
@@ -5,7 +7,12 @@ import semver from 'semver';
 import { readAllSpecs } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
 
-const run = async (version, { src: srcPatterns, confirm = true }) => {
+type Options = {|
+  src: string,
+  confirm?: boolean,
+|};
+
+const run = async (version: string, { src: srcPatterns, confirm = true }: Options) => {
   if (!semver.valid(version)) {
     mainStory.error(`Version ${version} is not valid`);
     throw new Error('INVALID_VERSION');

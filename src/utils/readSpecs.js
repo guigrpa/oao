@@ -1,3 +1,5 @@
+// @flow
+
 import path from 'path';
 import fs from 'fs';
 import { mainStory } from 'storyboard';
@@ -5,7 +7,16 @@ import listPaths from './listPaths';
 
 const ROOT_PACKAGE = '__ROOT_PACKAGE__';
 
-const readAllSpecs = async (srcPatterns) => {
+type PackageName = string;
+type OaoSpecs = {
+  pkgPath: string,
+  specPath: string,  // including .package.json
+  name: string,
+  specs: Object,
+};
+type AllSpecs = { [key: PackageName]: OaoSpecs };
+
+const readAllSpecs = async (srcPatterns: string): Promise<AllSpecs> => {
   const pkgPaths = await listPaths(srcPatterns);
   pkgPaths.push('.');
   const allSpecs = {};

@@ -1,5 +1,7 @@
+// @flow
+
 import globby from 'globby';
 
-const listPaths = (srcPatterns) => globby(srcPatterns);
+const listPaths = (srcPatterns: string): Promise<Array<string>> => globby(srcPatterns);
 
 export default listPaths;

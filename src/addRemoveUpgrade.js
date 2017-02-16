@@ -1,5 +1,7 @@
+// @flow
+
 import { merge, set as timmSet } from 'timm';
-import { mainStory, chalk } from 'storyboard';
+import { mainStory } from 'storyboard';
 import kebabCase from 'kebab-case';
 import { readAllSpecs, readOneSpec } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
@@ -8,7 +10,18 @@ import { exec } from './utils/shell';
 
 const PASS_THROUGH_OPTS = ['dev', 'peer', 'optional', 'exact', 'tilde', 'ignoreEngines'];
 
-const run = async (pkgName, op, deps, opts) => {
+type Operation = 'add' | 'remove' | 'upgrade';
+type Options = {
+  src: string,
+  dev?: boolean,
+  peer?: boolean,
+  optional?: boolean,
+  exact?: boolean,
+  tilde?: boolean,
+  ignoreEngines?: boolean,
+};
+
+const run = async (pkgName: string, op: Operation, deps: Array<string>, opts: Options) => {
   const { src: srcPatterns } = opts;
   const allSpecs = await readAllSpecs(srcPatterns);
   if (!allSpecs[pkgName]) {
@@ -22,7 +35,7 @@ const run = async (pkgName, op, deps, opts) => {
   const { nextSpecs, removedPackagesByType } = removeInternalLinks(prevSpecs, pkgNames);
   try {
     if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
-    mainStory.info(`Installing ${chalk.yellow.bold(deps.join(', '))}...`);
+    mainStory.info(`Executing 'yarn ${op}'...`);
     let cmd = `yarn ${op}`;
     if (deps.length) cmd += ` ${deps.join(' ')}`;
     PASS_THROUGH_OPTS.forEach((key) => { if (opts[key]) cmd += ` --${kebabCase(key)}`; });

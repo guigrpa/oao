@@ -1,31 +1,47 @@
+// @flow
+
 /* eslint-disable no-underscore-dangle */
 
 import path from 'path';
 import shell from 'shelljs';
 import split from 'split';
 import { mainStory, chalk } from 'storyboard';
+import type { StoryT } from 'storyboard';
 
-const cd = (dir, { story = mainStory } = {}) => {
+const cd = (dir: string, { story = mainStory }: { story?: StoryT } = {}) => {
   story.trace(`Changing working directory to ${chalk.cyan.bold(dir)}...`);
   shell.cd(dir);
 };
 
-const cp = (src, dst, { story = mainStory } = {}) => {
+const cp = (src: string, dst: string, { story = mainStory }: { story?: StoryT } = {}) => {
   story.debug(`Copying ${chalk.cyan.bold(src)} -> ${chalk.cyan.bold(dst)}...`);
   shell.cp('-rf', path.normalize(src), path.normalize(dst));
 };
 
-const mv = (src, dst, { story = mainStory } = {}) => {
+const mv = (src: string, dst: string, { story = mainStory }: { story?: StoryT } = {}) => {
   story.debug(`Moving ${chalk.cyan.bold(src)} -> ${chalk.cyan.bold(dst)}...`);
   shell.mv('-rf', path.normalize(src), path.normalize(dst));
 };
 
-const exec = async (cmd, {
+type ExecOptions = {|
+  story?: StoryT,
+  logLevel?: *,
+  errorLogLevel?: string,
+  cwd?: string,
+|};
+
+type ExecResult = {
+  code: number,
+  stdout: string,
+  stderr: string,
+};
+
+const exec = async (cmd: string, {
   story = mainStory,
   logLevel = 'info',
   errorLogLevel = 'error',
   cwd,
-} = {}) => {
+}: ExecOptions = {}): Promise<ExecResult> => {
   const prevWd = shell.pwd();
   let title = `Run cmd ${chalk.green.bold(cmd)}`;
   if (cwd) title += ` at ${chalk.green(cwd)}`;

@@ -1,5 +1,7 @@
 parser: babel-eslint
 extends: airbnb
+plugins:
+  - flowtype
 rules:
   eqeqeq: ['error', 'allow-null']
   no-unused-expressions:

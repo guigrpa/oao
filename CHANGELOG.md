@@ -1,5 +1,10 @@
 # Changelog
 
+* Add **tentative support for scoped packages**.
+* Internal:
+    - Add unit tests
+    - Add static types (Flow)
+
 ## 0.5.1 (Feb. 15, 2017)
 
 * Add **`oao upgrade <sub-package> [deps...]`**

@@ -1,8 +1,16 @@
+// @flow
+
 import { omit, set as timmSet } from 'timm';
 
 const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-const removeInternalLinks = (prevSpecs, pkgNames) => {
+type PkgVersionMap = { [pkgName: string]: string };
+
+const removeInternalLinks = (prevSpecs: Object, pkgNames: Array<string>): {
+  nextSpecs: Object,
+  removedPackagesByType: { [key: string]: PkgVersionMap },
+  allRemovedPackages: PkgVersionMap,
+} => {
   const removedPackagesByType = {};
   const allRemovedPackages = {};
 

@@ -1,3 +1,5 @@
+// @flow
+
 import { mainStory, chalk } from 'storyboard';
 import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
@@ -6,7 +8,9 @@ import { exec } from './utils/shell';
 
 const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-const run = async ({ src: srcPatterns }) => {
+type Options = {| src: string |};
+
+const run = async ({ src: srcPatterns }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
 

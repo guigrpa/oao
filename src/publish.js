@@ -1,3 +1,5 @@
+// @flow
+
 import semver from 'semver';
 import inquirer from 'inquirer';
 import { mainStory, chalk } from 'storyboard';
@@ -17,12 +19,22 @@ import {
 
 const DEBUG_SKIP_CHECKS = false;
 
+type Options = {|
+  src: string,
+  master: boolean,
+  confirm: boolean,
+  publishTag?: string,
+  _autoVersion?: boolean,
+|};
+
 const run = async ({
   src: srcPatterns,
   master,
   confirm,
   publishTag,
-}) => {
+  // For unit tests
+  _autoVersion = false,
+}: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
 
   // Confirm that we have run build
