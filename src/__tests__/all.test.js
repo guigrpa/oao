@@ -5,7 +5,7 @@ import all from '../all';
 
 jest.mock('../utils/shell');
 
-describe.only('ALL command', () => {
+describe('ALL command', () => {
   beforeEach(() => { jest.resetAllMocks(); });
 
   it('executes the specified command on all sub-packages', async () => {

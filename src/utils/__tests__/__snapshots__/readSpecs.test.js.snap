@@ -1,6 +1,7 @@
 exports[`readAllSpecs reads all package.json files as well as metadata 1`] = `
 Object {
   "oao": Object {
+    "name": "oao",
     "pkgPath": "test/fixtures/packages/oao",
     "specs": Object {
       "license": "MIT",
@@ -10,6 +11,7 @@ Object {
     },
   },
   "oao-b": Object {
+    "name": "oao-b",
     "pkgPath": "test/fixtures/packages/oao-b",
     "specs": Object {
       "dependencies": Object {
@@ -23,6 +25,7 @@ Object {
     },
   },
   "oao-c": Object {
+    "name": "oao-c",
     "pkgPath": "test/fixtures/packages/oao-c",
     "specs": Object {
       "dependencies": Object {
@@ -43,6 +46,7 @@ Object {
     },
   },
   "oao-d": Object {
+    "name": "oao-d",
     "pkgPath": "test/fixtures/packages/oao-d",
     "specs": Object {
       "dependencies": Object {
@@ -62,6 +66,7 @@ Object {
     },
   },
   "oao-priv": Object {
+    "name": "oao-priv",
     "pkgPath": "test/fixtures/packages/oao-priv",
     "specs": Object {
       "dependencies": Object {

@@ -7,8 +7,6 @@ jest.mock('../utils/shell');
 jest.mock('../utils/writeSpecs');
 
 describe('ADD/REMOVE/UPGRADE commands', () => {
-  beforeEach(() => { jest.resetAllMocks(); });
-
   it('touches only the correct package.json', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
     await addRemoveUpgrade('oao-b', 'add', ['mady'], { src: 'test/fixtures/packages2/*' });

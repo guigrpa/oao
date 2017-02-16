@@ -140,3 +140,45 @@ Array [
   ],
 ]
 `;
+
+exports[`BOOTSTRAP command supports scoped packages 1`] = `
+Array [
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packagesScoped/example-package",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesScoped/example-package",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packagesScoped/example-package-b",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesScoped/example-package-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link @guigrpa/example-package",
+    Object {
+      "cwd": "test/fixtures/packagesScoped/example-package-b",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;

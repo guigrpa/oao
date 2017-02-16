@@ -45,4 +45,10 @@ describe('BOOTSTRAP command', () => {
     await bootstrap({ src: 'test/fixtures/packages/*' });
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
+
+  it('supports scoped packages', async () => {
+    const helpers = require('../utils/shell');
+    await bootstrap({ src: 'test/fixtures/packagesScoped/*' });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
 });

@@ -37,7 +37,7 @@ const run = async (pkgName, op, deps, opts) => {
   }
 
   // Read the updated package.json, and add the internal deps
-  const { specs: updatedSpecs } = readOneSpec(pkgName, pkgPath);
+  const { specs: updatedSpecs } = readOneSpec(pkgPath);
   let finalSpecs = updatedSpecs;
   Object.keys(removedPackagesByType).forEach((type) => {
     const removedPackages = removedPackagesByType[type];

@@ -16,4 +16,19 @@ describe('readAllSpecs', () => {
     });
     expect(allSpecs).toMatchSnapshot();
   });
+
+  it('supports scoped packages', async () => {
+    const allSpecs = await readAllSpecs('test/fixtures/packagesScoped/*');
+    expect(allSpecs['@guigrpa/example-package'].specs.name).toEqual('@guigrpa/example-package');
+    expect(allSpecs['@guigrpa/example-package-b'].specs.name).toEqual('@guigrpa/example-package-b');
+  });
+
+  it('throws on invalid directory names (for non-scoped packages)', async () => {
+    try {
+      await readAllSpecs('test/fixtures/packagesWrongName/*');
+      throw new Error('DID_NOT_THROW');
+    } catch (err) {
+      if (err.message !== 'INVALID_DIR_NAME') throw err;
+    }
+  });
 });

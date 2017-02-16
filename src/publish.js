@@ -33,9 +33,8 @@ const run = async ({
       message: 'Have you built all your packages for production?',
       default: false,
     }]);
-    if (!confirmBuild) process.exit(0);
+    if (!confirmBuild) return;
   }
-
   // Prepublish checks
   await prepublishChecks({ master });
 
@@ -44,12 +43,13 @@ const run = async ({
   const dirty = await findPackagesToUpdate(allSpecs, lastTag);
   if (!dirty.length) {
     mainStory.info('No packages need to be published');
-    process.exit(0);
+    return;
   }
 
   // Determine a suitable version number
   const masterVersion = await getMasterVersion(allSpecs, lastTag);
-  const nextVersion = await getNextVersion(masterVersion);
+  if (masterVersion == null) return;
+  const nextVersion = await getNextVersion(masterVersion, _autoVersion);
 
   // Confirm before publishing
   if (confirm) {
@@ -60,7 +60,7 @@ const run = async ({
         `v${chalk.cyan.bold(nextVersion)})?`,
       default: false,
     }]);
-    if (!confirmPublish) process.exit(0);
+    if (!confirmPublish) return;
   }
 
   // Update package.json's for dirty packages AND THE ROOT PACKAGE
@@ -98,7 +98,7 @@ const prepublishChecks = async ({ master }) => {
   if (branch !== 'master') {
     if (master) {
       mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
-      if (!DEBUG_SKIP_CHECKS) process.exit(1);
+      if (!DEBUG_SKIP_CHECKS) throw new Error('BRANCH_CHECK_FAILED');
     }
     mainStory.warn(`Publishing from a non-master branch: ${chalk.red.bold(branch)}`);
   } else {
@@ -109,7 +109,7 @@ const prepublishChecks = async ({ master }) => {
   const uncommitted = await gitUncommittedChanges();
   if (uncommitted !== '') {
     mainStory.error(`Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(uncommitted)}`);
-    if (!DEBUG_SKIP_CHECKS) process.exit(1);
+    if (!DEBUG_SKIP_CHECKS) throw new Error('UNCOMMITTED_CHECK_FAILED');
   }
   mainStory.info('No uncommitted changes');
 
@@ -117,7 +117,7 @@ const prepublishChecks = async ({ master }) => {
   const unpulled = await gitUnpulledChanges();
   if (unpulled !== '0') {
     mainStory.error('Remote history differs. Please pull changes');
-    if (!DEBUG_SKIP_CHECKS) process.exit(1);
+    if (!DEBUG_SKIP_CHECKS) throw new Error('UNPULLED_CHECK_FAILED');
   }
   mainStory.info('Remote history matches local history');
 };
@@ -155,7 +155,7 @@ const getMasterVersion = async (allSpecs, lastTag) => {
         message: 'Continue?',
         default: false,
       }]);
-      if (!confirm) process.exit(0);
+      if (!confirm) return null;
       if (semver.valid(tagVersion) && semver.gt(tagVersion, masterVersion)) {
         masterVersion = tagVersion;
       }
@@ -166,13 +166,14 @@ const getMasterVersion = async (allSpecs, lastTag) => {
   }
   if (!semver.valid(masterVersion)) {
     mainStory.error(`Master version ${chalk.cyan.bold(masterVersion)} is invalid. Please correct it manually`);
-    process.exit(1);
+    throw new Error('INVALID_VERSION');
   }
   return masterVersion;
 };
 
-const getNextVersion = async (prevVersion) => {
+const getNextVersion = async (prevVersion: string, _autoVersion: ?boolean): Promise<string> => {
   const major = semver.inc(prevVersion, 'major');
+  if (_autoVersion) return major;
   const minor = semver.inc(prevVersion, 'minor');
   const patch = semver.inc(prevVersion, 'patch');
   const prerelease = semver.inc(prevVersion, 'prerelease');
