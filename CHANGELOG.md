@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.5.2 (Feb. 16, 2017)
+
 * Add **tentative support for scoped packages**.
 * Internal:
     - Add unit tests
