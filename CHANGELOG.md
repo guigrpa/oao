@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.5.3 (Feb. 20, 2017)
+
 * Add **`oao status`**: provides lots of information on the monorepo.
 * Add **`--link <regex>` option** to force some packages to be linked, not installed (useful in some development environments). Used in `oao bootstrap` and `oao add|remove|upgrade`.
 * Add **`--ignore-engines` option** to `oao upgrade` (passed through to Yarn).
