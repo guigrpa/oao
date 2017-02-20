@@ -62,4 +62,8 @@ createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorep
 createCommand('all <command>', 'Run a given command on all sub-packages')
 .action((command, cmd) => { all(command, cmd.opts()); });
 
+process.on('unhandledRejection', () => {
+  process.exit(1);
+});
+
 program.parse(process.argv);
