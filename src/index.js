@@ -5,6 +5,7 @@
 import 'babel-polyfill';
 import program from 'commander';
 import 'storyboard-preset-console';
+import status from './status';
 import bootstrap from './bootstrap';
 import addRemoveUpgrade from './addRemoveUpgrade';
 import prepublish from './prepublish';
@@ -15,13 +16,17 @@ import all from './all';
 const pkg = require('../package.json');
 
 const DEFAULT_SRC_DIR = 'packages/*';
+const DEFAULT_COPY_ATTRS = 'description,keywords,author,license,homepage,bugs,repository';
 
 program.version(pkg.version);
 
 const createCommand = (syntax, description) =>
   program.command(syntax).description(description)
-  .option('-s --src <glob>', `Glob pattern for sub-package paths [${DEFAULT_SRC_DIR}]`, DEFAULT_SRC_DIR)
-  .option('-l --link <regex>', 'Regex pattern for extra packages that should be linked, not installed');
+  .option('-s --src <glob>', `glob pattern for sub-package paths [${DEFAULT_SRC_DIR}]`, DEFAULT_SRC_DIR)
+  .option('-l --link <regex>', 'regex pattern for extra packages that should be linked, not installed');
+
+createCommand('status', 'Show an overview of the monorepo status')
+.action((cmd) => status(cmd.opts()));
 
 createCommand('bootstrap', 'Install external dependencies and create internal links')
 .action((cmd) => bootstrap(cmd.opts()));
@@ -42,12 +47,13 @@ createCommand('upgrade <sub-package> [packages...]', 'Upgrade some/all dependenc
 .action((subpackage, deps, cmd) => addRemoveUpgrade(subpackage, 'upgrade', deps, cmd.opts()));
 
 createCommand('prepublish', 'Prepare for a release: validate versions, copy READMEs and package.json attrs')
+.option('--copy-attrs <attrs>', `copy these package.json attrs to sub-packages [${DEFAULT_COPY_ATTRS}]`, DEFAULT_COPY_ATTRS)
 .action((cmd) => prepublish(cmd.opts()));
 
 createCommand('publish', 'Publish updated sub-packages')
-.option('--no-master', 'Allow publishing from a non-master branch')
-.option('--no-confirm', 'Do not ask for confirmation before publishing')
-.option('--publish-tag <tag>', 'Publish with a custom tag (instead of `latest`)')
+.option('--no-master', 'allow publishing from a non-master branch')
+.option('--no-confirm', 'do not ask for confirmation before publishing')
+.option('--publish-tag <tag>', 'publish with a custom tag (instead of `latest`)')
 .action((cmd) => publish(cmd.opts()));
 
 createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorepo package) to the specified one')

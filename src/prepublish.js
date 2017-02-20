@@ -8,14 +8,12 @@ import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
 import { cp } from './utils/shell';
 
-const COPY_SPECS = [
-  'description', 'keywords',
-  'author', 'license',
-  'homepage', 'bugs', 'repository',
-];
-type Options = { src: string };
+type Options = {
+  src: string,
+  copyAttrs: string,
+};
 
-const run = async ({ src: srcPatterns }: Options) => {
+const run = async ({ src: srcPatterns, copyAttrs: copyAttrsStr }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
   const rootSpecs = allSpecs[ROOT_PACKAGE].specs;
@@ -51,7 +49,8 @@ const run = async ({ src: srcPatterns }: Options) => {
 
   // Merge common attributes with submodules
   const commonSpecs = {};
-  COPY_SPECS.forEach((attr) => { commonSpecs[attr] = rootSpecs[attr]; });
+  const copyAttrs = copyAttrsStr.split(/\s*,\s*/);
+  copyAttrs.forEach((attr) => { commonSpecs[attr] = rootSpecs[attr]; });
   mainStory.info('Updating package attributes', { attach: commonSpecs });
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];

@@ -1,6 +1,9 @@
 # Changelog
 
-* Add **`link` argument** to force some packages to be linked, not installed (useful in some development environments).
+* Add **`oao status`**: provides lots of information on the monorepo.
+* Add **`--link <regex>` option** to force some packages to be linked, not installed (useful in some development environments). Used in `oao bootstrap` and `oao add|remove|upgrade`.
+* Add **`--ignore-engines` option** to `oao upgrade` (passed through to Yarn).
+* Add **`--copy-attrs` option** to `oao prepublish` (attributes that are copied to the sub-package's `package.json` file).
 
 ## 0.5.2 (Feb. 16, 2017)
 
@@ -28,7 +31,7 @@
 ## 0.4.0 (Feb. 12, 2017)
 
 * Greatly reduce the number of oao dependencies by bumping `storyboard` to v3 (prerelease).
-* Add configuration parameter to `oao publish`: `--publish-tag <tag>` (publishes with a custom tag, instead of `latest`).
+* Add **`--publish-tag <tag>` option** to `oao publish`:  (publishes with a custom tag, instead of `latest`).
 
 ## 0.3.3 (Feb. 12, 2017)
 
@@ -43,7 +46,7 @@
 
 ## 0.3.0, 0.3.1 (Feb. 12, 2017)
 
-* Add configuration parameters to `oao publish`:
+* Add options to `oao publish`:
     - `--no-master` (allow publishing from non-`master` branches)
     - `--no-confirm` (skip confirmation steps)
 

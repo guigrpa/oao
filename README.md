@@ -43,11 +43,13 @@ Usage: oao [options] [command]
 
 Commands:
 
+  status [options]                               Show an overview of the monorepo status
   bootstrap [options]                            Install external dependencies and create internal links
   add [options] <sub-package> <packages...>      Add dependencies to a sub-package
   remove [options] <sub-package> <packages...>   Remove dependencies from a sub-package
   upgrade [options] <sub-package> [packages...]  Upgrade some/all dependencies of a package
-  prepublish [options]                           Prepare for a release: validate versions, copy READMEs and package.json attrs
+  prepublish [options]                           Prepare for a release: validate versions, copy READMEs and package.js
+on attrs
   publish [options]                              Publish updated sub-packages
   reset-all-versions [options] <version>         Reset all versions (incl. monorepo package) to the specified one
   all [options] <command>                        Run a given command on all sub-packages
@@ -76,6 +78,11 @@ Options:
 
 
 ## Main commands
+
+### `oao status`
+
+Provides lots of information on the git repo (current branch, last tag, uncommitted/unpulled changes) and subpackage status (version, private flag, changes since last tag, dependencies).
+
 
 ### `oao bootstrap`
 

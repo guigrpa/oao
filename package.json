@@ -67,7 +67,7 @@
     "flow-bin": "0.39.0",
     "jest": "18.1.0",
     "nyc": "10.1.2",
-    "xxl": "^1.0.1"
+    "xxl": "^1.1.0"
   },
   "jest": {
     "resetMocks": true,
@@ -81,6 +81,7 @@
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/index.js",
+      "!src/status.js",
       "!src/utils/git.js",
       "!**/node_modules/**",
       "!**/__tests__/**",
