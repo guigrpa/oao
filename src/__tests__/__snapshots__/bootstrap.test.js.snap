@@ -141,6 +141,98 @@ Array [
 ]
 `;
 
+exports[`BOOTSTRAP command executes the correct \`yarn link\`s and \`yarn install\`s with custom links 1`] = `
+Array [
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-b",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-c",
+      "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link ext-one",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link ext-one",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link oao-b",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn link ext-two",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;
+
 exports[`BOOTSTRAP command supports scoped packages 1`] = `
 Array [
   Array [

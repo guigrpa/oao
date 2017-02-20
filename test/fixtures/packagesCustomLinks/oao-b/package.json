@@ -1,0 +1,11 @@
+{
+  "name": "oao-b",
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "timm": "1.x",
+    "oao": "*",
+    "ext-one": "*"
+  },
+  "license": "MIT"
+}

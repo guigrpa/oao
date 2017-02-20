@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+/* eslint-disable max-len */
+
 import 'babel-polyfill';
 import program from 'commander';
 import 'storyboard-preset-console';
@@ -17,8 +20,8 @@ program.version(pkg.version);
 
 const createCommand = (syntax, description) =>
   program.command(syntax).description(description)
-  .option('-s --src <pattern>', `Glob pattern for sub-package paths [${DEFAULT_SRC_DIR}]`,
-    DEFAULT_SRC_DIR);
+  .option('-s --src <glob>', `Glob pattern for sub-package paths [${DEFAULT_SRC_DIR}]`, DEFAULT_SRC_DIR)
+  .option('-l --link <regex>', 'Regex pattern for extra packages that should be linked, not installed');
 
 createCommand('bootstrap', 'Install external dependencies and create internal links')
 .action((cmd) => bootstrap(cmd.opts()));
@@ -35,10 +38,10 @@ createCommand('remove <sub-package> <packages...>', 'Remove dependencies from a 
 .action((subpackage, deps, cmd) => addRemoveUpgrade(subpackage, 'remove', deps, cmd.opts()));
 
 createCommand('upgrade <sub-package> [packages...]', 'Upgrade some/all dependencies of a package')
+.option('--ignore-engines', 'disregard engines check during upgrade')
 .action((subpackage, deps, cmd) => addRemoveUpgrade(subpackage, 'upgrade', deps, cmd.opts()));
 
-createCommand('prepublish',
-  'Prepare for a release: validate versions, copy READMEs and package.json attrs')
+createCommand('prepublish', 'Prepare for a release: validate versions, copy READMEs and package.json attrs')
 .action((cmd) => prepublish(cmd.opts()));
 
 createCommand('publish', 'Publish updated sub-packages')
@@ -47,8 +50,7 @@ createCommand('publish', 'Publish updated sub-packages')
 .option('--publish-tag <tag>', 'Publish with a custom tag (instead of `latest`)')
 .action((cmd) => publish(cmd.opts()));
 
-createCommand('reset-all-versions <version>',
-  'Reset all versions (incl. monorepo package) to the specified one')
+createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorepo package) to the specified one')
 .action((version, cmd) => { resetAllVersions(version, cmd.opts()); });
 
 createCommand('all <command>', 'Run a given command on all sub-packages')

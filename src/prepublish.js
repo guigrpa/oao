@@ -13,7 +13,7 @@ const COPY_SPECS = [
   'author', 'license',
   'homepage', 'bugs', 'repository',
 ];
-type Options = {| src: string |};
+type Options = { src: string };
 
 const run = async ({ src: srcPatterns }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);

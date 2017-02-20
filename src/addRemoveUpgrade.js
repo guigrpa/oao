@@ -13,6 +13,7 @@ const PASS_THROUGH_OPTS = ['dev', 'peer', 'optional', 'exact', 'tilde', 'ignoreE
 type Operation = 'add' | 'remove' | 'upgrade';
 type Options = {
   src: string,
+  link: ?string,
   dev?: boolean,
   peer?: boolean,
   optional?: boolean,
@@ -22,7 +23,7 @@ type Options = {
 };
 
 const run = async (pkgName: string, op: Operation, deps: Array<string>, opts: Options) => {
-  const { src: srcPatterns } = opts;
+  const { src: srcPatterns, link: linkPattern } = opts;
   const allSpecs = await readAllSpecs(srcPatterns);
   if (!allSpecs[pkgName]) {
     mainStory.error(`No such package: ${pkgName}`);
@@ -32,7 +33,8 @@ const run = async (pkgName: string, op: Operation, deps: Array<string>, opts: Op
   const pkgNames = Object.keys(allSpecs);
   const { pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
   let succeeded = false;
-  const { nextSpecs, removedPackagesByType } = removeInternalLinks(prevSpecs, pkgNames);
+  const { nextSpecs, removedPackagesByType } =
+    removeInternalLinks(prevSpecs, pkgNames, linkPattern);
   try {
     if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
     mainStory.info(`Executing 'yarn ${op}'...`);

@@ -6,13 +6,16 @@ import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
 
-const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+type Options = {
+  src: string,
+  link: ?string,
+};
 
-type Options = {| src: string |};
-
-const run = async ({ src: srcPatterns }: Options) => {
+const run = async (opts: Options) => {
+  const { src: srcPatterns, link: linkPattern } = opts;
   const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
+  const allRemovedDepsByPackage = {};
 
   // Pass 1: register each package with yarn, and install external deps
   for (let i = 0; i < pkgNames.length; i++) {
@@ -29,9 +32,11 @@ const run = async ({ src: srcPatterns }: Options) => {
       errorLogLevel: 'info',
     });
 
-    // Rewrite package.json without own packages, install, and revert changes
+    // Rewrite package.json without own/linked packages, install, and revert changes
     try {
-      const { nextSpecs } = removeInternalLinks(prevSpecs, pkgNames);
+      const { nextSpecs, allRemovedPackages } =
+        removeInternalLinks(prevSpecs, pkgNames, linkPattern);
+      allRemovedDepsByPackage[pkgName] = Object.keys(allRemovedPackages);
       if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
       mainStory.info('  - Installing external dependencies...');
       await exec('yarn install', { cwd: pkgPath, logLevel: 'trace' });
@@ -40,25 +45,18 @@ const run = async ({ src: srcPatterns }: Options) => {
     }
   }
 
-  // Pass 2: link internal deps
+  // Pass 2: link internal and user-specified deps
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     if (pkgName === ROOT_PACKAGE) continue;
-    const { pkgPath, specs } = allSpecs[pkgName];
     mainStory.info(
       `${chalk.bold('PASS 2:')} installing internal deps for ${chalk.cyan.bold(pkgName)}...`);
-    for (let k = 0; k < pkgNames.length; k++) {
-      const depName = pkgNames[k];
-      if (depName === pkgName) continue;
-      for (let m = 0; m < DEP_TYPES.length; m++) {
-        const deps = specs[DEP_TYPES[m]];
-        if (deps == null) continue;
-        if (deps[depName]) {
-          mainStory.info(`  - Linking to ${chalk.cyan.bold(depName)}...`);
-          await exec(`yarn link ${depName}`, { cwd: pkgPath, logLevel: 'trace' });
-          break;
-        }
-      }
+    const packagesToLink = allRemovedDepsByPackage[pkgName];
+    const { pkgPath } = allSpecs[pkgName];
+    for (let k = 0; k < packagesToLink.length; k++) {
+      const depName = packagesToLink[k];
+      mainStory.info(`  - Linking to ${chalk.cyan.bold(depName)}...`);
+      await exec(`yarn link ${depName}`, { cwd: pkgPath, logLevel: 'trace' });
     }
   }
 };

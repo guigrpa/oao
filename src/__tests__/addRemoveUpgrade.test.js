@@ -11,8 +11,19 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
     const writeSpecs = require('../utils/writeSpecs').default;
     await addRemoveUpgrade('oao-b', 'add', ['mady'], { src: 'test/fixtures/packages2/*' });
     expect(writeSpecs.mock.calls).toHaveLength(2);
-    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();
-    expect(writeSpecs.mock.calls[1][1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();  // removes internal deps
+    expect(writeSpecs.mock.calls[1][1]).toMatchSnapshot();  // restores internal deps
+  });
+
+  it('touches only the correct package.json, with custom links', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-b', 'add', ['mady'], {
+      src: 'test/fixtures/packagesCustomLinks/*',
+      link: 'ext-.*',
+    });
+    expect(writeSpecs.mock.calls).toHaveLength(2);
+    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();  // removes internal deps
+    expect(writeSpecs.mock.calls[1][1]).toMatchSnapshot();  // restores internal deps
   });
 
   it('executes ADD correctly (one package, no flags)', async () => {

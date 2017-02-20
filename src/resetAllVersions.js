@@ -7,10 +7,10 @@ import semver from 'semver';
 import { readAllSpecs } from './utils/readSpecs';
 import writeSpecs from './utils/writeSpecs';
 
-type Options = {|
+type Options = {
   src: string,
   confirm?: boolean,
-|};
+};
 
 const run = async (version: string, { src: srcPatterns, confirm = true }: Options) => {
   if (!semver.valid(version)) {

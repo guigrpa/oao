@@ -19,13 +19,13 @@ import {
 
 const DEBUG_SKIP_CHECKS = false;
 
-type Options = {|
+type Options = {
   src: string,
   master: boolean,
   confirm: boolean,
   publishTag?: string,
   _autoVersion?: boolean,
-|};
+};
 
 const run = async ({
   src: srcPatterns,

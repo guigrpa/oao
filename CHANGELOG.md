@@ -1,5 +1,7 @@
 # Changelog
 
+* Add **`link` argument** to force some packages to be linked, not installed (useful in some development environments).
+
 ## 0.5.2 (Feb. 16, 2017)
 
 * Add **tentative support for scoped packages**.

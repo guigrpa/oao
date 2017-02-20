@@ -99,3 +99,29 @@ Object {
   "version": "0.1.0",
 }
 `;
+
+exports[`ADD/REMOVE/UPGRADE commands touches only the correct package.json, with custom links 1`] = `
+Object {
+  "dependencies": Object {
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-b",
+  "version": "0.1.0",
+}
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands touches only the correct package.json, with custom links 2`] = `
+Object {
+  "dependencies": Object {
+    "ext-one": "*",
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-b",
+  "version": "0.1.0",
+}
+`;
