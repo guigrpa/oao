@@ -1,7 +1,9 @@
 # Changelog
 
-* Add **parallel support to `oao all`**, using the `--parallel` and `--ignore-errors` options.
-* Bugfix: filter out non-directory paths from globby results.
+## 0.5.4 (Feb. 21, 2017)
+
+* Add **parallel support to `oao all`**, using the `--parallel` and `--ignore-errors` options (#10, #13).
+* Bugfix: filter out non-directory paths from globby results (#11).
 
 ## 0.5.3 (Feb. 20, 2017)
 
@@ -12,7 +14,7 @@
 
 ## 0.5.2 (Feb. 16, 2017)
 
-* Add **tentative support for scoped packages**.
+* Add **tentative support for scoped packages** (#7).
 * Internal:
     - Add unit tests
     - Add static types (Flow)
