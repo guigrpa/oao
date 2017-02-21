@@ -9,6 +9,8 @@ A Yarn-based, opinionated monorepo management tool.
 * **Simple to use** and extend (hope so!).
 * Provides a number of monorepo **workflow enhancers**: installing all dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
+* Runs a command on all sub-packages, either **serially or in parallel**.
+* Provides an easy-to-read, **detailed status overview**.
 
 
 ## Assumptions :thought_balloon:

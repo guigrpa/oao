@@ -60,6 +60,8 @@ createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorep
 .action((version, cmd) => { resetAllVersions(version, cmd.opts()); });
 
 createCommand('all <command>', 'Run a given command on all sub-packages')
+.option('--parallel', 'run command in parallel on all sub-packages')
+.option('--ignore-errors', 'do not stop even if there are errors in some packages')
 .action((command, cmd) => { all(command, cmd.opts()); });
 
 process.on('unhandledRejection', () => {

@@ -1,5 +1,7 @@
 # Changelog
 
+* Add **parallel support to `oao all`**, using the `--parallel` and `--ignore-errors` options.
+
 ## 0.5.3 (Feb. 20, 2017)
 
 * Add **`oao status`**: provides lots of information on the monorepo.

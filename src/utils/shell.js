@@ -8,11 +8,6 @@ import split from 'split';
 import { mainStory, chalk } from 'storyboard';
 import type { StoryT } from 'storyboard';
 
-const cd = (dir: string, { story = mainStory }: { story?: StoryT } = {}) => {
-  story.trace(`Changing working directory to ${chalk.cyan.bold(dir)}...`);
-  shell.cd(dir);
-};
-
 const cp = (src: string, dst: string, { story = mainStory }: { story?: StoryT } = {}) => {
   story.debug(`Copying ${chalk.cyan.bold(src)} -> ${chalk.cyan.bold(dst)}...`);
   shell.cp('-rf', path.normalize(src), path.normalize(dst));
@@ -42,24 +37,20 @@ const exec = async (cmd: string, {
   errorLogLevel = 'error',
   cwd,
 }: ExecOptions = {}): Promise<ExecResult> => {
-  const prevWd = shell.pwd();
   let title = `Run cmd ${chalk.green.bold(cmd)}`;
   if (cwd) title += ` at ${chalk.green(cwd)}`;
   const ownStory = story.child({ title, level: logLevel });
   try {
-    if (cwd) cd(cwd, { story });
-    const result = await _exec(cmd, { story: ownStory, errorLogLevel });
-    if (cwd) cd(prevWd, { story });
-    return result;
+    return await _exec(cmd, { cwd, story: ownStory, errorLogLevel });
   } finally {
     ownStory.close();
   }
 };
 
-const _exec = (cmd, { story, errorLogLevel }) => new Promise((resolve, reject) => {
-  const child = shell.exec(cmd, { silent: true }, (code, stdout, stderr) => {
+const _exec = (cmd, { cwd, story, errorLogLevel }) => new Promise((resolve, reject) => {
+  const child = shell.exec(cmd, { cwd, silent: true }, (code, stdout, stderr) => {
     if (code !== 0) {
-      story[errorLogLevel](`Command failed [${code}]`);
+      story[errorLogLevel](`Command '${cmd}' failed at ${cwd} [${code}]`);
       reject(new Error(`Command failed: ${cmd}`));
       return;
     }
@@ -76,7 +67,6 @@ const _exec = (cmd, { story, errorLogLevel }) => new Promise((resolve, reject) =
 });
 
 export {
-  cd,
   cp, mv,
   exec,
 };
