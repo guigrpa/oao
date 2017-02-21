@@ -1,6 +1,7 @@
 # Changelog
 
 * Add **parallel support to `oao all`**, using the `--parallel` and `--ignore-errors` options.
+* Bugfix: filter out non-directory paths from globby results.
 
 ## 0.5.3 (Feb. 20, 2017)
 
