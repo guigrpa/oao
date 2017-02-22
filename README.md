@@ -72,10 +72,11 @@ Publish updated sub-packages
 Options:
 
   -h, --help           output usage information
-  -s --src <pattern>   Glob pattern for sub-package paths [packages/*]
-  --no-master          Allow publishing from a non-master branch
-  --no-confirm         Do not ask for confirmation before publishing
-  --publish-tag <tag>  Publish with a custom tag (instead of `latest`)
+  -s --src <glob>      glob pattern for sub-package paths [packages/*]
+  -l --link <regex>    regex pattern for extra packages that should be linked, not installed
+  --no-master          allow publishing from a non-master branch
+  --no-confirm         do not ask for confirmation before publishing
+  --publish-tag <tag>  publish with a custom tag (instead of `latest`)
 ```
 
 
@@ -147,6 +148,13 @@ $ oao all "ls -al"
 $ oao all "yarn run compile"
 ```
 
+By default, `oao all` runs sequentially. Sometimes you must run commands in parallel, for example when you want to compile all sub-packages with a *watch* option:
+
+```sh
+$ oao all "yarn run compileWatch" --parallel
+```
+
+If you want to disable parallel logs, include the `--no-parallel-logs` flag.
 
 ## Credits :clap:
 
