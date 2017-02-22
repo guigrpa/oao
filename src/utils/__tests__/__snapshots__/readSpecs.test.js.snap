@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`readAllSpecs reads all package.json files as well as metadata 1`] = `
 Object {
   "oao": Object {

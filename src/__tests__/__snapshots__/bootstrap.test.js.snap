@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`BOOTSTRAP command executes the correct \`yarn link\`s and \`yarn install\`s 1`] = `
 Array [
   Array [

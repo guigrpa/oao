@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ALL command executes the specified command on all sub-packages 1`] = `
 Array [
   Array [
