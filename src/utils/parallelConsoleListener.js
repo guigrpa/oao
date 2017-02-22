@@ -40,6 +40,7 @@ class ParallelConsoleListener {
 
   tearDown() {
     this.resetCursorPos();
+    console.log('');  // eslint-disable-line
     if (this.timerCheckSize != null) {
       clearInterval(this.timerCheckSize);
       this.timerCheckSize = null;
