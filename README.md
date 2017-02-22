@@ -86,6 +86,8 @@ Options:
 
 Provides lots of information on the git repo (current branch, last tag, uncommitted/unpulled changes) and subpackage status (version, private flag, changes since last tag, dependencies).
 
+![oao status](https://raw.githubusercontent.com/guigrpa/oao/master/docs/status.png)
+
 
 ### `oao bootstrap`
 
@@ -154,7 +156,9 @@ By default, `oao all` runs sequentially. Sometimes you must run commands in para
 $ oao all "yarn run compileWatch" --parallel
 ```
 
-If you want to disable parallel logs, include the `--no-parallel-logs` flag.
+If you want to disable parallel logs, include the `--no-parallel-logs` flag. But for some scenarios it's really useful:
+
+![oao all --parallel](https://raw.githubusercontent.com/guigrpa/oao/master/docs/parallel.gif)
 
 ## Credits :clap:
 
