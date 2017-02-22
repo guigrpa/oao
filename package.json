@@ -47,6 +47,7 @@
     "split": "1.0.0",
     "storyboard": "^3.0.0-rc.2",
     "storyboard-preset-console": "^3.0.0-rc.4",
+    "terminal-kit": "^0.26.1",
     "timm": "^1.2.3"
   },
   "devDependencies": {
@@ -83,6 +84,7 @@
       "!src/index.js",
       "!src/status.js",
       "!src/utils/git.js",
+      "!src/utils/parallelConsoleListener.js",
       "!**/node_modules/**",
       "!**/__tests__/**",
       "!**/__mocks__/**"

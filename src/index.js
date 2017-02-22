@@ -61,6 +61,7 @@ createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorep
 
 createCommand('all <command>', 'Run a given command on all sub-packages')
 .option('--parallel', 'run command in parallel on all sub-packages')
+.option('--no-parallel-logs', 'use chronological logging, even in parallel mode')
 .option('--ignore-errors', 'do not stop even if there are errors in some packages')
 .action((command, cmd) => { all(command, cmd.opts()); });
 

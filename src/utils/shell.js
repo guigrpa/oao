@@ -23,6 +23,7 @@ type ExecOptions = {|
   logLevel?: *,
   errorLogLevel?: string,
   cwd?: string,
+  bareLogs?: boolean,
 |};
 
 type ExecResult = {
@@ -35,22 +36,24 @@ const exec = async (cmd: string, {
   story = mainStory,
   logLevel = 'info',
   errorLogLevel = 'error',
+  bareLogs = false,
   cwd,
 }: ExecOptions = {}): Promise<ExecResult> => {
   let title = `Run cmd ${chalk.green.bold(cmd)}`;
   if (cwd) title += ` at ${chalk.green(cwd)}`;
   const ownStory = story.child({ title, level: logLevel });
   try {
-    return await _exec(cmd, { cwd, story: ownStory, errorLogLevel });
+    return await _exec(cmd, { cwd, story: ownStory, errorLogLevel, bareLogs });
   } finally {
     ownStory.close();
   }
 };
 
-const _exec = (cmd, { cwd, story, errorLogLevel }) => new Promise((resolve, reject) => {
+const _exec = (cmd, { cwd, story, errorLogLevel, bareLogs }) => new Promise((resolve, reject) => {
+  const prefix = bareLogs ? '' : '| ';
   const child = shell.exec(cmd, { cwd, silent: true }, (code, stdout, stderr) => {
     if (code !== 0) {
-      story[errorLogLevel](`Command '${cmd}' failed at ${cwd} [${code}]`);
+      story[errorLogLevel](`Command '${cmd}' failed at ${cwd || '\'.\''} [${code}]`);
       reject(new Error(`Command failed: ${cmd}`));
       return;
     }
@@ -59,10 +62,10 @@ const _exec = (cmd, { cwd, story, errorLogLevel }) => new Promise((resolve, reje
   });
   const cmdName = cmd.split(' ')[0].slice(0, 10);
   child.stdout.pipe(split()).on('data', (line) => {
-    story.info(cmdName, `| ${line}`);
+    story.info(cmdName, `${prefix}${line}`);
   });
   child.stderr.pipe(split()).on('data', (line) => {
-    if (line) story[errorLogLevel](cmdName, `| ${line}`);
+    if (line) story[errorLogLevel](cmdName, `${prefix}${line}`);
   });
 });
 

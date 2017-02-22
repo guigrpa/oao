@@ -172,6 +172,13 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
+async-kit@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/async-kit/-/async-kit-2.2.3.tgz#264751a279ddc5f59b419638b805ae2c49858fb7"
+  dependencies:
+    nextgen-events "^0.9.0"
+    tree-kit "^0.5.26"
+
 async@^1.4.0, async@^1.4.2, async@~1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
@@ -2725,6 +2732,10 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
 
+nextgen-events@^0.9.0, nextgen-events@^0.9.8:
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/nextgen-events/-/nextgen-events-0.9.8.tgz#ed1712c2b37dad55407b3e941672d1568c3a4630"
+
 node-emoji@^1.4.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-1.5.1.tgz#fd918e412769bf8c448051238233840b2aff16a1"
@@ -3446,6 +3457,12 @@ storyboard@^3.0.0-rc.2:
   dependencies:
     storyboard-core "^3.0.0-rc.2"
 
+string-kit@^0.5.12:
+  version "0.5.15"
+  resolved "https://registry.yarnpkg.com/string-kit/-/string-kit-0.5.15.tgz#02cb7718c91ed750c242f969bcbdc0a3a8218732"
+  dependencies:
+    tree-kit "^0.5.24"
+
 string-width@^1.0.1, string-width@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-1.0.2.tgz#118bdf5b8cdc51a2a7e70d211e07e2b0b9b107d3"
@@ -3543,6 +3560,15 @@ tar@~2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
+terminal-kit@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/terminal-kit/-/terminal-kit-0.26.1.tgz#142d960c98b3afc8e800fe5ebdf9cbbea6abdfa1"
+  dependencies:
+    async-kit "^2.2.3"
+    nextgen-events "^0.9.8"
+    string-kit "^0.5.12"
+    tree-kit "^0.5.26"
+
 test-exclude@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/test-exclude/-/test-exclude-3.3.0.tgz#7a17ca1239988c98367b0621456dbb7d4bc38977"
@@ -3592,6 +3618,10 @@ tough-cookie@^2.3.2, tough-cookie@~2.3.0:
 tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+
+tree-kit@^0.5.24, tree-kit@^0.5.26:
+  version "0.5.26"
+  resolved "https://registry.yarnpkg.com/tree-kit/-/tree-kit-0.5.26.tgz#8571c86fa24d1db754e5b0cb3a7e09f41e74a8df"
 
 tryit@^1.0.1:
   version "1.0.3"
