@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.5 (Feb. 22, 2017)
+
+* Add **parallel logging in `oao all`** (can be disabled using the `--no-parallel-logs` option) (#10).
+
 ## 0.5.4 (Feb. 21, 2017)
 
 * Add **parallel support to `oao all`**, using the `--parallel` and `--ignore-errors` options (#10, #13).
