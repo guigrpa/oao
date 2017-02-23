@@ -5,7 +5,6 @@ Object {
   "oao": Object {
     "name": "oao",
     "pkgPath": "test/fixtures/packages/oao",
-    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao/package.json",
     "specs": Object {
       "license": "MIT",
       "main": "index.js",
@@ -16,7 +15,6 @@ Object {
   "oao-b": Object {
     "name": "oao-b",
     "pkgPath": "test/fixtures/packages/oao-b",
-    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-b/package.json",
     "specs": Object {
       "dependencies": Object {
         "oao": "*",
@@ -31,7 +29,6 @@ Object {
   "oao-c": Object {
     "name": "oao-c",
     "pkgPath": "test/fixtures/packages/oao-c",
-    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-c/package.json",
     "specs": Object {
       "dependencies": Object {
         "oao": "*",
@@ -53,7 +50,6 @@ Object {
   "oao-d": Object {
     "name": "oao-d",
     "pkgPath": "test/fixtures/packages/oao-d",
-    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-d/package.json",
     "specs": Object {
       "dependencies": Object {
         "oao": "*",
@@ -74,7 +70,6 @@ Object {
   "oao-priv": Object {
     "name": "oao-priv",
     "pkgPath": "test/fixtures/packages/oao-priv",
-    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-priv/package.json",
     "specs": Object {
       "dependencies": Object {
         "oao": "*",

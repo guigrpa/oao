@@ -20,6 +20,9 @@ describe('readAllSpecs', () => {
   it('accepts --src ending with slash', async () => {
     const allSpecs = await readAllSpecs('test/fixtures/packages/*/');
     delete allSpecs[ROOT_PACKAGE];
+    Object.keys(allSpecs).forEach((name) => {
+      delete allSpecs[name].specPath;
+    });
     expect(allSpecs).toMatchSnapshot();
   });
 
