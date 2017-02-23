@@ -1,6 +1,9 @@
 # Changelog
 
+## 0.5.6 (Feb. 23, 2017)
+
 * Allow `--src` pattern to have a trailing slash (optional).
+* Other minor tweaks.
 
 ## 0.5.5 (Feb. 22, 2017)
 
