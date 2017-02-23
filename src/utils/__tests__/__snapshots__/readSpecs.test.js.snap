@@ -1,5 +1,101 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`readAllSpecs accepts --src ending with slash 1`] = `
+Object {
+  "oao": Object {
+    "name": "oao",
+    "pkgPath": "test/fixtures/packages/oao",
+    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao/package.json",
+    "specs": Object {
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao",
+      "version": "0.1.0",
+    },
+  },
+  "oao-b": Object {
+    "name": "oao-b",
+    "pkgPath": "test/fixtures/packages/oao-b",
+    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-b/package.json",
+    "specs": Object {
+      "dependencies": Object {
+        "oao": "*",
+        "timm": "1.x",
+      },
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao-b",
+      "version": "0.1.0",
+    },
+  },
+  "oao-c": Object {
+    "name": "oao-c",
+    "pkgPath": "test/fixtures/packages/oao-c",
+    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-c/package.json",
+    "specs": Object {
+      "dependencies": Object {
+        "oao": "*",
+        "timm": "1.x",
+      },
+      "devDependencies": Object {
+        "oao-b": "*",
+        "xxl": "1.x",
+      },
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao-c",
+      "peerDependencies": Object {
+        "oao-b": "*",
+      },
+      "version": "0.1.0",
+    },
+  },
+  "oao-d": Object {
+    "name": "oao-d",
+    "pkgPath": "test/fixtures/packages/oao-d",
+    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-d/package.json",
+    "specs": Object {
+      "dependencies": Object {
+        "oao": "*",
+        "timm": "1.x",
+      },
+      "devDependencies": Object {
+        "oao-b": "*",
+        "oao-c": "*",
+        "xxl": "1.x",
+      },
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao-d",
+      "peerDependencies": Object {},
+      "version": "0.1.0",
+    },
+  },
+  "oao-priv": Object {
+    "name": "oao-priv",
+    "pkgPath": "test/fixtures/packages/oao-priv",
+    "specPath": "/Users/guillermo/Docs/Docs.Prog/JavaScript/oao/test/fixtures/packages/oao-priv/package.json",
+    "specs": Object {
+      "dependencies": Object {
+        "oao": "*",
+        "timm": "1.x",
+      },
+      "devDependencies": Object {
+        "oao-b": "*",
+        "oao-c": "*",
+        "xxl": "1.x",
+      },
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao-priv",
+      "peerDependencies": Object {},
+      "private": true,
+      "version": "0.1.0",
+    },
+  },
+}
+`;
+
 exports[`readAllSpecs reads all package.json files as well as metadata 1`] = `
 Object {
   "oao": Object {

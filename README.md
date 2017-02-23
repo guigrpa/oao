@@ -156,9 +156,10 @@ By default, `oao all` runs sequentially. Sometimes you must run commands in para
 $ oao all "yarn run compileWatch" --parallel
 ```
 
-If you want to disable parallel logs, include the `--no-parallel-logs` flag. But for some scenarios it's really useful:
-
 ![oao all --parallel](https://raw.githubusercontent.com/guigrpa/oao/master/docs/parallel.gif)
+
+**Note: some terminals may have problems with parallel logs (based on [terminal-kit](https://github.com/cronvel/terminal-kit)). If you experience issues, use the `--no-parallel-logs` flag. If you're using the default terminal or Hyper on OS X or Windows, you should be fine.**
+
 
 ## Credits :clap:
 

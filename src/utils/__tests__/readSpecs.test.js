@@ -17,6 +17,12 @@ describe('readAllSpecs', () => {
     expect(allSpecs).toMatchSnapshot();
   });
 
+  it('accepts --src ending with slash', async () => {
+    const allSpecs = await readAllSpecs('test/fixtures/packages/*/');
+    delete allSpecs[ROOT_PACKAGE];
+    expect(allSpecs).toMatchSnapshot();
+  });
+
   it('supports scoped packages', async () => {
     const allSpecs = await readAllSpecs('test/fixtures/packagesScoped/*');
     expect(allSpecs['@guigrpa/example-package'].specs.name).toEqual('@guigrpa/example-package');

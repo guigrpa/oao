@@ -1,5 +1,7 @@
 # Changelog
 
+* Allow `--src` pattern to have a trailing slash (optional).
+
 ## 0.5.5 (Feb. 22, 2017)
 
 * Add **parallel logging in `oao all`** (can be disabled using the `--no-parallel-logs` option) (#10).
