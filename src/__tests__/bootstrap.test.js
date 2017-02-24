@@ -65,6 +65,12 @@ describe('BOOTSTRAP command', () => {
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
 
+  it('executes the correct `yarn link`s and `yarn install`s in production', async () => {
+    const helpers = require('../utils/shell');
+    await bootstrap({ src: 'test/fixtures/packages/*', production: true });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
   it('executes the correct `yarn link`s and `yarn install`s with custom links', async () => {
     const helpers = require('../utils/shell');
     await bootstrap({

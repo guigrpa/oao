@@ -29,6 +29,7 @@ createCommand('status', 'Show an overview of the monorepo status')
 .action((cmd) => status(cmd.opts()));
 
 createCommand('bootstrap', 'Install external dependencies and create internal links')
+.option('--prod --production', 'skip external and internal development-only dependencies (also via NODE_ENV=production)')
 .action((cmd) => bootstrap(cmd.opts()));
 
 createCommand('add <sub-package> <packages...>', 'Add dependencies to a sub-package')

@@ -7,7 +7,7 @@ A Yarn-based, opinionated monorepo management tool.
 
 * Works with **yarn**, hence (relatively) **fast**.
 * **Simple to use** and extend (hope so!).
-* Provides a number of monorepo **workflow enhancers**: installing all dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
+* Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
 * Runs a command on all sub-packages, either **serially or in parallel**.
 * Provides an easy-to-read, **detailed status overview**.
@@ -92,6 +92,8 @@ Provides lots of information on the git repo (current branch, last tag, uncommit
 ### `oao bootstrap`
 
 Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself are `yarn link`ed.
+
+Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`.
 
 
 ### `oao add <sub-package> <deps...>`

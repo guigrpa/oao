@@ -1,5 +1,6 @@
 # Changelog
 
+* Add **`--production` option** to `oao bootstrap`: skip external and internal development-only dependencies (also available by setting the `NODE_ENV` environment variable to `production`) (#19). See also discussion in #16.
 * Filter sub-package paths, keeping only those that contain a `package.json` file.
 
 ## 0.5.6 (Feb. 23, 2017)
