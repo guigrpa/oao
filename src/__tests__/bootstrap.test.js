@@ -42,7 +42,9 @@ describe('BOOTSTRAP command', () => {
       expect(specPath.split(path.sep)).toContain('package.json');
     });
     PACKAGE_NAMES_1.forEach((name) => {
-      expect(spyFinalSpec(writeSpecs, name)).toEqual(originalSpecs[name]);
+      const finalSpecWritten = spyFinalSpec(writeSpecs, name);
+      if (finalSpecWritten === undefined) return;  // not changed at all!
+      expect(finalSpecWritten).toEqual(originalSpecs[name]);
     });
   });
 
@@ -55,7 +57,9 @@ describe('BOOTSTRAP command', () => {
       link: 'ext-.*',
     });
     PACKAGE_NAMES_2.forEach((name) => {
-      expect(spyFinalSpec(writeSpecs, name)).toEqual(originalSpecs[name]);
+      const finalSpecWritten = spyFinalSpec(writeSpecs, name);
+      if (finalSpecWritten === undefined) return;  // not changed at all!
+      expect(finalSpecWritten).toEqual(originalSpecs[name]);
     });
   });
 

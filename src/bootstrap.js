@@ -39,18 +39,22 @@ const run = async (opts: Options) => {
     });
 
     // Rewrite package.json without own/linked packages, install, and revert changes
+    let fModified = false;
     try {
       const { nextSpecs, allRemovedPackages, removedPackagesByType } =
         removeInternalLinks(prevSpecs, pkgNames, linkPattern);
       allRemovedDepsByPackage[pkgName] = Object.keys(allRemovedPackages);
       allRemovedDepsByPackageAndType[pkgName] = removedPackagesByType;
-      if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
+      if (nextSpecs !== prevSpecs) {
+        writeSpecs(specPath, nextSpecs);
+        fModified = true;
+      }
       mainStory.info('  - Installing external dependencies...');
       let cmd = 'yarn install';
       PASS_THROUGH_OPTS.forEach((key) => { if (opts[key]) cmd += ` --${kebabCase(key)}`; });
       await exec(cmd, { cwd: pkgPath, logLevel: 'trace' });
     } finally {
-      if (prevSpecs != null) writeSpecs(specPath, prevSpecs);
+      if (prevSpecs != null && fModified) writeSpecs(specPath, prevSpecs);
     }
   }
 
