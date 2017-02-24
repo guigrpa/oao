@@ -8,10 +8,12 @@ const listPaths = async (srcPatterns: string): Promise<Array<string>> => {
   const paths = await globby(srcPatterns);
   return paths.filter((filePath) => {
     try {
-      return fs.statSync(path.resolve(process.cwd(), filePath)).isDirectory();
+      return fs.statSync(path.resolve(process.cwd(), filePath)).isDirectory()
+          && fs.existsSync(path.resolve(process.cwd(), filePath, 'package.json'));
     } catch (err) { return false; }
   })
   .map((filePath) => {
+      console.log(filePath);
     if (filePath === '/' || filePath[filePath.length - 1] !== '/') return filePath;
     return filePath.slice(0, -1);
   });
