@@ -17,7 +17,7 @@ type Options = {
 
 const run = async (opts: Options) => {
   const { src: srcPatterns, link: linkPattern } = opts;
-  const production = opts.production || process.NODE_ENV === 'production';
+  const production = opts.production || process.env.NODE_ENV === 'production';
   const allSpecs = await readAllSpecs(srcPatterns);
   const pkgNames = Object.keys(allSpecs);
   const allRemovedDepsByPackage = {};
