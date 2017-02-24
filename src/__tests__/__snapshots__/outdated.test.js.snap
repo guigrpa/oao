@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OUTDATED command executes the correct \`yarn outdated\`s 1`] = `
+Array [
+  Array [
+    "yarn outdated",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+    },
+  ],
+  Array [
+    "yarn outdated",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+    },
+  ],
+  Array [
+    "yarn outdated",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+    },
+  ],
+  Array [
+    "yarn outdated",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
+    },
+  ],
+  Array [
+    "yarn outdated",
+    Object {
+      "cwd": "test/fixtures/packages/oao-priv",
+    },
+  ],
+  Array [
+    "yarn outdated",
+    Object {
+      "cwd": ".",
+    },
+  ],
+]
+`;

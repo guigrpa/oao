@@ -9,7 +9,7 @@ A Yarn-based, opinionated monorepo management tool.
 * **Simple to use** and extend (hope so!).
 * Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
-* Runs a command on all sub-packages, either **serially or in parallel**.
+* Runs a command on all sub-packages, **serially or in parallel**.
 * Provides an easy-to-read, **detailed status overview**.
 
 
@@ -114,6 +114,10 @@ Removes one or several dependencies from a sub-package.
 ### `oao upgrade <sub-package> [deps...]`
 
 Upgrade one/several/all dependencies of a sub-package.
+
+### `oao outdated`
+
+Runs `yarn outdated` on all sub-packages, as well as the root package.
 
 
 ### `oao prepublish`

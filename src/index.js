@@ -8,6 +8,7 @@ import 'storyboard-preset-console';
 import status from './status';
 import bootstrap from './bootstrap';
 import addRemoveUpgrade from './addRemoveUpgrade';
+import outdated from './outdated';
 import prepublish from './prepublish';
 import publish from './publish';
 import resetAllVersions from './resetAllVersions';
@@ -46,6 +47,9 @@ createCommand('remove <sub-package> <packages...>', 'Remove dependencies from a 
 createCommand('upgrade <sub-package> [packages...]', 'Upgrade some/all dependencies of a package')
 .option('--ignore-engines', 'disregard engines check during upgrade')
 .action((subpackage, deps, cmd) => addRemoveUpgrade(subpackage, 'upgrade', deps, cmd.opts()));
+
+createCommand('outdated', 'Check for outdated dependencies')
+.action((cmd) => outdated(cmd.opts()));
 
 createCommand('prepublish', 'Prepare for a release: validate versions, copy READMEs and package.json attrs')
 .option('--copy-attrs <attrs>', `copy these package.json attrs to sub-packages [${DEFAULT_COPY_ATTRS}]`, DEFAULT_COPY_ATTRS)
