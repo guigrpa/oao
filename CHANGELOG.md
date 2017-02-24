@@ -1,7 +1,10 @@
 # Changelog
 
+## 0.5.7 (Feb. 24, 2017)
+
 * Add **`oao outdated`**: runs `yarn outdated` on all sub-packages and the root package, taking care that internal and custom links are omitted.
 * Add **`--production` option** to `oao bootstrap`: skip external and internal development-only dependencies (also available by setting the `NODE_ENV` environment variable to `production`) (#19). See also discussion in #16.
+* Filter sub-package paths, keeping only those that contain a `package.json` file (#20).
 
 ## 0.5.6 (Feb. 23, 2017)
 
