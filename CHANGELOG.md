@@ -1,5 +1,7 @@
 # Changelog
 
+* Filter sub-package paths, keeping only those that contain a `package.json` file.
+
 ## 0.5.6 (Feb. 23, 2017)
 
 * Allow `--src` pattern to have a trailing slash (optional).
