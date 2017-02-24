@@ -13,7 +13,6 @@ const listPaths = async (srcPatterns: string): Promise<Array<string>> => {
     } catch (err) { return false; }
   })
   .map((filePath) => {
-      console.log(filePath);
     if (filePath === '/' || filePath[filePath.length - 1] !== '/') return filePath;
     return filePath.slice(0, -1);
   });
