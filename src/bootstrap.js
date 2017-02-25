@@ -2,6 +2,7 @@
 
 import { mainStory, chalk } from 'storyboard';
 import kebabCase from 'kebab-case';
+import semver from 'semver';
 import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
@@ -43,7 +44,7 @@ const run = async (opts: Options) => {
     try {
       const { nextSpecs, allRemovedPackages, removedPackagesByType } =
         removeInternalLinks(prevSpecs, pkgNames, linkPattern);
-      allRemovedDepsByPackage[pkgName] = Object.keys(allRemovedPackages);
+      allRemovedDepsByPackage[pkgName] = allRemovedPackages;
       allRemovedDepsByPackageAndType[pkgName] = removedPackagesByType;
       if (nextSpecs !== prevSpecs) {
         writeSpecs(specPath, nextSpecs);
@@ -64,13 +65,21 @@ const run = async (opts: Options) => {
     if (pkgName === ROOT_PACKAGE) continue;
     mainStory.info(
       `${chalk.bold('PASS 2:')} installing internal deps for ${chalk.cyan.bold(pkgName)}...`);
-    const packagesToLink = allRemovedDepsByPackage[pkgName];
+    const allRemovedPackages = allRemovedDepsByPackage[pkgName];
     const removedPackagesByType = allRemovedDepsByPackageAndType[pkgName];
+    const packagesToLink = Object.keys(allRemovedPackages);
     const { pkgPath } = allSpecs[pkgName];
     for (let k = 0; k < packagesToLink.length; k++) {
       const depName = packagesToLink[k];
       if (production && isPureDevDependency(removedPackagesByType, depName)) continue;
       mainStory.info(`  - Linking to ${chalk.cyan.bold(depName)}...`);
+      const depVersionRange = allRemovedPackages[depName];
+      const depSpecs = allSpecs[depName]; // might not exist, if it's a custom link
+      const depActualVersion = depSpecs ? depSpecs.specs.version : null;
+      if (depActualVersion && !semver.satisfies(depActualVersion, depVersionRange)) {
+        mainStory.warn(`  - Warning: ${chalk.cyan.bold(`${depName}@${depActualVersion}`)} ` +
+          `does not satisfy specified range: ${chalk.cyan.bold(depVersionRange)}`);
+      }
       await exec(`yarn link ${depName}`, { cwd: pkgPath, logLevel: 'trace' });
     }
   }

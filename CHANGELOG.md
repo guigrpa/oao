@@ -1,6 +1,7 @@
 # Changelog
 
 * Modify `oao status` so that it provides more accurate information (e.g. in git repos with no tags, no upstream, etc.) (#23).
+* Warn during `oao bootstrap` when linked package version does not satisfy the required range (#25).
 
 ## 0.5.7 (Feb. 24, 2017)
 
