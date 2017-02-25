@@ -50,8 +50,8 @@ Commands:
   add [options] <sub-package> <packages...>      Add dependencies to a sub-package
   remove [options] <sub-package> <packages...>   Remove dependencies from a sub-package
   upgrade [options] <sub-package> [packages...]  Upgrade some/all dependencies of a package
-  prepublish [options]                           Prepare for a release: validate versions, copy READMEs and package.js
-on attrs
+  outdated [options]                             Check for outdated dependencies
+  prepublish [options]                           Prepare for a release: validate versions, copy READMEs and package.json attrs
   publish [options]                              Publish updated sub-packages
   reset-all-versions [options] <version>         Reset all versions (incl. monorepo package) to the specified one
   all [options] <command>                        Run a given command on all sub-packages
