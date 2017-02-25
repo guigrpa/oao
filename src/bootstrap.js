@@ -60,7 +60,6 @@ const run = async (opts: Options) => {
   // Pass 2: link internal and user-specified deps
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
-    if (pkgName === ROOT_PACKAGE) continue;
     const allRemovedPackages = allRemovedDepsByPackage[pkgName];
     const removedPackagesByType = allRemovedDepsByPackageAndType[pkgName];
     const packagesToLink = Object.keys(allRemovedPackages);
