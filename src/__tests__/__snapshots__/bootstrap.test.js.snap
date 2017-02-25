@@ -78,6 +78,13 @@ Array [
     },
   ],
   Array [
+    "yarn install",
+    Object {
+      "cwd": ".",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
     "yarn link oao",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
@@ -221,6 +228,13 @@ Array [
     },
   ],
   Array [
+    "yarn install --production",
+    Object {
+      "cwd": ".",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
     "yarn link oao",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
@@ -306,6 +320,13 @@ Array [
     },
   ],
   Array [
+    "yarn install",
+    Object {
+      "cwd": ".",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
     "yarn link oao",
     Object {
       "cwd": "test/fixtures/packagesCustomLinks/oao-b",
@@ -379,6 +400,13 @@ Array [
     "yarn install",
     Object {
       "cwd": "test/fixtures/packagesScoped/example-package-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": ".",
       "logLevel": "trace",
     },
   ],

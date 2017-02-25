@@ -27,17 +27,15 @@ const run = async (opts: Options) => {
   // Pass 1: register each package with yarn, and install external deps
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
-    if (pkgName === ROOT_PACKAGE) continue;
-    const { pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
-    mainStory.info(`${chalk.bold('PASS 1:')} processing ${chalk.cyan.bold(pkgName)}...`);
+    // if (pkgName === ROOT_PACKAGE) continue;
+    const { displayName, pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
+    mainStory.info(`${chalk.bold('PASS 1:')} processing ${chalk.cyan.bold(displayName)}...`);
 
     // Link
-    mainStory.info('  - Registering...');
-    await exec('yarn link', {
-      cwd: pkgPath,
-      logLevel: 'trace',
-      errorLogLevel: 'info',
-    });
+    if (pkgName !== ROOT_PACKAGE) {
+      mainStory.info('  - Registering...');
+      await exec('yarn link', { cwd: pkgPath, logLevel: 'trace', errorLogLevel: 'info' });
+    }
 
     // Rewrite package.json without own/linked packages, install, and revert changes
     let fModified = false;
@@ -63,12 +61,12 @@ const run = async (opts: Options) => {
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     if (pkgName === ROOT_PACKAGE) continue;
-    mainStory.info(
-      `${chalk.bold('PASS 2:')} installing internal deps for ${chalk.cyan.bold(pkgName)}...`);
     const allRemovedPackages = allRemovedDepsByPackage[pkgName];
     const removedPackagesByType = allRemovedDepsByPackageAndType[pkgName];
     const packagesToLink = Object.keys(allRemovedPackages);
-    const { pkgPath } = allSpecs[pkgName];
+    const { displayName, pkgPath } = allSpecs[pkgName];
+    mainStory.info(`${chalk.bold('PASS 2:')} installing internal deps for ` +
+      `${chalk.cyan.bold(displayName)}...`);
     for (let k = 0; k < packagesToLink.length; k++) {
       const depName = packagesToLink[k];
       if (production && isPureDevDependency(removedPackagesByType, depName)) continue;
