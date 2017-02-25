@@ -1,5 +1,7 @@
 # Changelog
 
+* Modify `oao status` so that it provides more accurate information (e.g. in git repos with no tags, no upstream, etc.) (#23).
+
 ## 0.5.7 (Feb. 24, 2017)
 
 * Add **`oao outdated`**: runs `yarn outdated` on all sub-packages and the root package, taking care that internal and custom links are omitted.

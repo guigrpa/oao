@@ -22,22 +22,29 @@ const run = async (opts: Options) => {
 };
 
 const gitStatus = async () => {
-  let lastTag;
+  console.log('');
+  console.log('* Git status:');
+  console.log('');
   try {
     const branch = await gitCurBranch();
-    lastTag = await gitLastTag();
-    const uncommitted = await gitUncommittedChanges();
-    const unpulled = await gitUnpulledChanges();
-    console.log('');
-    console.log('* Git status:');
-    console.log('');
     console.log(`    - Current branch: ${chalk.cyan.bold(branch)}`);
-    console.log(`    - Last tag: ${chalk.cyan.bold(lastTag)}`);
+  } catch (err) {
+    console.log(`    - ${chalk.red.bold('Could not be determined')} (is this a git repo?)`);
+  }
+  let lastTag;
+  try {
+    lastTag = await gitLastTag();
+    console.log(`    - Last tag: ${lastTag != null ? chalk.cyan.bold(lastTag) : chalk.yellow.bold('NONE YET')}`);
+  } catch (err) { /* ignore */ }
+  try {
+    const uncommitted = await gitUncommittedChanges();
     console.log(`    - Uncommitted changes: ${uncommitted !== '' ? chalk.yellow.bold('YES') : chalk.cyan.bold('no')}`);
+  } catch (err) { /* ignore */ }
+  try {
+    const unpulled = await gitUnpulledChanges();
     console.log(`    - Unpulled changes: ${unpulled !== '0' ? chalk.yellow.bold('YES') : chalk.cyan.bold('no')}`);
   } catch (err) {
-    console.log('');
-    console.log(`* Git status: ${chalk.red.bold('could not be determined')} (is this a git repo?)`);
+    console.log(`    - Unpulled changes: ${chalk.yellow.bold('UNKNOWN (no upstream?)')}`);
   }
   return lastTag;
 };
