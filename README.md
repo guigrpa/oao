@@ -1,5 +1,7 @@
 # oao :package: [![Build Status](https://travis-ci.org/guigrpa/oao.svg?branch=master)](https://travis-ci.org/guigrpa/oao) [![Coverage Status](https://coveralls.io/repos/github/guigrpa/oao/badge.svg?branch=master)](https://coveralls.io/github/guigrpa/oao?branch=master) [![npm version](https://img.shields.io/npm/v/oao.svg)](https://www.npmjs.com/package/oao)
 
+![oao all --parallel](https://raw.githubusercontent.com/guigrpa/oao/master/docs/parallel.gif)
+
 A Yarn-based, opinionated monorepo management tool.
 
 
@@ -161,8 +163,6 @@ By default, `oao all` runs sequentially. Sometimes you must run commands in para
 ```sh
 $ oao all "yarn run compileWatch" --parallel
 ```
-
-![oao all --parallel](https://raw.githubusercontent.com/guigrpa/oao/master/docs/parallel.gif)
 
 **Note: some terminals may have problems with parallel logs (based on [terminal-kit](https://github.com/cronvel/terminal-kit)). If you experience issues, use the `--no-parallel-logs` flag. If you're using the default terminal or Hyper on OS X or Windows, you should be fine.**
 
