@@ -8,6 +8,7 @@ describe('readAllSpecs', () => {
     const allSpecs = await readAllSpecs('test/fixtures/packages/*');
     const rootSpecs = allSpecs[ROOT_PACKAGE];
     expect(rootSpecs.pkgPath).toBe('.');
+    expect(rootSpecs.displayName).toBe('ROOT');
     expect(rootSpecs.specs.name).toBe('oao');
     delete allSpecs[ROOT_PACKAGE];
     Object.keys(allSpecs).forEach((name) => {
