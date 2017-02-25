@@ -42,7 +42,7 @@ const readOneSpec = (pkgPath: string): OaoSpecs => {
   const name = pkgPath === '.' ? ROOT_PACKAGE : pkg.specs.name;
   validatePkgName(pkgPath, name);
   pkg.name = name;
-  const displayName = name === ROOT_PACKAGE ? 'ROOT' : name;
+  const displayName = name === ROOT_PACKAGE ? 'MONOREPO ROOT' : name;
   pkg.displayName = displayName;
   return pkg;
 };
