@@ -73,4 +73,8 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
 process.on('unhandledRejection', () => { process.exit(1); });
 process.on('SIGINT', () => { process.exit(0); });
 
+program.command('*', '', { noHelp: true })
+.action(() => program.outputHelp());
+if (process.argv.length <= 2) program.outputHelp();
+
 program.parse(process.argv);

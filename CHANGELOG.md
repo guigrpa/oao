@@ -1,5 +1,7 @@
 # Changelog
 
+* Show help when user enters no valid command.
+
 ## 0.6.0 (Feb. 25, 2017)
 
 * Also process the monorepo root during `oao bootstrap`, including links to sub-packages (if any) (#24).
