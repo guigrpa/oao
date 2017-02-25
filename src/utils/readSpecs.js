@@ -12,6 +12,7 @@ type OaoSpecs = {
   pkgPath: string,
   specPath: string,  // including .package.json
   name: string,
+  displayName: string,
   specs: Object,
 };
 type AllSpecs = { [key: PackageName]: OaoSpecs };
@@ -41,6 +42,8 @@ const readOneSpec = (pkgPath: string): OaoSpecs => {
   const name = pkgPath === '.' ? ROOT_PACKAGE : pkg.specs.name;
   validatePkgName(pkgPath, name);
   pkg.name = name;
+  const displayName = name === 'ROOT_PACKAGE' ? 'ROOT' : name;
+  pkg.displayName = displayName;
   return pkg;
 };
 

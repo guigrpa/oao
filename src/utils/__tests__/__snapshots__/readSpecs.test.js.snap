@@ -3,6 +3,7 @@
 exports[`readAllSpecs accepts --src ending with slash 1`] = `
 Object {
   "oao": Object {
+    "displayName": "oao",
     "name": "oao",
     "pkgPath": "test/fixtures/packages/oao",
     "specs": Object {
@@ -13,6 +14,7 @@ Object {
     },
   },
   "oao-b": Object {
+    "displayName": "oao-b",
     "name": "oao-b",
     "pkgPath": "test/fixtures/packages/oao-b",
     "specs": Object {
@@ -27,6 +29,7 @@ Object {
     },
   },
   "oao-c": Object {
+    "displayName": "oao-c",
     "name": "oao-c",
     "pkgPath": "test/fixtures/packages/oao-c",
     "specs": Object {
@@ -48,6 +51,7 @@ Object {
     },
   },
   "oao-d": Object {
+    "displayName": "oao-d",
     "name": "oao-d",
     "pkgPath": "test/fixtures/packages/oao-d",
     "specs": Object {
@@ -68,6 +72,7 @@ Object {
     },
   },
   "oao-priv": Object {
+    "displayName": "oao-priv",
     "name": "oao-priv",
     "pkgPath": "test/fixtures/packages/oao-priv",
     "specs": Object {
@@ -94,6 +99,7 @@ Object {
 exports[`readAllSpecs reads all package.json files as well as metadata 1`] = `
 Object {
   "oao": Object {
+    "displayName": "oao",
     "name": "oao",
     "pkgPath": "test/fixtures/packages/oao",
     "specs": Object {
@@ -104,6 +110,7 @@ Object {
     },
   },
   "oao-b": Object {
+    "displayName": "oao-b",
     "name": "oao-b",
     "pkgPath": "test/fixtures/packages/oao-b",
     "specs": Object {
@@ -118,6 +125,7 @@ Object {
     },
   },
   "oao-c": Object {
+    "displayName": "oao-c",
     "name": "oao-c",
     "pkgPath": "test/fixtures/packages/oao-c",
     "specs": Object {
@@ -139,6 +147,7 @@ Object {
     },
   },
   "oao-d": Object {
+    "displayName": "oao-d",
     "name": "oao-d",
     "pkgPath": "test/fixtures/packages/oao-d",
     "specs": Object {
@@ -159,6 +168,7 @@ Object {
     },
   },
   "oao-priv": Object {
+    "displayName": "oao-priv",
     "name": "oao-priv",
     "pkgPath": "test/fixtures/packages/oao-priv",
     "specs": Object {
