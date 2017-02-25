@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.0 (Feb. 25, 2017)
+
+* Also process the monorepo root during `oao bootstrap`, including links to sub-packages (if any) (#24).
 * Modify `oao status` so that it provides more accurate information (e.g. in git repos with no tags, no upstream, etc.) (#23).
 * Warn during `oao bootstrap` when linked package version does not satisfy the required range (#25).
 
