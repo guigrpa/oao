@@ -147,7 +147,7 @@ class ParallelConsoleListener {
   }
 
   termRefreshAll() {
-    term.clear();
+    this.termClear();
     const { threads, height: h0 } = this;
     const threadIds = Object.keys(threads);
     let len = threadIds.length;
@@ -178,6 +178,14 @@ class ParallelConsoleListener {
       // TODO: show warning that more stories are available
     }
     this.resetCursorPos();
+  }
+
+  termClear() {
+    const { height } = term;
+    for (let i = 0; i < height; i++) {
+      term.moveTo(1, i + 1).eraseLine();
+      term('');
+    }
   }
 
   termRefreshThread(threadId) {

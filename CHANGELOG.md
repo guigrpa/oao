@@ -1,5 +1,6 @@
 # Changelog
 
+* Remove extra blank lines (above the fold) caused when clearing the terminal in parallel logs (#18).
 * Show help when user enters no valid command.
 
 ## 0.6.0 (Feb. 25, 2017)
