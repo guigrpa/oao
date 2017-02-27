@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.7.0 (Feb. 27, 2017)
+
 * Add support for **internal links in `oao add|remove|upgrade`** (#17).
 * Add support for `oao add|remove|upgrade` on the root package (use either `.` or `ROOT` as package name).
 
