@@ -1,5 +1,8 @@
 # Changelog
 
+* Add support for **internal links in `oao add|remove|upgrade`** (#17).
+* Add support for `oao add|remove|upgrade` on the root package (use either `.` or `ROOT` as package name).
+
 ## 0.6.1 (Feb. 26, 2017)
 
 * Remove extra blank lines (above the fold) caused when clearing the terminal in parallel logs (#18).

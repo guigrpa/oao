@@ -48,10 +48,55 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
 
+  it('executes ADD correctly (external/internal deps, flags)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-c', 'add', ['mady', 'jest-html', 'oao-b'], {
+      src: 'test/fixtures/packages2/*',
+      dev: true,
+    });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    expect(writeSpecs).toHaveBeenCalled();
+    const finalSpecs = writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
+  });
+
+  it('executes ADD correctly (internal deps, flags)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-c', 'add', ['oao-b'], {
+      src: 'test/fixtures/packages2/*',
+      dev: true,
+    });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const finalSpecs = writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
+  });
+
   it('executes REMOVE correctly', async () => {
     const helpers = require('../utils/shell');
     await addRemoveUpgrade('oao-b', 'remove', ['mady'], { src: 'test/fixtures/packages2/*' });
     expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
+  it('executes REMOVE correctly (external/internal deps)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-c', 'remove', ['timm', 'oao'], { src: 'test/fixtures/packages2/*' });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    expect(writeSpecs).toHaveBeenCalled();
+    const finalSpecs = writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs.dependencies.oao).toBeUndefined();
+  });
+
+  it('executes REMOVE correctly (internal deps)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-c', 'remove', ['oao'], { src: 'test/fixtures/packages2/*' });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    expect(writeSpecs).toHaveBeenCalled();
+    const finalSpecs = writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs.dependencies.oao).toBeUndefined();
   });
 
   it('executes UPGRADE correctly (one package, no flags)', async () => {
@@ -69,9 +114,21 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
 
+  it('executes UPGRADE correctly (external/internal deps, no flags)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-c', 'upgrade', ['timm', 'oao@2.0.0'], { src: 'test/fixtures/packages2/*' });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const finalSpecs = writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
+  });
+
   it('executes UPGRADE correctly (no package, no flags)', async () => {
     const helpers = require('../utils/shell');
-    await addRemoveUpgrade('oao-b', 'upgrade', [], { src: 'test/fixtures/packages2/*' });
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade('oao-c', 'upgrade', [], { src: 'test/fixtures/packages2/*' });
     expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const finalSpecs = writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
   });
 });

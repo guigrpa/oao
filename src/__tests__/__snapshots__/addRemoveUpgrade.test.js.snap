@@ -1,5 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (external/internal deps, flags) 1`] = `
+Array [
+  Array [
+    "yarn add mady jest-html --dev",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+    },
+  ],
+  Array [
+    "yarn link oao-b",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+      "errorLogLevel": "trace",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (external/internal deps, flags) 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "devDependencies": Object {
+    "oao-b": "^0.1.16",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "version": "0.1.0",
+}
+`;
+
 exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (flags) 1`] = `
 Array [
   Array [
@@ -9,6 +44,35 @@ Array [
     },
   ],
 ]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (internal deps, flags) 1`] = `
+Array [
+  Array [
+    "yarn link oao-b",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+      "errorLogLevel": "trace",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (internal deps, flags) 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "devDependencies": Object {
+    "oao-b": "^0.1.16",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "version": "0.1.0",
+}
 `;
 
 exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly (multiple packages, no flags) 1`] = `
@@ -33,6 +97,38 @@ Array [
 ]
 `;
 
+exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly (external/internal deps) 1`] = `
+Array [
+  Array [
+    "yarn remove timm",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+    },
+  ],
+  Array [
+    "yarn unlink oao",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+      "errorLogLevel": "trace",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly (internal deps) 1`] = `
+Array [
+  Array [
+    "yarn unlink oao",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+      "errorLogLevel": "trace",
+      "logLevel": "trace",
+    },
+  ],
+]
+`;
+
 exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly 1`] = `
 Array [
   Array [
@@ -44,15 +140,52 @@ Array [
 ]
 `;
 
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (external/internal deps, no flags) 1`] = `
+Array [
+  Array [
+    "yarn upgrade timm",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-c",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (external/internal deps, no flags) 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "2.0.0",
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "version": "0.1.0",
+}
+`;
+
 exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (no package, no flags) 1`] = `
 Array [
   Array [
     "yarn upgrade",
     Object {
-      "cwd": "test/fixtures/packages2/oao-b",
+      "cwd": "test/fixtures/packages2/oao-c",
     },
   ],
 ]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (no package, no flags) 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "^0.1.0",
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "version": "0.1.0",
+}
 `;
 
 exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (one package, flags) 1`] = `
@@ -85,7 +218,7 @@ Object {
   "license": "MIT",
   "main": "index.js",
   "name": "oao-b",
-  "version": "0.1.0",
+  "version": "0.1.16",
 }
 `;
 
@@ -98,7 +231,7 @@ Object {
   "license": "MIT",
   "main": "index.js",
   "name": "oao-b",
-  "version": "0.1.0",
+  "version": "0.1.16",
 }
 `;
 
