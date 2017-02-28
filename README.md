@@ -93,29 +93,41 @@ Provides lots of information on the git repo (current branch, last tag, uncommit
 
 ### `oao bootstrap`
 
-Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself are `yarn link`ed.
+Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself (and custom links specified with the `--link` option) are `yarn link`ed.
 
 Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`.
 
 
 ### `oao add <sub-package> <deps...>`
 
-Adds one or several dependencies to a sub-package. It passes through [`yarn add`'s flags](https://yarnpkg.com/en/docs/cli/add). Examples:
+Adds one or several dependencies to a sub-package. For external dependencies, it passes through [`yarn add`'s flags](https://yarnpkg.com/en/docs/cli/add). Internal dependencies are linked. Examples:
 
 ```sh
-$ oao add my-sub-package dep-one dep-two
-$ oao add my-sub-package dep-one --exact --dev
+$ oao add subpackage-1 jest --dev
+$ oao add subpackage-2 react subpackage-1 --exact
 ```
 
 
 ### `oao remove <sub-package> <deps...>`
 
-Removes one or several dependencies from a sub-package.
+Removes one or several dependencies from a sub-package. Examples:
+
+```sh
+$ oao remove subpackage-1 jest
+$ oao remove subpackage-2 react subpackage-1
+```
 
 
 ### `oao upgrade <sub-package> [deps...]`
 
-Upgrade one/several/all dependencies of a sub-package.
+Upgrade one/several/all dependencies of a sub-package. For external dependencies, it will download the upgraded dependency using yarn. For internal dependencies, it will just update the sub-package's `package.json` file. Examples:
+
+```sh
+$ oao upgrade subpackage-1 jest@18.0.1
+$ oao upgrade subpackage-2 react subpackage-1@3.1.2
+$ oao upgrade subpackage-3
+```
+
 
 ### `oao outdated`
 
