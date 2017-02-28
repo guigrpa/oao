@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.7.1 (Feb. 28, 2017)
+
 * Add **`oao clean`** to remove all `node_modules` directories in sub-packages.
 * Provide **more explicit errors when unhandled rejections occur**.
 * Add `--no-confirm` option to `oao reset-all-versions` (#26)
