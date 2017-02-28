@@ -1,6 +1,7 @@
 # Changelog
 
 * Add **`oao clean`** to remove all `node_modules` directories in sub-packages.
+* Provide **more explicit errors when unhandled rejections occur**.
 * Extract Parallel Console (now published as `storyboard-listener-console-parallel` under the Storyboard monorepo).
 
 ## 0.7.0 (Feb. 27, 2017)

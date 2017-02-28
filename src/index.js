@@ -74,7 +74,10 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
 .option('--ignore-errors', 'do not stop even if there are errors in some packages')
 .action((command, cmd) => { all(command, cmd.opts()); });
 
-process.on('unhandledRejection', () => { process.exit(1); });
+process.on('unhandledRejection', (err) => {
+  console.error(err);  // eslint-disable-line
+  process.exit(1);
+});
 process.on('SIGINT', () => { process.exit(0); });
 
 program.command('*', '', { noHelp: true })
