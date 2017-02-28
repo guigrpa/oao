@@ -66,6 +66,7 @@ createCommand('publish', 'Publish updated sub-packages')
 .action((cmd) => publish(cmd.opts()));
 
 createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorepo package) to the specified one')
+.option('--no-confirm', 'do not ask for confirmation')
 .action((version, cmd) => { resetAllVersions(version, cmd.opts()); });
 
 createCommand('all <command>', 'Run a given command on all sub-packages')
