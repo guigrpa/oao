@@ -3432,21 +3432,28 @@ storyboard-core@^3.0.0-rc.2:
     timm "^1.2.3"
     uuid "^3.0.1"
 
-storyboard-listener-console@^3.0.0-rc.2:
+storyboard-listener-console-parallel@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/storyboard-listener-console-parallel/-/storyboard-listener-console-parallel-3.1.0.tgz#97f96f78c51f1e9147af18943ec506777afc3ee7"
+  dependencies:
+    terminal-kit "^0.26.1"
+    timm "^1.2.3"
+
+storyboard-listener-console@^3.0.0, storyboard-listener-console@^3.0.0-rc.2:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/storyboard-listener-console/-/storyboard-listener-console-3.0.0.tgz#feeb54e25fc5def0f41145d2dea23f6003fff2cd"
   dependencies:
     timm "^1.2.3"
 
-storyboard-preset-console@^3.0.0, storyboard-preset-console@^3.0.0-rc.2:
+storyboard-preset-console@^3.0.0-rc.2:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/storyboard-preset-console/-/storyboard-preset-console-3.0.0.tgz#ae3f098e5b386876b2d41ab7c89d55bfd3ac0a44"
   dependencies:
     storyboard-listener-console "^3.0.0-rc.2"
 
-storyboard@^3.0.0, storyboard@^3.0.0-rc.2:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/storyboard/-/storyboard-3.0.0.tgz#839515a88fbefb89a22f9055d3df5b0d5e6e9099"
+storyboard@^3.0.0-rc.2, storyboard@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/storyboard/-/storyboard-3.1.0.tgz#00053f50b2df3657a531d26b996e56a606323936"
   dependencies:
     storyboard-core "^3.0.0-rc.2"
 

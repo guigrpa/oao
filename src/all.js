@@ -1,9 +1,9 @@
 // @flow
 
 import { removeAllListeners, addListener } from 'storyboard';
+import parallelConsoleListener from 'storyboard-listener-console-parallel';
 import listPaths from './utils/listPaths';
 import { exec } from './utils/shell';
-import parallelConsoleListener from './utils/parallelConsoleListener';
 
 type Options = {
   src: string,

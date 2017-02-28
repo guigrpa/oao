@@ -1,5 +1,7 @@
 # Changelog
 
+* Extract Parallel Console (now published as `storyboard-listener-console-parallel` under the Storyboard monorepo).
+
 ## 0.7.0 (Feb. 27, 2017)
 
 * Add support for **internal links in `oao add|remove|upgrade`** (#17).

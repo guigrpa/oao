@@ -4,7 +4,7 @@
 
 import 'babel-polyfill';
 import program from 'commander';
-import 'storyboard-preset-console';
+import './utils/initConsole';
 import status from './status';
 import bootstrap from './bootstrap';
 import addRemoveUpgrade from './addRemoveUpgrade';

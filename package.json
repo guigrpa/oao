@@ -45,8 +45,9 @@
     "semver": "5.3.0",
     "shelljs": "0.7.6",
     "split": "1.0.0",
-    "storyboard": "^3.0.0",
-    "storyboard-preset-console": "^3.0.0",
+    "storyboard": "^3.1.0",
+    "storyboard-listener-console": "^3.0.0",
+    "storyboard-listener-console-parallel": "^3.1.0",
     "terminal-kit": "^0.26.1",
     "timm": "^1.2.3"
   },
