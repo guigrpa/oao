@@ -12,8 +12,6 @@ jest.mock('../utils/writeSpecs');
 const PACKAGE_NAMES = ['oao', 'oao-b', 'oao-c', 'oao-d', 'oao-priv'];
 
 describe('RESET_ALL_VERSIONS command', () => {
-  beforeEach(() => { jest.resetAllMocks(); });
-
   it('does not modify any package.json (except for the version number)', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
     const base = path.join(process.cwd(), 'test/fixtures/packages');

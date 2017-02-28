@@ -49,6 +49,7 @@ Commands:
 
   status [options]                               Show an overview of the monorepo status
   bootstrap [options]                            Install external dependencies and create internal links
+  clean [options]                                Delete all node_modules directories from sub-packages
   add [options] <sub-package> <packages...>      Add dependencies to a sub-package
   remove [options] <sub-package> <packages...>   Remove dependencies from a sub-package
   upgrade [options] <sub-package> [packages...]  Upgrade some/all dependencies of a package
@@ -96,6 +97,11 @@ Provides lots of information on the git repo (current branch, last tag, uncommit
 Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself (and custom links specified with the `--link` option) are `yarn link`ed.
 
 Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`.
+
+
+### `oao clean`
+
+Removes `node_modules` directories from all sub-packages, as well as from the root package.
 
 
 ### `oao add <sub-package> <deps...>`

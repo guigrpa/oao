@@ -31,7 +31,7 @@ rules:
       mode: 'minimum'
   object-property-newline: off
   class-methods-use-this: off
-  arrow-parens: ['error', 'always']
+  arrow-parens: off
   react/sort-comp: off
   react/jsx-first-prop-new-line: off
   react/jsx-indent: off

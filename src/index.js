@@ -7,6 +7,7 @@ import program from 'commander';
 import './utils/initConsole';
 import status from './status';
 import bootstrap from './bootstrap';
+import clean from './clean';
 import addRemoveUpgrade from './addRemoveUpgrade';
 import outdated from './outdated';
 import prepublish from './prepublish';
@@ -32,6 +33,9 @@ createCommand('status', 'Show an overview of the monorepo status')
 createCommand('bootstrap', 'Install external dependencies and create internal links')
 .option('--prod --production', 'skip external and internal development-only dependencies (also via NODE_ENV=production)')
 .action((cmd) => bootstrap(cmd.opts()));
+
+createCommand('clean', 'Delete all node_modules directories from sub-packages')
+.action((cmd) => clean(cmd.opts()));
 
 createCommand('add <sub-package> <packages...>', 'Add dependencies to a sub-package')
 .option('-D --dev', 'add to `devDependencies` instead of `dependencies`')

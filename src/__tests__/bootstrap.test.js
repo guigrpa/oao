@@ -27,8 +27,6 @@ const spyFinalSpec = (spy, pkgName) => {
 };
 
 describe('BOOTSTRAP command', () => {
-  beforeEach(() => { jest.resetAllMocks(); });
-
   it('does not modify any package.json', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
     const base = path.join(process.cwd(), 'test/fixtures/packages');

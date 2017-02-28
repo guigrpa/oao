@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CLEAN command executes the correct rimraf calls 1`] = `
+Array [
+  "test/fixtures/packages/oao/node_modules",
+  "test/fixtures/packages/oao-b/node_modules",
+  "test/fixtures/packages/oao-c/node_modules",
+  "test/fixtures/packages/oao-d/node_modules",
+  "test/fixtures/packages/oao-priv/node_modules",
+  "node_modules",
+]
+`;

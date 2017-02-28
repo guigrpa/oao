@@ -16,8 +16,6 @@ const COPY_SPECS = [
 const normalizePath = (p) => p.split(path.sep).join('/');
 
 describe('PREPUBLISH command', () => {
-  beforeEach(() => { jest.resetAllMocks(); });
-
   it('copies READMEs as appropriate', async () => {
     const helpers = require('../utils/shell');
     await prepublish({ src: 'test/fixtures/packages/*', copyAttrs: COPY_SPECS.join(',') });
