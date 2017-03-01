@@ -1,0 +1,12 @@
+{
+  "name": "b",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "inception": "yarn inception2",
+    "inception2": "yarn inception3",
+    "inception3": "yarn hello",
+    "hello": "echo hello"
+  }
+}

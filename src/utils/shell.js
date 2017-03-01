@@ -5,6 +5,7 @@
 import path from 'path';
 import shell from 'shelljs';
 import split from 'split';
+import execa from 'execa';
 import { mainStory, chalk } from 'storyboard';
 import type { StoryT } from 'storyboard';
 
@@ -49,25 +50,30 @@ const exec = async (cmd: string, {
   }
 };
 
-const _exec = (cmd, { cwd, story, errorLogLevel, bareLogs }) => new Promise((resolve, reject) => {
-  const prefix = bareLogs ? '' : '| ';
-  const child = shell.exec(cmd, { cwd, silent: true }, (code, stdout, stderr) => {
-    if (code !== 0) {
-      story[errorLogLevel](`Command '${cmd}' failed at ${cwd || '\'.\''} [${code}]`);
-      reject(new Error(`Command failed: ${cmd}`));
-      return;
-    }
-    story.trace('Command completed successfully');
-    resolve({ code, stdout, stderr });
-  });
-  const cmdName = cmd.split(' ')[0].slice(0, 10);
-  child.stdout.pipe(split()).on('data', (line) => {
-    story.info(cmdName, `${prefix}${line}`);
-  });
-  child.stderr.pipe(split()).on('data', (line) => {
-    if (line) story[errorLogLevel](cmdName, `${prefix}${line}`);
-  });
-});
+const _exec = async (cmd, { cwd, story, errorLogLevel, bareLogs }) => {
+  try {
+    const prefix = bareLogs ? '' : '| ';
+    const cmdName = cmd.split(' ')[0].slice(0, 10);
+    const child = execa.shell(cmd, {
+      cwd: cwd || '.',
+      // Workaround for Node.js bug: https://github.com/nodejs/node/issues/10836
+      // See also: https://github.com/yarnpkg/yarn/issues/2462
+      stdio: process.platform === 'win32' ? ['ignore', 'pipe', 'pipe'] : undefined,
+    });
+    child.stdout.pipe(split()).on('data', (line) => {
+      story.info(cmdName, `${prefix}${line}`);
+    });
+    child.stderr.pipe(split()).on('data', (line) => {
+      if (line) story[errorLogLevel](cmdName, `${prefix}${line}`);
+    });
+    const { code, stdout, stderr } = await child;
+    if (code !== 0) throw new Error(`Command returned non-zero exit code: ${cmd} [${code}]`);
+    return { code, stdout, stderr };
+  } catch (err) {
+    story[errorLogLevel](`Command '${cmd}' failed at ${cwd || '\'.\''}`, { attach: err });
+    throw new Error(`Command failed: ${cmd}`);
+  }
+};
 
 export {
   cp, mv,
