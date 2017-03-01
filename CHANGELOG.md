@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.7.2 (Mar. 1, 2017)
+
 * When executing a command, inhibit `stdin` access on Windows (see [this](https://github.com/nodejs/node/issues/10836) and [this](https://github.com/yarnpkg/yarn/issues/2462)).
 
 ## 0.7.1 (Feb. 28, 2017)
