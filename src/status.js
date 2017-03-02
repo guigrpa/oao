@@ -81,7 +81,7 @@ const subpackageStatus = async (opts: Options, lastTag: ?string) => {
   }
 };
 
-const field = (str, n) => {
+const field = (str = '', n) => {
   if (str.length > n) return `${str.slice(0, n - 1)}…`;
   let out = str;
   // inefficient, slow, etc. but doesn't matter in this case, and easy to read
