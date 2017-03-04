@@ -61,7 +61,10 @@ createCommand('prepublish', 'Prepare for a release: validate versions, copy READ
 
 createCommand('publish', 'Publish updated sub-packages')
 .option('--no-master', 'allow publishing from a non-master branch')
+.option('--no-check-uncommitted', 'skip uncommitted check')
+.option('--no-check-unpulled', 'skip unpulled check')
 .option('--no-confirm', 'do not ask for confirmation before publishing')
+.option('--no-git-commit', 'skip the commit-tag-push step before publishing')
 .option('--version <new-version>', 'use this version for publishing, instead of asking')
 .option('--publish-tag <tag>', 'publish with a custom tag (instead of `latest`)')
 .action((cmd) => publish(cmd.opts()));

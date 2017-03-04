@@ -11,7 +11,10 @@ jest.mock('../utils/git');
 const NOMINAL_OPTIONS = {
   src: 'test/fixtures/packages/*',
   master: true,
+  checkUncommitted: true,
+  checkUnpulled: true,
   confirm: false,
+  gitCommit: true,
   version: '99.99.99',
 };
 const NUM_FIXTURE_SUBPACKAGES = 4;

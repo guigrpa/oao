@@ -22,7 +22,10 @@ const DEBUG_SKIP_CHECKS = false;
 type Options = {
   src: string,
   master: boolean,
+  checkUncommitted: boolean,
+  checkUnpulled: boolean,
   confirm: boolean,
+  gitCommit: boolean,
   version?: string,
   publishTag?: string,
 };
@@ -30,7 +33,10 @@ type Options = {
 const run = async ({
   src: srcPatterns,
   master,
+  checkUncommitted,
+  checkUnpulled,
   confirm,
+  gitCommit,
   version,
   publishTag,
 }: Options) => {
@@ -47,7 +53,7 @@ const run = async ({
     if (!confirmBuild) return;
   }
   // Prepublish checks
-  await prepublishChecks({ master });
+  await prepublishChecks({ master, checkUncommitted, checkUnpulled });
 
   // Get last tag and find packages requiring updates
   const lastTag = await gitLastTag();
@@ -84,9 +90,11 @@ const run = async ({
   }
 
   // Commit, tag and push
-  await gitCommitChanges(`v${nextVersion}`);
-  await gitAddTag(`v${nextVersion}`);
-  await gitPushWithTags();
+  if (gitCommit) {
+    await gitCommitChanges(`v${nextVersion}`);
+    await gitAddTag(`v${nextVersion}`);
+    await gitPushWithTags();
+  }
 
   // Publish
   for (let i = 0; i < dirty.length; i++) {
@@ -101,7 +109,7 @@ const run = async ({
 // ------------------------------------------------
 // Helpers
 // ------------------------------------------------
-const prepublishChecks = async ({ master }) => {
+const prepublishChecks = async ({ master, checkUncommitted, checkUnpulled }) => {
   if (DEBUG_SKIP_CHECKS) mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
 
   // Check current branch
@@ -119,18 +127,26 @@ const prepublishChecks = async ({ master }) => {
   // Check that the branch is clean
   const uncommitted = await gitUncommittedChanges();
   if (uncommitted !== '') {
-    mainStory.error(`Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(uncommitted)}`);
-    if (!DEBUG_SKIP_CHECKS) throw new Error('UNCOMMITTED_CHECK_FAILED');
+    if (checkUncommitted) {
+      mainStory.error(`Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(uncommitted)}`);
+      if (!DEBUG_SKIP_CHECKS) throw new Error('UNCOMMITTED_CHECK_FAILED');
+    }
+    mainStory.warn('Publishing with uncommitted changes');
+  } else {
+    mainStory.info('No uncommitted changes');
   }
-  mainStory.info('No uncommitted changes');
 
   // Check remote history
   const unpulled = await gitUnpulledChanges();
   if (unpulled !== '0') {
-    mainStory.error('Remote history differs. Please pull changes');
-    if (!DEBUG_SKIP_CHECKS) throw new Error('UNPULLED_CHECK_FAILED');
+    if (checkUnpulled) {
+      mainStory.error('Remote history differs. Please pull changes');
+      if (!DEBUG_SKIP_CHECKS) throw new Error('UNPULLED_CHECK_FAILED');
+    }
+    mainStory.warn('Publishing with unpulled changes');
+  } else {
+    mainStory.info('Remote history matches local history');
   }
-  mainStory.info('Remote history matches local history');
 };
 
 const findPackagesToUpdate = async (allSpecs, lastTag) => {
