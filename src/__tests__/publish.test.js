@@ -2,7 +2,6 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
 import { merge } from 'timm';
-import semver from 'semver';
 import publish from '../publish';
 
 jest.mock('../utils/shell');
@@ -13,7 +12,7 @@ const NOMINAL_OPTIONS = {
   src: 'test/fixtures/packages/*',
   master: true,
   confirm: false,
-  _autoVersion: true,
+  version: '99.99.99',
 };
 const NUM_FIXTURE_SUBPACKAGES = 4;
 
@@ -72,12 +71,10 @@ describe('PUBLISH command', () => {
 
   it('performs a commit-tag-push on dirty sub-packages increasing the version number', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-    const pkg = require('../../package.json');
-    const nextVersion = semver.inc(pkg.version, 'major');
     await publish(NOMINAL_OPTIONS);
     expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
     writeSpecs.mock.calls.forEach(([, specs]) => {
-      expect(specs.version).toEqual(nextVersion);
+      expect(specs.version).toEqual('99.99.99');
     });
     expect(git.gitCommitChanges).toHaveBeenCalledTimes(1);
     expect(git.gitAddTag).toHaveBeenCalledTimes(1);

@@ -23,17 +23,16 @@ type Options = {
   src: string,
   master: boolean,
   confirm: boolean,
+  version?: string,
   publishTag?: string,
-  _autoVersion?: boolean,
 };
 
 const run = async ({
   src: srcPatterns,
   master,
   confirm,
+  version,
   publishTag,
-  // For unit tests
-  _autoVersion = false,
 }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
 
@@ -61,7 +60,7 @@ const run = async ({
   // Determine a suitable version number
   const masterVersion = await getMasterVersion(allSpecs, lastTag);
   if (masterVersion == null) return;
-  const nextVersion = await getNextVersion(masterVersion, _autoVersion);
+  const nextVersion = version || await getNextVersion(masterVersion);
 
   // Confirm before publishing
   if (confirm) {
@@ -183,9 +182,8 @@ const getMasterVersion = async (allSpecs, lastTag) => {
   return masterVersion;
 };
 
-const getNextVersion = async (prevVersion: string, _autoVersion: ?boolean): Promise<string> => {
+const getNextVersion = async (prevVersion: string): Promise<string> => {
   const major = semver.inc(prevVersion, 'major');
-  if (_autoVersion) return major;
   const minor = semver.inc(prevVersion, 'minor');
   const patch = semver.inc(prevVersion, 'patch');
   const prerelease = semver.inc(prevVersion, 'prerelease');
