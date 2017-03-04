@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.7.3 (Mar. 4, 2017)
+
 * Add more granular configuration options for `oao publish`: `--no-check-uncommitted`, `--no-check-unpulled`, `--no-git-commit` (#29).
 * Add `--version <new-version>` option to `oao publish` (overrides manual version specification) (#30).
 
