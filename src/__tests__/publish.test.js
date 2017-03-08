@@ -17,6 +17,9 @@ const NOMINAL_OPTIONS = {
   gitCommit: true,
   npmPublish: true,
   version: '99.99.99',
+  changelog: false,
+  changelogPath: 'test/fixtures/CHANGELOG.md',
+  _date: new Date('2017-01-01T05:00:00Z'),
 };
 const NUM_FIXTURE_SUBPACKAGES = 5;
 const NUM_FIXTURE_PRIVATE_SUBPACKAGES = 1;
@@ -108,5 +111,19 @@ describe('PUBLISH command', () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { npmPublish: false }));
     expect(exec).not.toHaveBeenCalled();
+  });
+
+  it('updates the changelog correctly', async () => {
+    const fs = require('fs');
+    const { writeFileSync } = fs;
+    let calls;
+    try {
+      fs.writeFileSync = jest.fn();
+      await publish(merge(NOMINAL_OPTIONS, { changelog: true }));
+      calls = fs.writeFileSync.mock.calls;
+    } finally {
+      fs.writeFileSync = writeFileSync;
+    }
+    expect(calls).toMatchSnapshot();
   });
 });

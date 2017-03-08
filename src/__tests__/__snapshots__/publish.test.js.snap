@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PUBLISH command updates the changelog correctly 1`] = `
+Array [
+  Array [
+    "test/fixtures/CHANGELOG.md",
+    "## 99.99.99 (2017-1-1)
+
+* Add awesome functionality
+* Add epic feature
+* Remove 1e5 bugs
+",
+    "utf8",
+  ],
+]
+`;

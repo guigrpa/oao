@@ -19,6 +19,7 @@ const pkg = require('../package.json');
 
 const DEFAULT_SRC_DIR = 'packages/*';
 const DEFAULT_COPY_ATTRS = 'description,keywords,author,license,homepage,bugs,repository';
+const DEFAULT_CHANGELOG = 'CHANGELOG.md';
 
 program.version(pkg.version);
 
@@ -68,6 +69,8 @@ createCommand('publish', 'Publish updated sub-packages')
 .option('--no-npm-publish', 'skip the npm publish step')
 .option('--version <new-version>', 'use this version for publishing, instead of asking')
 .option('--publish-tag <tag>', 'publish with a custom tag (instead of `latest`)')
+.option('--changelog-path <path>', `changelog path [${DEFAULT_CHANGELOG}]`, DEFAULT_CHANGELOG)
+.option('--no-changelog', 'skip changelog updates')
 .action((cmd) => publish(cmd.opts()));
 
 createCommand('reset-all-versions <version>', 'Reset all versions (incl. monorepo package) to the specified one')

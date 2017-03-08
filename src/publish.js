@@ -16,6 +16,7 @@ import {
   gitAddTag,
   gitPushWithTags,
 } from './utils/git';
+import { addVersionLine } from './utils/changelog';
 
 const DEBUG_SKIP_CHECKS = false;
 
@@ -29,6 +30,10 @@ type Options = {
   version?: string,
   npmPublish: boolean,
   publishTag?: string,
+  changelog: boolean,
+  changelogPath: string,
+  // For unit tests
+  _date?: ?Object,
 };
 
 const run = async ({
@@ -41,6 +46,9 @@ const run = async ({
   version,
   npmPublish,
   publishTag,
+  changelog,
+  changelogPath,
+  _date,
 }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
 
@@ -82,7 +90,7 @@ const run = async ({
     if (!confirmPublish) return;
   }
 
-  // Update package.json's for dirty packages AND THE ROOT PACKAGE
+  // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
   const dirtyPlusRoot = dirty.concat(ROOT_PACKAGE);
   for (let i = 0; i < dirtyPlusRoot.length; i++) {
     const pkgName = dirtyPlusRoot[i];
@@ -90,6 +98,7 @@ const run = async ({
     specs.version = nextVersion;
     writeSpecs(specPath, specs);
   }
+  if (changelog) addVersionLine({ changelogPath, version: nextVersion, _date });
 
   // Commit, tag and push
   if (gitCommit) {
