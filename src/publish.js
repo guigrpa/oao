@@ -27,6 +27,7 @@ type Options = {
   confirm: boolean,
   gitCommit: boolean,
   version?: string,
+  npmPublish: boolean,
   publishTag?: string,
 };
 
@@ -38,6 +39,7 @@ const run = async ({
   confirm,
   gitCommit,
   version,
+  npmPublish,
   publishTag,
 }: Options) => {
   const allSpecs = await readAllSpecs(srcPatterns);
@@ -97,13 +99,15 @@ const run = async ({
   }
 
   // Publish
-  for (let i = 0; i < dirty.length; i++) {
-    const pkgName = dirty[i];
-    const { pkgPath, specs } = allSpecs[pkgName];
-    if (specs.private) continue; // we don't want npm to complain :)
-    let cmd = 'npm publish';
-    if (publishTag != null) cmd += ` --tag ${publishTag}`;
-    await exec(cmd, { cwd: pkgPath });
+  if (npmPublish) {
+    for (let i = 0; i < dirty.length; i++) {
+      const pkgName = dirty[i];
+      const { pkgPath, specs } = allSpecs[pkgName];
+      if (specs.private) continue; // we don't want npm to complain :)
+      let cmd = 'npm publish';
+      if (publishTag != null) cmd += ` --tag ${publishTag}`;
+      await exec(cmd, { cwd: pkgPath });
+    }
   }
 };
 

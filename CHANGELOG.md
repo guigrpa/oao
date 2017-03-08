@@ -1,5 +1,6 @@
 # Changelog
 
+* Add **`--no-npm-publish` option to `oao publish`** to prevent accidental publishing on npm of parts of an all-private monorepo.
 * During `oao publish`, also **update the versions of _private_ sub-packages** that have changed.
 
 ## 0.7.3 (Mar. 4, 2017)

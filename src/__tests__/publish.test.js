@@ -15,6 +15,7 @@ const NOMINAL_OPTIONS = {
   checkUnpulled: true,
   confirm: false,
   gitCommit: true,
+  npmPublish: true,
   version: '99.99.99',
 };
 const NUM_FIXTURE_SUBPACKAGES = 5;
@@ -101,5 +102,11 @@ describe('PUBLISH command', () => {
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish --tag next');
     });
+  });
+
+  it('skips `npm publish` when using --no-npm-publish', async () => {
+    const { exec } = require('../utils/shell');
+    await publish(merge(NOMINAL_OPTIONS, { npmPublish: false }));
+    expect(exec).not.toHaveBeenCalled();
   });
 });
