@@ -17,7 +17,8 @@ const NOMINAL_OPTIONS = {
   gitCommit: true,
   version: '99.99.99',
 };
-const NUM_FIXTURE_SUBPACKAGES = 4;
+const NUM_FIXTURE_SUBPACKAGES = 5;
+const NUM_FIXTURE_PRIVATE_SUBPACKAGES = 1;
 
 describe('PUBLISH command', () => {
   let git;
@@ -84,10 +85,10 @@ describe('PUBLISH command', () => {
     expect(git.gitPushWithTags).toHaveBeenCalledTimes(1);
   });
 
-  it('runs `npm publish` on dirty sub-packages', async () => {
+  it('runs `npm publish` on dirty sub-packages (which are not private)', async () => {
     const { exec } = require('../utils/shell');
     await publish(NOMINAL_OPTIONS);
-    expect(exec).toHaveBeenCalledTimes(NUM_FIXTURE_SUBPACKAGES);
+    expect(exec).toHaveBeenCalledTimes(NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES);
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish');
     });
@@ -96,7 +97,7 @@ describe('PUBLISH command', () => {
   it('runs `npm publish --tag X` on dirty sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { publishTag: 'next' }));
-    expect(exec).toHaveBeenCalledTimes(NUM_FIXTURE_SUBPACKAGES);
+    expect(exec).toHaveBeenCalledTimes(NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES);
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish --tag next');
     });

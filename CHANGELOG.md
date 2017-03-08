@@ -1,5 +1,7 @@
 # Changelog
 
+* During `oao publish`, also **update the versions of _private_ sub-packages** that have changed.
+
 ## 0.7.3 (Mar. 4, 2017)
 
 * Add more granular configuration options for `oao publish`: `--no-check-uncommitted`, `--no-check-unpulled`, `--no-git-commit` (#29).

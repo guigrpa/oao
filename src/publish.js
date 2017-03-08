@@ -59,7 +59,7 @@ const run = async ({
   const lastTag = await gitLastTag();
   const dirty = await findPackagesToUpdate(allSpecs, lastTag);
   if (!dirty.length) {
-    mainStory.info('No packages need to be published');
+    mainStory.info('No sub-packages have been updated');
     return;
   }
 
@@ -68,12 +68,12 @@ const run = async ({
   if (masterVersion == null) return;
   const nextVersion = version || await getNextVersion(masterVersion);
 
-  // Confirm before publishing
+  // Confirm before proceeding
   if (confirm) {
     const { confirmPublish } = await inquirer.prompt([{
       name: 'confirmPublish',
       type: 'confirm',
-      message: `Confirm publish (${chalk.yellow.bold(dirty.length)} package/s, ` +
+      message: `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
         `v${chalk.cyan.bold(nextVersion)})?`,
       default: false,
     }]);
@@ -99,7 +99,8 @@ const run = async ({
   // Publish
   for (let i = 0; i < dirty.length; i++) {
     const pkgName = dirty[i];
-    const { pkgPath } = allSpecs[pkgName];
+    const { pkgPath, specs } = allSpecs[pkgName];
+    if (specs.private) continue; // we don't want npm to complain :)
     let cmd = 'npm publish';
     if (publishTag != null) cmd += ` --tag ${publishTag}`;
     await exec(cmd, { cwd: pkgPath });
@@ -156,7 +157,6 @@ const findPackagesToUpdate = async (allSpecs, lastTag) => {
     const pkgName = pkgNames[i];
     if (pkgName === ROOT_PACKAGE) continue;
     const { pkgPath, specs } = allSpecs[pkgName];
-    if (specs.private) continue;
     const diff = await gitDiffSinceIn(lastTag, pkgPath);
     if (diff !== '') {
       const numChanges = diff.split('\n').length;
