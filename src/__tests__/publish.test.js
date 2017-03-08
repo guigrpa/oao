@@ -16,7 +16,7 @@ const NOMINAL_OPTIONS = {
   confirm: false,
   gitCommit: true,
   npmPublish: true,
-  version: '99.99.99',
+  newVersion: '99.99.99',
   changelog: false,
   changelogPath: 'test/fixtures/CHANGELOG.md',
   _date: new Date('2017-01-01T05:00:00Z'),

@@ -27,7 +27,7 @@ type Options = {
   checkUnpulled: boolean,
   confirm: boolean,
   gitCommit: boolean,
-  version?: string,
+  newVersion?: string,
   npmPublish: boolean,
   publishTag?: string,
   changelog: boolean,
@@ -43,7 +43,7 @@ const run = async ({
   checkUnpulled,
   confirm,
   gitCommit,
-  version,
+  newVersion,
   npmPublish,
   publishTag,
   changelog,
@@ -76,7 +76,7 @@ const run = async ({
   // Determine a suitable version number
   const masterVersion = await getMasterVersion(allSpecs, lastTag);
   if (masterVersion == null) return;
-  const nextVersion = version || await getNextVersion(masterVersion);
+  const nextVersion = newVersion || await getNextVersion(masterVersion);
 
   // Confirm before proceeding
   if (confirm) {
