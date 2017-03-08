@@ -1,3 +1,5 @@
+## 0.8.0 (Mar. 8, 2017)
+
 * Rename `--version` option (incompatible with `commander`'s default option') to `--new-version` (#35)
 * During `oao publish`, automatically **update the changelog** with the new version and release date
 * Add **`--no-npm-publish` option to `oao publish`** to prevent accidental publishing on npm of parts of an all-private monorepo.
