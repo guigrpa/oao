@@ -1,3 +1,5 @@
+* Add warning to `oao oudated` for internal deps that do not meet the specified version range (#34)
+
 ## 0.8.0 (Mar. 8, 2017)
 
 * Rename `--version` option (incompatible with `commander`'s default option') to `--new-version` (#35)

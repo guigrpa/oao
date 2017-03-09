@@ -21,6 +21,7 @@ const mv = (src: string, dst: string, { story = mainStory }: { story?: StoryT } 
 
 type ExecOptions = {|
   story?: StoryT,
+  createChildStory?: boolean,
   logLevel?: *,
   errorLogLevel?: string,
   cwd?: string,
@@ -35,6 +36,7 @@ type ExecResult = {
 
 const exec = async (cmd: string, {
   story = mainStory,
+  createChildStory = true,
   logLevel = 'info',
   errorLogLevel = 'error',
   bareLogs = false,
@@ -42,11 +44,13 @@ const exec = async (cmd: string, {
 }: ExecOptions = {}): Promise<ExecResult> => {
   let title = `Run cmd ${chalk.green.bold(cmd)}`;
   if (cwd) title += ` at ${chalk.green(cwd)}`;
-  const ownStory = story.child({ title, level: logLevel });
+  const ownStory = createChildStory
+    ? story.child({ title, level: logLevel })
+    : story || mainStory;
   try {
     return await _exec(cmd, { cwd, story: ownStory, errorLogLevel, bareLogs });
   } finally {
-    ownStory.close();
+    if (createChildStory) ownStory.close();
   }
 };
 

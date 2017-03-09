@@ -48,6 +48,11 @@ describe('OUTDATED command', () => {
   it('executes the correct `yarn outdated`s', async () => {
     const helpers = require('../utils/shell');
     await outdated({ src: 'test/fixtures/packages/*' });
-    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const { calls } = helpers.exec.mock;
+    const calls2 = calls.map(call => [
+      call[0],
+      { cwd: call[1].cwd },
+    ]);
+    expect(calls2).toMatchSnapshot();
   });
 });
