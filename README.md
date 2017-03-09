@@ -74,12 +74,19 @@ Publish updated sub-packages
 
 Options:
 
-  -h, --help           output usage information
-  -s --src <glob>      glob pattern for sub-package paths [packages/*]
-  -l --link <regex>    regex pattern for extra packages that should be linked, not installed
-  --no-master          allow publishing from a non-master branch
-  --no-confirm         do not ask for confirmation before publishing
-  --publish-tag <tag>  publish with a custom tag (instead of `latest`)
+  -h, --help               output usage information
+  -s --src <glob>          glob pattern for sub-package paths [packages/*]
+  -l --link <regex>        regex pattern for extra packages that should be linked, not installed
+  --no-master              allow publishing from a non-master branch
+  --no-check-uncommitted   skip uncommitted check
+  --no-check-unpulled      skip unpulled check
+  --no-confirm             do not ask for confirmation before publishing
+  --no-git-commit          skip the commit-tag-push step before publishing
+  --no-npm-publish         skip the npm publish step
+  --new-version <version>  use this version for publishing, instead of asking
+  --publish-tag <tag>      publish with a custom tag (instead of `latest`)
+  --changelog-path <path>  changelog path [CHANGELOG.md]
+  --no-changelog           skip changelog updates
 ```
 
 
@@ -165,6 +172,7 @@ Carries out a number of steps:
 * Updates versions in `package.json` files, commits the updates, adds a tag and pushes all the changes.
 * Publishes updated sub-packages.
 
+There are lots of custom options for `oao publish`. Chances are, you can disable each one of the previous steps by means of one of those options. Check them all with `oao publish --help`.
 
 ### `oao all <command>`
 
