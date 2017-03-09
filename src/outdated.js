@@ -20,7 +20,7 @@ const run = async (opts: Options) => {
     const pkgName = pkgNames[i];
     const { pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
     const story = mainStory.child({
-      title: `Outdated packages in ${chalk.cyan.bold(pkgName)}`,
+      title: `Outdated dependencies in ${chalk.cyan.bold(pkgName)}`,
       level: 'info',
     });
 
