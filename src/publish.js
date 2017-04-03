@@ -22,6 +22,7 @@ const DEBUG_SKIP_CHECKS = false;
 
 type Options = {
   src: string,
+  ignoreSrc?: string,
   master: boolean,
   checkUncommitted: boolean,
   checkUnpulled: boolean,
@@ -37,7 +38,8 @@ type Options = {
 };
 
 const run = async ({
-  src: srcPatterns,
+  src,
+  ignoreSrc,
   master,
   checkUncommitted,
   checkUnpulled,
@@ -50,7 +52,7 @@ const run = async ({
   changelogPath,
   _date,
 }: Options) => {
-  const allSpecs = await readAllSpecs(srcPatterns);
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
 
   // Confirm that we have run build
   if (confirm) {

@@ -9,12 +9,13 @@ import { exec } from './utils/shell';
 
 type Options = {
   src: string,
+  ignoreSrc?: string,
   link: ?string,
 };
 
 const run = async (opts: Options) => {
-  const { src: srcPatterns, link: linkPattern } = opts;
-  const allSpecs = await readAllSpecs(srcPatterns);
+  const { src, ignoreSrc, link: linkPattern } = opts;
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];

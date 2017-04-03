@@ -17,8 +17,8 @@ type OaoSpecs = {
 };
 type AllSpecs = { [key: PackageName]: OaoSpecs };
 
-const readAllSpecs = async (srcPatterns: string): Promise<AllSpecs> => {
-  const pkgPaths = await listPaths(srcPatterns);
+const readAllSpecs = async (src: string, ignoreSrc?: ?string): Promise<AllSpecs> => {
+  const pkgPaths = await listPaths(src, ignoreSrc);
   pkgPaths.push('.');
   const allSpecs = {};
   mainStory.info('Reading all package.json files...');

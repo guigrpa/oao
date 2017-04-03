@@ -14,6 +14,7 @@ const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optio
 type Operation = 'add' | 'remove' | 'upgrade';
 type Options = {
   src: string,
+  ignoreSrc?: string,
   link: ?string,
   dev?: boolean,
   peer?: boolean,
@@ -24,9 +25,9 @@ type Options = {
 };
 
 const run = async (pkgName0: string, op: Operation, deps: Array<string>, opts: Options) => {
-  const { src: srcPatterns, link: linkPattern } = opts;
+  const { src, ignoreSrc, link: linkPattern } = opts;
   const pkgName = pkgName0 === '.' || pkgName0 === 'ROOT' ? ROOT_PACKAGE : pkgName0;
-  const allSpecs = await readAllSpecs(srcPatterns);
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   if (!allSpecs[pkgName]) {
     mainStory.error(`No such package: ${pkgName}`);
     process.exit(1);

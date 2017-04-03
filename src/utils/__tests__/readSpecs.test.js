@@ -27,6 +27,15 @@ describe('readAllSpecs', () => {
     expect(allSpecs).toMatchSnapshot();
   });
 
+  it('supports excluding packages', async () => {
+    const allSpecs = await readAllSpecs('test/fixtures/packages/*/', 'test/fixtures/packages/oao-{b,c}');
+    delete allSpecs[ROOT_PACKAGE];
+    Object.keys(allSpecs).forEach((name) => {
+      delete allSpecs[name].specPath;
+    });
+    expect(allSpecs).toMatchSnapshot();
+  });
+
   it('supports scoped packages', async () => {
     const allSpecs = await readAllSpecs('test/fixtures/packagesScoped/*');
     expect(allSpecs['@guigrpa/example-package'].specs.name).toEqual('@guigrpa/example-package');

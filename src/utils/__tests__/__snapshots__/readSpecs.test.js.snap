@@ -191,3 +191,62 @@ Object {
   },
 }
 `;
+
+exports[`readAllSpecs supports excluding packages 1`] = `
+Object {
+  "oao": Object {
+    "displayName": "oao",
+    "name": "oao",
+    "pkgPath": "test/fixtures/packages/oao",
+    "specs": Object {
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao",
+      "version": "0.1.0",
+    },
+  },
+  "oao-d": Object {
+    "displayName": "oao-d",
+    "name": "oao-d",
+    "pkgPath": "test/fixtures/packages/oao-d",
+    "specs": Object {
+      "dependencies": Object {
+        "oao": "*",
+        "timm": "1.x",
+      },
+      "devDependencies": Object {
+        "oao-b": "*",
+        "oao-c": "*",
+        "xxl": "1.x",
+      },
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao-d",
+      "peerDependencies": Object {},
+      "version": "0.1.0",
+    },
+  },
+  "oao-priv": Object {
+    "displayName": "oao-priv",
+    "name": "oao-priv",
+    "pkgPath": "test/fixtures/packages/oao-priv",
+    "specs": Object {
+      "dependencies": Object {
+        "oao": "*",
+        "timm": "1.x",
+      },
+      "devDependencies": Object {
+        "oao-b": "*",
+        "oao-c": "*",
+        "xxl": "1.x",
+      },
+      "license": "MIT",
+      "main": "index.js",
+      "name": "oao-priv",
+      "peerDependencies": Object {},
+      "private": true,
+      "version": "0.1.0",
+    },
+  },
+}
+`;

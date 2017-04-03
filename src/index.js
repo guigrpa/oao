@@ -26,7 +26,8 @@ program.version(pkg.version);
 const createCommand = (syntax, description) =>
   program.command(syntax).description(description)
   .option('-s --src <glob>', `glob pattern for sub-package paths [${DEFAULT_SRC_DIR}]`, DEFAULT_SRC_DIR)
-  .option('-l --link <regex>', 'regex pattern for extra packages that should be linked, not installed');
+  .option('-i --ignore-src <glob>', 'glob pattern for sub-package paths that should be ignored')
+  .option('-l --link <regex>', 'regex pattern for dependencies that should be linked, not installed');
 
 createCommand('status', 'Show an overview of the monorepo status')
 .action((cmd) => status(cmd.opts()));

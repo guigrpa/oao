@@ -7,13 +7,15 @@ import { exec } from './utils/shell';
 
 type Options = {
   src: string,
+  ignoreSrc?: string,
   parallel?: boolean,
   parallelLogs?: boolean,
   ignoreErrors?: boolean,
 };
 
 const run = async (cmd: string, {
-  src: srcPatterns,
+  src,
+  ignoreSrc,
   parallel,
   parallelLogs,
   ignoreErrors,
@@ -22,7 +24,7 @@ const run = async (cmd: string, {
     removeAllListeners();
     addListener(parallelConsoleListener);
   }
-  const pkgPaths = await listPaths(srcPatterns);
+  const pkgPaths = await listPaths(src, ignoreSrc);
   const allPromises = [];
   for (let i = 0; i < pkgPaths.length; i += 1) {
     let promise = exec(cmd, { cwd: pkgPaths[i], bareLogs: parallelLogs });

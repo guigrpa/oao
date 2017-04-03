@@ -5,10 +5,13 @@ import rimraf from 'rimraf';
 import { mainStory, chalk } from 'storyboard';
 import { readAllSpecs } from './utils/readSpecs';
 
-type Options = { src: string };
+type Options = {
+  src: string,
+  ignoreSrc?: string,
+};
 
-const run = async ({ src: srcPatterns }: Options) => {
-  const allSpecs = await readAllSpecs(srcPatterns);
+const run = async ({ src, ignoreSrc }: Options) => {
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   await Promise.all(
     pkgNames.map(

@@ -9,16 +9,17 @@ import writeSpecs from './utils/writeSpecs';
 
 type Options = {
   src: string,
+  ignoreSrc?: string,
   confirm?: boolean,
 };
 
-const run = async (version: string, { src: srcPatterns, confirm = true }: Options) => {
+const run = async (version: string, { src, ignoreSrc, confirm = true }: Options) => {
   if (!semver.valid(version)) {
     mainStory.error(`Version ${version} is not valid`);
     throw new Error('INVALID_VERSION');
   }
 
-  const allSpecs = await readAllSpecs(srcPatterns);
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
 
   // Ask for confirmation

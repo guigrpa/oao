@@ -76,7 +76,8 @@ Options:
 
   -h, --help               output usage information
   -s --src <glob>          glob pattern for sub-package paths [packages/*]
-  -l --link <regex>        regex pattern for extra packages that should be linked, not installed
+  -i --ignore-src <glob>   glob pattern for sub-package paths that should be ignored
+  -l --link <regex>        regex pattern for dependencies that should be linked, not installed
   --no-master              allow publishing from a non-master branch
   --no-check-uncommitted   skip uncommitted check
   --no-check-unpulled      skip unpulled check

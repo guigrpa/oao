@@ -10,11 +10,12 @@ import { cp } from './utils/shell';
 
 type Options = {
   src: string,
+  ignoreSrc?: string,
   copyAttrs: string,
 };
 
-const run = async ({ src: srcPatterns, copyAttrs: copyAttrsStr }: Options) => {
-  const allSpecs = await readAllSpecs(srcPatterns);
+const run = async ({ src, ignoreSrc, copyAttrs: copyAttrsStr }: Options) => {
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   const rootSpecs = allSpecs[ROOT_PACKAGE].specs;
 
@@ -42,9 +43,9 @@ const run = async ({ src: srcPatterns, copyAttrs: copyAttrsStr }: Options) => {
     if (pkgName === ROOT_PACKAGE) continue;
     const { pkgPath, specs } = allSpecs[pkgName];
     if (specs.private) continue;
-    const src = pkgName === rootSpecs.name ? 'README.md' : 'README-LINK.md';
-    const dst = path.join(pkgPath, 'README.md');
-    cp(src, dst);
+    const srcFile = pkgName === rootSpecs.name ? 'README.md' : 'README-LINK.md';
+    const dstFile = path.join(pkgPath, 'README.md');
+    cp(srcFile, dstFile);
   }
 
   // Merge common attributes with submodules

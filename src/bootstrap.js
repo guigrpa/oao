@@ -12,14 +12,15 @@ const PASS_THROUGH_OPTS = ['production'];
 
 type Options = {
   src: string,
+  ignoreSrc?: string,
   link: ?string,
   production?: boolean,
 };
 
 const run = async (opts: Options) => {
-  const { src: srcPatterns, link: linkPattern } = opts;
+  const { src, ignoreSrc, link: linkPattern } = opts;
   const production = opts.production || process.env.NODE_ENV === 'production';
-  const allSpecs = await readAllSpecs(srcPatterns);
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   const allRemovedDepsByPackage = {};
   const allRemovedDepsByPackageAndType = {};

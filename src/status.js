@@ -12,7 +12,10 @@ import {
   gitDiffSinceIn,
 } from './utils/git';
 
-type Options = { src: string };
+type Options = {
+  src: string,
+  ignoreSrc?: string,
+};
 
 const run = async (opts: Options) => {
   storyboardConfig({ filter: '-*' });
@@ -50,8 +53,8 @@ const gitStatus = async () => {
 };
 
 const subpackageStatus = async (opts: Options, lastTag: ?string) => {
-  const { src: srcPatterns } = opts;
-  const allSpecs = await readAllSpecs(srcPatterns);
+  const { src, ignoreSrc } = opts;
+  const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   console.log('');
   console.log(`* Subpackage status: [${chalk.cyan.bold(pkgNames.length)} package/s, incl. root]`);
