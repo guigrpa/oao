@@ -1,3 +1,5 @@
+## 0.8.1 (Apr. 3, 2017)
+
 * Add `--ignore-src <glob>` option to all commands to exclude sub-packages (#38)
 * Add warning to `oao oudated` for internal deps that do not meet the specified version range (#34)
 
