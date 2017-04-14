@@ -1,3 +1,5 @@
+* Bump deps
+
 ## 0.8.1 (Apr. 3, 2017)
 
 * Add `--ignore-src <glob>` option to all commands to exclude sub-packages (#38)
