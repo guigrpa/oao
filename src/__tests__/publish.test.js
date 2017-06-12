@@ -46,6 +46,15 @@ describe('PUBLISH command', () => {
     await publish(merge(NOMINAL_OPTIONS, { master: false }));
   });
 
+  it('throws with invalid increment by value', async () => {
+    try {
+      await publish(merge(NOMINAL_OPTIONS, { incrementVersionBy: 'argle-bargle' }));
+      throw new Error('DID_NOT_THROW');
+    } catch (err) {
+      if (err.message !== 'INVALID_INCREMENT_BY_VALUE') throw err;
+    }
+  });
+
   it('throws with uncommitted changes', async () => {
     git._setUncommitted('SOMETHING_HAS_NOT_YET_BEEN_COMMITTED');
     try {
@@ -87,6 +96,90 @@ describe('PUBLISH command', () => {
     expect(git.gitCommitChanges).toHaveBeenCalledTimes(1);
     expect(git.gitAddTag).toHaveBeenCalledTimes(1);
     expect(git.gitPushWithTags).toHaveBeenCalledTimes(1);
+  });
+
+  it('increments version by major when incrementVersionBy is "major" and newVersion is not set', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+
+    const options = Object.assign({}, NOMINAL_OPTIONS, {
+      newVersion: undefined,
+      incrementVersionBy: 'major',
+    });
+    await publish(options);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('1.0.0');
+    });
+  });
+
+  it('increments version by minor when incrementVersionBy is "minor" and newVersion is not set', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+
+    const options = Object.assign({}, NOMINAL_OPTIONS, {
+      newVersion: undefined,
+      incrementVersionBy: 'minor',
+    });
+    await publish(options);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('0.9.0');
+    });
+  });
+
+  it('increments version by patch when incrementVersionBy is "patch" and newVersion is not set', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+
+    const options = Object.assign({}, NOMINAL_OPTIONS, {
+      newVersion: undefined,
+      incrementVersionBy: 'patch',
+    });
+    await publish(options);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('0.8.3');
+    });
+  });
+
+  it('increments version by prerelease when incrementVersionBy is "rc" and newVersion is not set', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+
+    const options = Object.assign({}, NOMINAL_OPTIONS, {
+      newVersion: undefined,
+      incrementVersionBy: 'rc',
+    });
+    await publish(options);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('1.0.0-rc.0');
+    });
+  });
+
+  it('increments version by prerelease when incrementVersionBy is "beta" and newVersion is not set', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+
+    const options = Object.assign({}, NOMINAL_OPTIONS, {
+      newVersion: undefined,
+      incrementVersionBy: 'beta',
+    });
+    await publish(options);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('1.0.0-beta.0');
+    });
+  });
+
+  it('increments version by prerelease when incrementVersionBy is "alpha" and newVersion is not set', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+
+    const options = Object.assign({}, NOMINAL_OPTIONS, {
+      newVersion: undefined,
+      incrementVersionBy: 'alpha',
+    });
+    await publish(options);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('1.0.0-alpha.0');
+    });
   });
 
   it('runs `npm publish` on dirty sub-packages (which are not private)', async () => {

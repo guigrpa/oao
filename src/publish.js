@@ -19,10 +19,14 @@ import {
 import { addVersionLine } from './utils/changelog';
 
 const DEBUG_SKIP_CHECKS = false;
+const releaseIncrements = ['major', 'minor', 'patch'];
+const preReleaseIncrements = ['rc', 'beta', 'alpha'];
+const increments = [...releaseIncrements, ...preReleaseIncrements];
 
 type Options = {
   src: string,
   ignoreSrc?: string,
+  incrementVersionBy?: string,
   master: boolean,
   checkUncommitted: boolean,
   checkUnpulled: boolean,
@@ -48,6 +52,7 @@ const run = async ({
   newVersion,
   npmPublish,
   publishTag,
+  incrementVersionBy,
   changelog,
   changelogPath,
   _date,
@@ -78,7 +83,17 @@ const run = async ({
   // Determine a suitable version number
   const masterVersion = await getMasterVersion(allSpecs, lastTag);
   if (masterVersion == null) return;
-  const nextVersion = newVersion || await getNextVersion(masterVersion);
+  if (incrementVersionBy) {
+    if (increments.indexOf(incrementVersionBy) < 0) {
+      mainStory.error(`Value specified for --increment-version-by: ${chalk.bold(incrementVersionBy)} is invalid.`);
+      mainStory.error(`It should be one of (${increments.join(', ')}), or not specified.`);
+      if (!DEBUG_SKIP_CHECKS) throw new Error('INVALID_INCREMENT_BY_VALUE');
+    }
+  }
+
+  const nextVersion = newVersion
+    || calcNextVersion(masterVersion, incrementVersionBy)
+    || await promptNextVersion(masterVersion);
 
   // Confirm before proceeding
   if (confirm) {
@@ -213,7 +228,17 @@ const getMasterVersion = async (allSpecs, lastTag) => {
   return masterVersion;
 };
 
-const getNextVersion = async (prevVersion: string): Promise<string> => {
+const calcNextVersion = (prevVersion: string, incrementBy = ''): string => {
+  const isPreRelease = preReleaseIncrements.indexOf(incrementBy) >= 0;
+  const increment = isPreRelease ? 'prerelease' : incrementBy;
+  const isNewPreRelease = isPreRelease && prevVersion.indexOf(incrementBy) < 0;
+
+  return isNewPreRelease
+    ? `${semver.inc(prevVersion, 'major')}-${incrementBy}.0`
+    : semver.inc(prevVersion, increment);
+};
+
+const promptNextVersion = async (prevVersion: string): Promise<string> => {
   const major = semver.inc(prevVersion, 'major');
   const minor = semver.inc(prevVersion, 'minor');
   const patch = semver.inc(prevVersion, 'patch');
