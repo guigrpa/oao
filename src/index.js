@@ -37,6 +37,7 @@ createCommand('bootstrap', 'Install external dependencies and create internal li
 .option('--no-lockfile', "don't read or generate a lockfile")
 .option('--pure-lockfile', "don't generate a lockfile")
 .option('--frozen-lockfile', "don't generate a lockfile and fail if an update is needed")
+.option('--no-parallel', "don't run yarn install in parallel (use it to debug errors, since parallel logs may be hard to read)")
 .action((cmd) => bootstrap(cmd.opts()));
 
 createCommand('clean', 'Delete all node_modules directories from sub-packages')

@@ -7,7 +7,7 @@ import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
-import { runInParallel } from './utils/promises';
+import { runInParallel, runInSeries } from './utils/promises';
 
 const PASS_THROUGH_OPTS = ['production', 'noLockfile', 'pureLockfile', 'frozenLockfile'];
 
@@ -16,6 +16,10 @@ type Options = {
   ignoreSrc?: string,
   link: ?string,
   production?: boolean,
+  noLockfile?: boolean,
+  pureLockfile?: boolean,
+  frozenLockfile?: boolean,
+  parallel?: boolean,
 };
 
 const run = async (opts: Options) => {
@@ -39,11 +43,10 @@ const run = async (opts: Options) => {
     });
   });
 
-  // Pass 1: install external deps for all subpackages [SERIAL, at least for the time being]
+  // Pass 1: install external deps for all subpackages [PARALLEL]
   mainStory.info(`${chalk.bold('PASS 1:')} installing external dependencies...`);
-  for (let i = 0; i < pkgNames.length; i++) {
-    const pkgName = pkgNames[i];
-    // if (pkgName === ROOT_PACKAGE) continue;
+  const installer = async pkgName => {
+    // if (pkgName === ROOT_PACKAGE) return;
     const { displayName, pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
     mainStory.info(`  - ${chalk.cyan.bold(displayName)}`);
 
@@ -64,6 +67,11 @@ const run = async (opts: Options) => {
     } finally {
       if (prevSpecs != null && fModified) writeSpecs(specPath, prevSpecs);
     }
+  };
+  if (opts.parallel) {
+    await runInParallel(pkgNames, installer);
+  } else {
+    await runInSeries(pkgNames, installer);
   }
 
   // Pass 2: link internal and user-specified deps [PARALLEL]

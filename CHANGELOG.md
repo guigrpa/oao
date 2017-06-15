@@ -1,4 +1,4 @@
-* Run `yarn link` commands in parallel during `oao bootstrap` (#42).
+* Parallelize `oao bootstrap` -- substantially improves perf (#42).
 * Add support for `--frozen-lockfile`, `--pure-lockfile` and `--no-lockfile` flags in `oao bootstrap` (see Yarn documentation) (#43).
 
 ## 0.8.2 (Apr. 14, 2017)
