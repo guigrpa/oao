@@ -7,6 +7,7 @@ import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
 import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
+import { runInParallel } from './utils/promises';
 
 const PASS_THROUGH_OPTS = ['production', 'noLockfile', 'pureLockfile', 'frozenLockfile'];
 
@@ -25,18 +26,26 @@ const run = async (opts: Options) => {
   const allRemovedDepsByPackage = {};
   const allRemovedDepsByPackageAndType = {};
 
-  // Pass 1: register each package with yarn, and install external deps
+  // Pass 0: register all subpackages (yarn link) [PARALLEL]
+  mainStory.info(`${chalk.bold('PASS 0:')} registering all subpackages...`);
+  await runInParallel(pkgNames, async pkgName => {
+    if (pkgName === ROOT_PACKAGE) return;
+    const { displayName, pkgPath } = allSpecs[pkgName];
+    mainStory.info(`  - ${chalk.cyan.bold(displayName)}`);
+    await exec('yarn link', {
+      cwd: pkgPath,
+      logLevel: 'trace',
+      errorLogLevel: 'info', // reduce yarn's log level (stderr) when subpackage is already registered
+    });
+  });
+
+  // Pass 1: install external deps for all subpackages [SERIAL, at least for the time being]
+  mainStory.info(`${chalk.bold('PASS 1:')} installing external dependencies...`);
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     // if (pkgName === ROOT_PACKAGE) continue;
     const { displayName, pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
-    mainStory.info(`${chalk.bold('PASS 1:')} processing ${chalk.cyan.bold(displayName)}...`);
-
-    // Link
-    if (pkgName !== ROOT_PACKAGE) {
-      mainStory.info('  - Registering...');
-      await exec('yarn link', { cwd: pkgPath, logLevel: 'trace', errorLogLevel: 'info' });
-    }
+    mainStory.info(`  - ${chalk.cyan.bold(displayName)}`);
 
     // Rewrite package.json without own/linked packages, install, and revert changes
     let fModified = false;
@@ -49,7 +58,6 @@ const run = async (opts: Options) => {
         writeSpecs(specPath, nextSpecs);
         fModified = true;
       }
-      mainStory.info('  - Installing external dependencies...');
       let cmd = 'yarn install';
       PASS_THROUGH_OPTS.forEach((key) => { if (opts[key]) cmd += ` --${kebabCase(key)}`; });
       await exec(cmd, { cwd: pkgPath, logLevel: 'trace' });
@@ -58,29 +66,26 @@ const run = async (opts: Options) => {
     }
   }
 
-  // Pass 2: link internal and user-specified deps
-  for (let i = 0; i < pkgNames.length; i++) {
-    const pkgName = pkgNames[i];
+  // Pass 2: link internal and user-specified deps [PARALLEL]
+  mainStory.info(`${chalk.bold('PASS 2:')} Installing all internal dependencies...`);
+  await runInParallel(pkgNames, async pkgName => {
     const allRemovedPackages = allRemovedDepsByPackage[pkgName];
     const removedPackagesByType = allRemovedDepsByPackageAndType[pkgName];
     const packagesToLink = Object.keys(allRemovedPackages);
     const { displayName, pkgPath } = allSpecs[pkgName];
-    mainStory.info(`${chalk.bold('PASS 2:')} installing internal deps for ` +
-      `${chalk.cyan.bold(displayName)}...`);
-    for (let k = 0; k < packagesToLink.length; k++) {
-      const depName = packagesToLink[k];
-      if (production && isPureDevDependency(removedPackagesByType, depName)) continue;
-      mainStory.info(`  - Linking to ${chalk.cyan.bold(depName)}...`);
+    await runInParallel(packagesToLink, async depName => {
+      if (production && isPureDevDependency(removedPackagesByType, depName)) return;
+      mainStory.info(`  - ${chalk.cyan.bold(displayName)} -> ${chalk.cyan.bold(depName)}`);
       const depVersionRange = allRemovedPackages[depName];
       const depSpecs = allSpecs[depName]; // might not exist, if it's a custom link
       const depActualVersion = depSpecs ? depSpecs.specs.version : null;
       if (depActualVersion && !semver.satisfies(depActualVersion, depVersionRange)) {
-        mainStory.warn(`  - Warning: ${chalk.cyan.bold(`${depName}@${depActualVersion}`)} ` +
+        mainStory.warn(`    Warning: ${chalk.cyan.bold(`${depName}@${depActualVersion}`)} ` +
           `does not satisfy specified range: ${chalk.cyan.bold(depVersionRange)}`);
       }
       await exec(`yarn link ${depName}`, { cwd: pkgPath, logLevel: 'trace' });
-    }
-  }
+    });
+  });
 };
 
 const isPureDevDependency = (deps, depName) =>

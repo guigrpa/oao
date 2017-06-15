@@ -11,24 +11,10 @@ Array [
     },
   ],
   Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packages/oao",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packages/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -41,24 +27,10 @@ Array [
     },
   ],
   Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packages/oao-c",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-d",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -67,6 +39,34 @@ Array [
     Object {
       "cwd": "test/fixtures/packages/oao-priv",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -161,24 +161,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --production",
-    Object {
-      "cwd": "test/fixtures/packages/oao",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --production",
-    Object {
-      "cwd": "test/fixtures/packages/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -191,24 +177,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --production",
-    Object {
-      "cwd": "test/fixtures/packages/oao-c",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-d",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --production",
-    Object {
-      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -217,6 +189,34 @@ Array [
     Object {
       "cwd": "test/fixtures/packages/oao-priv",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --production",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --production",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --production",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --production",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -283,24 +283,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --frozen-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --frozen-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -313,24 +299,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --frozen-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-c",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-d",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --frozen-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -339,6 +311,34 @@ Array [
     Object {
       "cwd": "test/fixtures/packages/oao-priv",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --frozen-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --frozen-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --frozen-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --frozen-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -433,24 +433,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --no-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --no-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -463,24 +449,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --no-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-c",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-d",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --no-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -489,6 +461,34 @@ Array [
     Object {
       "cwd": "test/fixtures/packages/oao-priv",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --no-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --no-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --no-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --no-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -583,24 +583,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --pure-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-b",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --pure-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -613,24 +599,10 @@ Array [
     },
   ],
   Array [
-    "yarn install --pure-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-c",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packages/oao-d",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install --pure-lockfile",
-    Object {
-      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -639,6 +611,34 @@ Array [
     Object {
       "cwd": "test/fixtures/packages/oao-priv",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --pure-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --pure-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-b",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --pure-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-c",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install --pure-lockfile",
+    Object {
+      "cwd": "test/fixtures/packages/oao-d",
       "logLevel": "trace",
     },
   ],
@@ -733,24 +733,10 @@ Array [
     },
   ],
   Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packagesCustomLinks/oao",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packagesCustomLinks/oao-b",
       "errorLogLevel": "info",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packagesCustomLinks/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -759,6 +745,20 @@ Array [
     Object {
       "cwd": "test/fixtures/packagesCustomLinks/oao-c",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesCustomLinks/oao-b",
       "logLevel": "trace",
     },
   ],
@@ -832,17 +832,17 @@ Array [
     },
   ],
   Array [
-    "yarn install",
-    Object {
-      "cwd": "test/fixtures/packagesScoped/example-package",
-      "logLevel": "trace",
-    },
-  ],
-  Array [
     "yarn link",
     Object {
       "cwd": "test/fixtures/packagesScoped/example-package-b",
       "errorLogLevel": "info",
+      "logLevel": "trace",
+    },
+  ],
+  Array [
+    "yarn install",
+    Object {
+      "cwd": "test/fixtures/packagesScoped/example-package",
       "logLevel": "trace",
     },
   ],
