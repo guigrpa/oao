@@ -69,7 +69,7 @@ const run = async (opts: Options) => {
     }
   };
   if (opts.parallel) {
-    await runInParallel(pkgNames, installer);
+    await runInParallel(pkgNames, installer, { waitForAllToResolve: true });
   } else {
     await runInSeries(pkgNames, installer);
   }
