@@ -1,3 +1,5 @@
+## 0.8.4 (Jun. 16, 2017)
+
 * Bugfix: in parallel `oao bootstrap`, recover original subpackage `package.json` files always, even if one of the subpackages fails to install (#42).
 
 ## 0.8.3 (Jun. 15, 2017)
