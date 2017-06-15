@@ -1,4 +1,6 @@
-* Parallelize `oao bootstrap` -- substantially improves perf (#42).
+## 0.8.3 (Jun. 15, 2017)
+
+* Parallelize `oao bootstrap` -- **substantially improved performance** (#42).
 * Add support for `--frozen-lockfile`, `--pure-lockfile` and `--no-lockfile` flags in `oao bootstrap` (see Yarn documentation) (#43).
 
 ## 0.8.2 (Apr. 14, 2017)
