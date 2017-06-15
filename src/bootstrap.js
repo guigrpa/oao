@@ -8,7 +8,7 @@ import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
 
-const PASS_THROUGH_OPTS = ['production'];
+const PASS_THROUGH_OPTS = ['production', 'noLockfile', 'pureLockfile', 'frozenLockfile'];
 
 type Options = {
   src: string,

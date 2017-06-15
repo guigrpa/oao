@@ -104,7 +104,7 @@ Provides lots of information on the git repo (current branch, last tag, uncommit
 
 Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself (and custom links specified with the `--link` option) are `yarn link`ed.
 
-Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`.
+Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`. Other flags that are passed through to `yarn install` include `--frozen-lockfile`, `--pure-lockfile` and `--no-lockfile`.
 
 
 ### `oao clean`

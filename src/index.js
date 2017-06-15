@@ -34,6 +34,9 @@ createCommand('status', 'Show an overview of the monorepo status')
 
 createCommand('bootstrap', 'Install external dependencies and create internal links')
 .option('--prod --production', 'skip external and internal development-only dependencies (also via NODE_ENV=production)')
+.option('--no-lockfile', "don't read or generate a lockfile")
+.option('--pure-lockfile', "don't generate a lockfile")
+.option('--frozen-lockfile', "don't generate a lockfile and fail if an update is needed")
 .action((cmd) => bootstrap(cmd.opts()));
 
 createCommand('clean', 'Delete all node_modules directories from sub-packages')

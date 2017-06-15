@@ -73,6 +73,24 @@ describe('BOOTSTRAP command', () => {
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
 
+  it('executes the correct `yarn link`s and `yarn install`s with --frozen-lockfile', async () => {
+    const helpers = require('../utils/shell');
+    await bootstrap({ src: 'test/fixtures/packages/*', frozenLockfile: true });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
+  it('executes the correct `yarn link`s and `yarn install`s with --pure-lockfile', async () => {
+    const helpers = require('../utils/shell');
+    await bootstrap({ src: 'test/fixtures/packages/*', pureLockfile: true });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
+  it('executes the correct `yarn link`s and `yarn install`s with --no-lockfile', async () => {
+    const helpers = require('../utils/shell');
+    await bootstrap({ src: 'test/fixtures/packages/*', noLockfile: true });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
   it('executes the correct `yarn link`s and `yarn install`s with custom links', async () => {
     const helpers = require('../utils/shell');
     await bootstrap({

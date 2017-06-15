@@ -1,16 +1,18 @@
+* Add support for `--frozen-lockfile`, `--pure-lockfile` and `--no-lockfile` flags in `oao bootstrap` (see Yarn documentation) (#43).
+
 ## 0.8.2 (Apr. 14, 2017)
 
 * Bump deps
 
 ## 0.8.1 (Apr. 3, 2017)
 
-* Add `--ignore-src <glob>` option to all commands to exclude sub-packages (#38)
-* Add warning to `oao oudated` for internal deps that do not meet the specified version range (#34)
+* Add `--ignore-src <glob>` option to all commands to exclude sub-packages (#38).
+* Add warning to `oao oudated` for internal deps that do not meet the specified version range (#34).
 
 ## 0.8.0 (Mar. 8, 2017)
 
-* Rename `--version` option (incompatible with `commander`'s default option') to `--new-version` (#35)
-* During `oao publish`, automatically **update the changelog** with the new version and release date
+* Rename `--version` option (incompatible with `commander`'s default option') to `--new-version` (#35).
+* During `oao publish`, automatically **update the changelog** with the new version and release date.
 * Add **`--no-npm-publish` option to `oao publish`** to prevent accidental publishing on npm of parts of an all-private monorepo.
 * During `oao publish`, also **update the versions of _private_ sub-packages** that have changed.
 
@@ -27,7 +29,7 @@
 
 * Add **`oao clean`** to remove all `node_modules` directories in sub-packages.
 * Provide **more explicit errors when unhandled rejections occur**.
-* Add `--no-confirm` option to `oao reset-all-versions` (#26)
+* Add `--no-confirm` option to `oao reset-all-versions` (#26).
 * Extract Parallel Console (now published as `storyboard-listener-console-parallel` under the Storyboard monorepo).
 
 ## 0.7.0 (Feb. 27, 2017)
@@ -77,18 +79,18 @@
 
 * Add **tentative support for scoped packages** (#7).
 * Internal:
-    - Add unit tests
-    - Add static types (Flow)
+    - Add unit tests.
+    - Add static types (Flow).
 
 ## 0.5.1 (Feb. 15, 2017)
 
-* Add **`oao upgrade <sub-package> [deps...]`**
+* Add **`oao upgrade <sub-package> [deps...]`**.
 * Add unit tests, Travis, Coveralls.
 
 ## 0.5.0 (Feb. 14, 2017)
 
-* Add **`oao add <sub-package> <deps...>`**
-* Add **`oao remove <sub-package> <deps...>`**
+* Add **`oao add <sub-package> <deps...>`**.
+* Add **`oao remove <sub-package> <deps...>`**.
 * Bump `storyboard` yet again (some warnings remained).
 * Fix missing newlines at the end of `package.json` files (#3).
 
@@ -115,8 +117,8 @@
 ## 0.3.0, 0.3.1 (Feb. 12, 2017)
 
 * Add options to `oao publish`:
-    - `--no-master` (allow publishing from non-`master` branches)
-    - `--no-confirm` (skip confirmation steps)
+    - `--no-master` (allow publishing from non-`master` branches).
+    - `--no-confirm` (skip confirmation steps).
 
 ## 0.2.0 (Feb. 10, 2017)
 
