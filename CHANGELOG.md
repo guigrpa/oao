@@ -1,3 +1,5 @@
+## 0.8.5 (Jun. 16, 2017)
+
 * Add **`--increment-version-by` option for `oao publish`**. This allows setting the next version automatically, e.g. in a continuous deployment scheme (#41).
 * Add prettier.
 
