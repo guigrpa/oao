@@ -8,8 +8,20 @@ import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
 
-const PASS_THROUGH_OPTS = ['dev', 'peer', 'optional', 'exact', 'tilde', 'ignoreEngines'];
-const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+const PASS_THROUGH_OPTS = [
+  'dev',
+  'peer',
+  'optional',
+  'exact',
+  'tilde',
+  'ignoreEngines',
+];
+const DEP_TYPES = [
+  'dependencies',
+  'devDependencies',
+  'peerDependencies',
+  'optionalDependencies',
+];
 
 type Operation = 'add' | 'remove' | 'upgrade';
 type Options = {
@@ -24,9 +36,16 @@ type Options = {
   ignoreEngines?: boolean,
 };
 
-const run = async (pkgName0: string, op: Operation, deps: Array<string>, opts: Options) => {
+const run = async (
+  pkgName0: string,
+  op: Operation,
+  deps: Array<string>,
+  opts: Options
+) => {
   const { src, ignoreSrc, link: linkPattern } = opts;
-  const pkgName = pkgName0 === '.' || pkgName0 === 'ROOT' ? ROOT_PACKAGE : pkgName0;
+  const pkgName = pkgName0 === '.' || pkgName0 === 'ROOT'
+    ? ROOT_PACKAGE
+    : pkgName0;
   const allSpecs = await readAllSpecs(src, ignoreSrc);
   if (!allSpecs[pkgName]) {
     mainStory.error(`No such package: ${pkgName}`);
@@ -40,21 +59,31 @@ const run = async (pkgName0: string, op: Operation, deps: Array<string>, opts: O
   // 1. Remove internal links from package.json
   // 2. Run `yarn add/remove/upgrade` as needed (if it fails, revert to original specs and abort)
   // 3. Add the original internal links back to package.json
-  const externalDeps = deps.filter((dep) => !isLinked(pkgNames, linkPattern, dep));
-  const externalOperation = externalDeps.length || (op === 'upgrade' && !deps.length);
+  const externalDeps = deps.filter(
+    dep => !isLinked(pkgNames, linkPattern, dep)
+  );
+  const externalOperation =
+    externalDeps.length || (op === 'upgrade' && !deps.length);
   if (externalOperation) {
-    const { nextSpecs, removedPackagesByType } =
-      removeInternalLinks(prevSpecs, pkgNames, linkPattern);
+    const { nextSpecs, removedPackagesByType } = removeInternalLinks(
+      prevSpecs,
+      pkgNames,
+      linkPattern
+    );
     let succeeded = false;
     try {
       if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
       mainStory.info(`Executing 'yarn ${op}'...`);
       let cmd = `yarn ${op}`;
       if (externalDeps.length) cmd += ` ${externalDeps.join(' ')}`;
-      PASS_THROUGH_OPTS.forEach((key) => { if (opts[key]) cmd += ` --${kebabCase(key)}`; });
+      PASS_THROUGH_OPTS.forEach(key => {
+        if (opts[key]) cmd += ` --${kebabCase(key)}`;
+      });
       await exec(cmd, { cwd: pkgPath });
       succeeded = true;
-    } catch (err) { /* ignore */ }
+    } catch (err) {
+      /* ignore */
+    }
     // If unsuccessful, revert to the original specs
     if (!succeeded) {
       if (prevSpecs != null) writeSpecs(specPath, prevSpecs);
@@ -63,24 +92,31 @@ const run = async (pkgName0: string, op: Operation, deps: Array<string>, opts: O
     // Read the updated package.json, and add the internal deps
     const { specs: updatedSpecs } = readOneSpec(pkgPath);
     let finalSpecs = updatedSpecs;
-    Object.keys(removedPackagesByType).forEach((type) => {
+    Object.keys(removedPackagesByType).forEach(type => {
       const removedPackages = removedPackagesByType[type];
-      const nextDeps = merge((updatedSpecs[type] || {}), removedPackages);
+      const nextDeps = merge(updatedSpecs[type] || {}, removedPackages);
       finalSpecs = timmSet(finalSpecs, type, nextDeps);
     });
     writeSpecs(specPath, finalSpecs);
   }
 
   // Add/remove/upgrade INTERNAL dependencies:
-  const internalDeps = deps.filter((dep) => isLinked(pkgNames, linkPattern, dep));
-  const internalOperation = internalDeps.length || (op === 'upgrade' && !deps.length);
+  const internalDeps = deps.filter(dep => isLinked(pkgNames, linkPattern, dep));
+  const internalOperation =
+    internalDeps.length || (op === 'upgrade' && !deps.length);
   if (internalOperation) {
     mainStory.info(`Processing '${op}' on internal dependencies...`);
     const { specs } = readOneSpec(pkgPath);
     let nextSpecs;
     switch (op) {
       case 'add':
-        nextSpecs = await addInternal(specs, internalDeps, pkgPath, allSpecs, opts);
+        nextSpecs = await addInternal(
+          specs,
+          internalDeps,
+          pkgPath,
+          allSpecs,
+          opts
+        );
         break;
       case 'remove':
         nextSpecs = await removeInternal(specs, internalDeps, pkgPath);
@@ -101,8 +137,14 @@ const addInternal = async (prevSpecs, deps, pkgPath, allSpecs, opts) => {
     const [depName, depVersion0] = deps[i].split('@');
     try {
       mainStory.info(`Linking ${chalk.cyan.bold(depName)}...`);
-      await exec(`yarn link ${depName}`, { cwd: pkgPath, logLevel: 'trace', errorLogLevel: 'trace' });
-    } catch (err) { /* ignore unlink errors */ }
+      await exec(`yarn link ${depName}`, {
+        cwd: pkgPath,
+        logLevel: 'trace',
+        errorLogLevel: 'trace',
+      });
+    } catch (err) {
+      /* ignore unlink errors */
+    }
     let depType;
     if (opts.dev) depType = 'devDependencies';
     else if (opts.peer) depType = 'peerDependencies';
@@ -127,8 +169,14 @@ const removeInternal = async (prevSpecs, deps, pkgPath) => {
     const [depName] = deps[i].split('@');
     try {
       mainStory.info(`Unlinking ${chalk.cyan.bold(depName)}...`);
-      await exec(`yarn unlink ${depName}`, { cwd: pkgPath, logLevel: 'trace', errorLogLevel: 'trace' });
-    } catch (err) { /* ignore unlink errors */ }
+      await exec(`yarn unlink ${depName}`, {
+        cwd: pkgPath,
+        logLevel: 'trace',
+        errorLogLevel: 'trace',
+      });
+    } catch (err) {
+      /* ignore unlink errors */
+    }
     for (let k = 0; k < DEP_TYPES.length; k++) {
       const type = DEP_TYPES[k];
       if (!nextSpecs[type]) continue;
@@ -142,12 +190,12 @@ const upgradeInternal = (prevSpecs, deps, allSpecs, linkPattern) => {
   const pkgNames = Object.keys(allSpecs);
   let nextSpecs = prevSpecs;
   const targetVersions = {};
-  deps.forEach((dep) => {
+  deps.forEach(dep => {
     const [name, version] = dep.split('@');
     targetVersions[name] = version;
   });
-  DEP_TYPES.forEach((type) => {
-    Object.keys(nextSpecs[type] || {}).forEach((depName) => {
+  DEP_TYPES.forEach(type => {
+    Object.keys(nextSpecs[type] || {}).forEach(depName => {
       if (!isLinked(pkgNames, linkPattern, depName)) return;
       let depVersion = targetVersions[depName];
       if (!depVersion && allSpecs[depName]) {

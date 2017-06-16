@@ -19,6 +19,7 @@
     "_testCovReport": "cp -r .nyc_tmp .nyc_output && nyc report --reporter=html --reporter=lcov --reporter=text",
     "_testDev": "yarn _testCov && mv .nyc_tmp/coverage-final.json .nyc_tmp/coverage-dev.json",
     "_testCov": "jest --coverage && mv .nyc_output/coverage-final.json .nyc_tmp && rm -rf .nyc_output",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write \"src/**/*.js\"",
     "xxl": "xxl"
   },
   "repository": "guigrpa/oao",
@@ -70,6 +71,7 @@
     "flow-bin": "0.44.2",
     "jest": "19.0.2",
     "nyc": "^10.2.0",
+    "prettier": "^1.4.4",
     "xxl": "1.2.0"
   },
   "jest": {

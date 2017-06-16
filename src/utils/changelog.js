@@ -15,12 +15,17 @@ const addVersionLine = ({ changelogPath, version, _date }: Options) => {
   try {
     contents = fs.readFileSync(changelogPath, 'utf8');
   } catch (err) {
-    mainStory.warn(`Could not find changelog (${chalk.cyan.bold(changelogPath)}). Skipped update`);
+    mainStory.warn(
+      `Could not find changelog (${chalk.cyan.bold(
+        changelogPath
+      )}). Skipped update`
+    );
     return;
   }
 
   const date = _date || new Date();
-  const line = `## ${version} (${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()})`;
+  const line = `## ${version} (${date.getFullYear()}-${date.getMonth() +
+    1}-${date.getDate()})`;
   const finalContents = `${line}\n\n${contents}`;
   try {
     fs.writeFileSync(changelogPath, finalContents, 'utf8');
@@ -29,6 +34,4 @@ const addVersionLine = ({ changelogPath, version, _date }: Options) => {
   }
 };
 
-export {
-  addVersionLine,
-};
+export { addVersionLine };

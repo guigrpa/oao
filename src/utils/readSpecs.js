@@ -10,19 +10,22 @@ const ROOT_PACKAGE = '__ROOT_PACKAGE__';
 type PackageName = string;
 type OaoSpecs = {
   pkgPath: string,
-  specPath: string,  // including .package.json
+  specPath: string, // including .package.json
   name: string,
   displayName: string,
   specs: Object,
 };
 type AllSpecs = { [key: PackageName]: OaoSpecs };
 
-const readAllSpecs = async (src: string, ignoreSrc?: ?string): Promise<AllSpecs> => {
+const readAllSpecs = async (
+  src: string,
+  ignoreSrc?: ?string
+): Promise<AllSpecs> => {
   const pkgPaths = await listPaths(src, ignoreSrc);
   pkgPaths.push('.');
   const allSpecs = {};
   mainStory.info('Reading all package.json files...');
-  pkgPaths.forEach((pkgPath) => {
+  pkgPaths.forEach(pkgPath => {
     const pkg = readOneSpec(pkgPath);
     allSpecs[pkg.name] = pkg;
   });
@@ -48,17 +51,17 @@ const readOneSpec = (pkgPath: string): OaoSpecs => {
 };
 
 const validatePkgName = (pkgPath: string, name: PackageName): void => {
-  if (name == null || name === '') throw new Error(`Package has no name (${pkgPath})`);
+  if (name == null || name === '') {
+    throw new Error(`Package has no name (${pkgPath})`);
+  }
   if (pkgPath === '.') return;
   const segments = pkgPath.split('/');
   if (name[0] !== '@' && name !== segments[segments.length - 1]) {
-    mainStory.error(`Package name (${name}) does not match directory name ${pkgPath}`);
+    mainStory.error(
+      `Package name (${name}) does not match directory name ${pkgPath}`
+    );
     throw new Error('INVALID_DIR_NAME');
   }
 };
 
-export {
-  readAllSpecs,
-  readOneSpec,
-  ROOT_PACKAGE,
-};
+export { readAllSpecs, readOneSpec, ROOT_PACKAGE };

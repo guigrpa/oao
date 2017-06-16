@@ -11,7 +11,7 @@ describe('readAllSpecs', () => {
     expect(rootSpecs.displayName).toBe('MONOREPO ROOT');
     expect(rootSpecs.specs.name).toBe('oao');
     delete allSpecs[ROOT_PACKAGE];
-    Object.keys(allSpecs).forEach((name) => {
+    Object.keys(allSpecs).forEach(name => {
       expect(allSpecs[name].specPath).not.toBeNull();
       delete allSpecs[name].specPath;
     });
@@ -21,16 +21,19 @@ describe('readAllSpecs', () => {
   it('accepts --src ending with slash', async () => {
     const allSpecs = await readAllSpecs('test/fixtures/packages/*/');
     delete allSpecs[ROOT_PACKAGE];
-    Object.keys(allSpecs).forEach((name) => {
+    Object.keys(allSpecs).forEach(name => {
       delete allSpecs[name].specPath;
     });
     expect(allSpecs).toMatchSnapshot();
   });
 
   it('supports excluding packages', async () => {
-    const allSpecs = await readAllSpecs('test/fixtures/packages/*/', 'test/fixtures/packages/oao-{b,c}');
+    const allSpecs = await readAllSpecs(
+      'test/fixtures/packages/*/',
+      'test/fixtures/packages/oao-{b,c}'
+    );
     delete allSpecs[ROOT_PACKAGE];
-    Object.keys(allSpecs).forEach((name) => {
+    Object.keys(allSpecs).forEach(name => {
       delete allSpecs[name].specPath;
     });
     expect(allSpecs).toMatchSnapshot();
@@ -38,8 +41,12 @@ describe('readAllSpecs', () => {
 
   it('supports scoped packages', async () => {
     const allSpecs = await readAllSpecs('test/fixtures/packagesScoped/*');
-    expect(allSpecs['@guigrpa/example-package'].specs.name).toEqual('@guigrpa/example-package');
-    expect(allSpecs['@guigrpa/example-package-b'].specs.name).toEqual('@guigrpa/example-package-b');
+    expect(allSpecs['@guigrpa/example-package'].specs.name).toEqual(
+      '@guigrpa/example-package'
+    );
+    expect(allSpecs['@guigrpa/example-package-b'].specs.name).toEqual(
+      '@guigrpa/example-package-b'
+    );
   });
 
   it('throws on invalid directory names (for non-scoped packages)', async () => {

@@ -48,7 +48,9 @@ describe('PUBLISH command', () => {
 
   it('throws with invalid increment by value', async () => {
     try {
-      await publish(merge(NOMINAL_OPTIONS, { incrementVersionBy: 'argle-bargle' }));
+      await publish(
+        merge(NOMINAL_OPTIONS, { incrementVersionBy: 'argle-bargle' })
+      );
       throw new Error('DID_NOT_THROW');
     } catch (err) {
       if (err.message !== 'INVALID_INCREMENT_BY_VALUE') throw err;
@@ -185,7 +187,9 @@ describe('PUBLISH command', () => {
   it('runs `npm publish` on dirty sub-packages (which are not private)', async () => {
     const { exec } = require('../utils/shell');
     await publish(NOMINAL_OPTIONS);
-    expect(exec).toHaveBeenCalledTimes(NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES);
+    expect(exec).toHaveBeenCalledTimes(
+      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
+    );
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish');
     });
@@ -194,7 +198,9 @@ describe('PUBLISH command', () => {
   it('runs `npm publish --tag X` on dirty sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { publishTag: 'next' }));
-    expect(exec).toHaveBeenCalledTimes(NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES);
+    expect(exec).toHaveBeenCalledTimes(
+      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
+    );
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish --tag next');
     });

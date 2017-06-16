@@ -2,14 +2,19 @@
 
 import { omit, set as timmSet } from 'timm';
 
-const DEP_TYPES = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+const DEP_TYPES = [
+  'dependencies',
+  'devDependencies',
+  'peerDependencies',
+  'optionalDependencies',
+];
 
 type PkgVersionMap = { [pkgName: string]: string };
 
 const removeInternalLinks = (
   prevSpecs: Object,
   pkgNames: Array<string>,
-  linkPattern: ?string,
+  linkPattern: ?string
 ): {
   nextSpecs: Object,
   removedPackagesByType: { [key: string]: PkgVersionMap },
@@ -20,14 +25,15 @@ const removeInternalLinks = (
   const regex = linkPattern ? new RegExp(linkPattern) : null;
 
   let nextSpecs = prevSpecs;
-  DEP_TYPES.forEach((type) => {
+  DEP_TYPES.forEach(type => {
     const prevDeps = nextSpecs[type];
     if (prevDeps == null) return;
     let nextDeps = prevDeps;
-    Object.keys(prevDeps).forEach((name) => {
+    Object.keys(prevDeps).forEach(name => {
       // Is package to be removed? Only if it belongs to the internal
       // subpackage list (`pkgNames`) or it matches the custom `linkPattern`
-      const fRemove = pkgNames.indexOf(name) >= 0 || (regex != null && regex.test(name));
+      const fRemove =
+        pkgNames.indexOf(name) >= 0 || (regex != null && regex.test(name));
       if (!fRemove) return;
       const version = prevDeps[name];
       if (version == null) return;

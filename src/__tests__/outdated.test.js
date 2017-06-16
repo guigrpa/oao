@@ -11,7 +11,7 @@ const PACKAGE_NAMES_1 = ['oao', 'oao-b', 'oao-c', 'oao-d', 'oao-priv'];
 
 const readOriginalSpecs = (base, names) => {
   const originalSpecs = {};
-  names.forEach((name) => {
+  names.forEach(name => {
     originalSpecs[name] = require(path.join(base, `${name}/package.json`));
   });
   return originalSpecs;
@@ -38,9 +38,9 @@ describe('OUTDATED command', () => {
       expect(specPath.split(path.sep)).toContain(name);
       expect(specPath.split(path.sep)).toContain('package.json');
     });
-    PACKAGE_NAMES_1.forEach((name) => {
+    PACKAGE_NAMES_1.forEach(name => {
       const finalSpecWritten = spyFinalSpec(writeSpecs, name);
-      if (finalSpecWritten === undefined) return;  // not changed at all!
+      if (finalSpecWritten === undefined) return; // not changed at all!
       expect(finalSpecWritten).toEqual(originalSpecs[name]);
     });
   });
@@ -49,10 +49,7 @@ describe('OUTDATED command', () => {
     const helpers = require('../utils/shell');
     await outdated({ src: 'test/fixtures/packages/*' });
     const { calls } = helpers.exec.mock;
-    const calls2 = calls.map(call => [
-      call[0],
-      { cwd: call[1].cwd },
-    ]);
+    const calls2 = calls.map(call => [call[0], { cwd: call[1].cwd }]);
     expect(calls2).toMatchSnapshot();
   });
 });

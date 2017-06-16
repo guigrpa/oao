@@ -28,11 +28,17 @@ const run = async ({ src, ignoreSrc, copyAttrs: copyAttrsStr }: Options) => {
     const { version } = specs;
     if (specs.private) continue;
     if (!semver.valid(version)) {
-      mainStory.error(`Invalid version for ${chalk.bold(pkgName)}: ${chalk.bold(version)}`);
+      mainStory.error(
+        `Invalid version for ${chalk.bold(pkgName)}: ${chalk.bold(version)}`
+      );
       throw new Error('INVALID_VERSION');
     }
     if (semver.gt(version, masterVersion)) {
-      mainStory.error(`Version for ${pkgName} (${chalk.bold(version)}) > master version (${chalk.bold(masterVersion)})`);
+      mainStory.error(
+        `Version for ${pkgName} (${chalk.bold(
+          version
+        )}) > master version (${chalk.bold(masterVersion)})`
+      );
       throw new Error('INVALID_VERSION');
     }
   }
@@ -51,7 +57,9 @@ const run = async ({ src, ignoreSrc, copyAttrs: copyAttrsStr }: Options) => {
   // Merge common attributes with submodules
   const commonSpecs = {};
   const copyAttrs = copyAttrsStr.split(/\s*,\s*/);
-  copyAttrs.forEach((attr) => { commonSpecs[attr] = rootSpecs[attr]; });
+  copyAttrs.forEach(attr => {
+    commonSpecs[attr] = rootSpecs[attr];
+  });
   mainStory.info('Updating package attributes', { attach: commonSpecs });
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
@@ -62,7 +70,9 @@ const run = async ({ src, ignoreSrc, copyAttrs: copyAttrsStr }: Options) => {
     writeSpecs(specPath, nextSpecs);
   }
 
-  mainStory.warn('Please make sure you commit all changes before you attempt "oao publish"');
+  mainStory.warn(
+    'Please make sure you commit all changes before you attempt "oao publish"'
+  );
 };
 
 export default run;

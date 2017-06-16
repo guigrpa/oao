@@ -13,13 +13,10 @@ type Options = {
   ignoreErrors?: boolean,
 };
 
-const run = async (cmd: string, {
-  src,
-  ignoreSrc,
-  parallel,
-  parallelLogs,
-  ignoreErrors,
-}: Options) => {
+const run = async (
+  cmd: string,
+  { src, ignoreSrc, parallel, parallelLogs, ignoreErrors }: Options
+) => {
   if (parallel && parallelLogs) {
     removeAllListeners();
     addListener(parallelConsoleListener);

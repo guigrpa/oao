@@ -36,8 +36,12 @@ const run = async (opts: Options) => {
         writeSpecs(specPath, nextSpecs);
         fModified = true;
       }
-      await exec('yarn outdated',
-        { cwd: pkgPath, story, createChildStory: false, logLevel: 'trace' });
+      await exec('yarn outdated', {
+        cwd: pkgPath,
+        story,
+        createChildStory: false,
+        logLevel: 'trace',
+      });
     } catch (err) {
       story.close();
       throw err;
@@ -53,8 +57,14 @@ const run = async (opts: Options) => {
         if (!depSpecs) return; // might not exist, if it's a custom link
         const depActualVersion = depSpecs.specs.version;
         if (!semver.satisfies(depActualVersion, depVersionRange)) {
-          story.warn(`| - Warning: ${chalk.cyan.bold(`${depName}@${depActualVersion}`)} ` +
-            `does not satisfy the specified range: ${chalk.cyan.bold(depVersionRange)}`);
+          story.warn(
+            `| - Warning: ${chalk.cyan.bold(
+              `${depName}@${depActualVersion}`
+            )} ` +
+              `does not satisfy the specified range: ${chalk.cyan.bold(
+                depVersionRange
+              )}`
+          );
         }
       });
     } finally {

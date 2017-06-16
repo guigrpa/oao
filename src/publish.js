@@ -19,9 +19,9 @@ import {
 import { addVersionLine } from './utils/changelog';
 
 const DEBUG_SKIP_CHECKS = false;
-const releaseIncrements = ['major', 'minor', 'patch'];
-const preReleaseIncrements = ['rc', 'beta', 'alpha'];
-const increments = [...releaseIncrements, ...preReleaseIncrements];
+const RELEASE_INCREMENTS = ['major', 'minor', 'patch'];
+const PRERELEASE_INCREMENTS = ['rc', 'beta', 'alpha'];
+const INCREMENTS = [...RELEASE_INCREMENTS, ...PRERELEASE_INCREMENTS];
 
 type Options = {
   src: string,
@@ -61,12 +61,14 @@ const run = async ({
 
   // Confirm that we have run build
   if (confirm) {
-    const { confirmBuild } = await inquirer.prompt([{
-      name: 'confirmBuild',
-      type: 'confirm',
-      message: 'Have you built all your packages for production?',
-      default: false,
-    }]);
+    const { confirmBuild } = await inquirer.prompt([
+      {
+        name: 'confirmBuild',
+        type: 'confirm',
+        message: 'Have you built all your packages for production?',
+        default: false,
+      },
+    ]);
     if (!confirmBuild) return;
   }
   // Prepublish checks
@@ -84,26 +86,35 @@ const run = async ({
   const masterVersion = await getMasterVersion(allSpecs, lastTag);
   if (masterVersion == null) return;
   if (incrementVersionBy) {
-    if (increments.indexOf(incrementVersionBy) < 0) {
-      mainStory.error(`Value specified for --increment-version-by: ${chalk.bold(incrementVersionBy)} is invalid.`);
-      mainStory.error(`It should be one of (${increments.join(', ')}), or not specified.`);
+    if (INCREMENTS.indexOf(incrementVersionBy) < 0) {
+      mainStory.error(
+        `Value specified for --increment-version-by: ${chalk.bold(
+          incrementVersionBy
+        )} is invalid.`
+      );
+      mainStory.error(
+        `It should be one of (${INCREMENTS.join(', ')}), or not specified.`
+      );
       if (!DEBUG_SKIP_CHECKS) throw new Error('INVALID_INCREMENT_BY_VALUE');
     }
   }
-
-  const nextVersion = newVersion
-    || calcNextVersion(masterVersion, incrementVersionBy)
-    || await promptNextVersion(masterVersion);
+  const nextVersion =
+    newVersion ||
+    calcNextVersion(masterVersion, incrementVersionBy) ||
+    (await promptNextVersion(masterVersion));
 
   // Confirm before proceeding
   if (confirm) {
-    const { confirmPublish } = await inquirer.prompt([{
-      name: 'confirmPublish',
-      type: 'confirm',
-      message: `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
-        `v${chalk.cyan.bold(nextVersion)})?`,
-      default: false,
-    }]);
+    const { confirmPublish } = await inquirer.prompt([
+      {
+        name: 'confirmPublish',
+        type: 'confirm',
+        message:
+          `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
+            `v${chalk.cyan.bold(nextVersion)})?`,
+        default: false,
+      },
+    ]);
     if (!confirmPublish) return;
   }
 
@@ -140,17 +151,27 @@ const run = async ({
 // ------------------------------------------------
 // Helpers
 // ------------------------------------------------
-const prepublishChecks = async ({ master, checkUncommitted, checkUnpulled }) => {
-  if (DEBUG_SKIP_CHECKS) mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
+const prepublishChecks = async ({
+  master,
+  checkUncommitted,
+  checkUnpulled,
+}) => {
+  if (DEBUG_SKIP_CHECKS) {
+    mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
+  }
 
   // Check current branch
   const branch = await gitCurBranch();
   if (branch !== 'master') {
     if (master) {
-      mainStory.error(`Can't publish from current branch: ${chalk.bold(branch)}`);
+      mainStory.error(
+        `Can't publish from current branch: ${chalk.bold(branch)}`
+      );
       if (!DEBUG_SKIP_CHECKS) throw new Error('BRANCH_CHECK_FAILED');
     }
-    mainStory.warn(`Publishing from a non-master branch: ${chalk.red.bold(branch)}`);
+    mainStory.warn(
+      `Publishing from a non-master branch: ${chalk.red.bold(branch)}`
+    );
   } else {
     mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);
   }
@@ -159,7 +180,11 @@ const prepublishChecks = async ({ master, checkUncommitted, checkUnpulled }) => 
   const uncommitted = await gitUncommittedChanges();
   if (uncommitted !== '') {
     if (checkUncommitted) {
-      mainStory.error(`Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(uncommitted)}`);
+      mainStory.error(
+        `Can't publish with uncommitted changes (stash/commit them): \n${chalk.bold(
+          uncommitted
+        )}`
+      );
       if (!DEBUG_SKIP_CHECKS) throw new Error('UNCOMMITTED_CHECK_FAILED');
     }
     mainStory.warn('Publishing with uncommitted changes');
@@ -190,7 +215,11 @@ const findPackagesToUpdate = async (allSpecs, lastTag) => {
     const diff = await gitDiffSinceIn(lastTag, pkgPath);
     if (diff !== '') {
       const numChanges = diff.split('\n').length;
-      mainStory.info(`- Package ${pkgName} (currently ${chalk.cyan.bold(specs.version)}) has changed (#files: ${numChanges})`);
+      mainStory.info(
+        `- Package ${pkgName} (currently ${chalk.cyan.bold(
+          specs.version
+        )}) has changed (#files: ${numChanges})`
+      );
       dirty.push(pkgName);
     }
   }
@@ -203,36 +232,53 @@ const getMasterVersion = async (allSpecs, lastTag) => {
     const tagVersion = semver.clean(lastTag);
     mainStory.info(`Last tag found: ${chalk.yellow.bold(lastTag)}`);
     if (tagVersion !== masterVersion) {
-      mainStory.warn(`Last tagged version ${chalk.cyan.bold(tagVersion)} does not match package.json version ${chalk.cyan.bold(masterVersion)}`);
-      mainStory.warn('This may cause inaccuracies when determining which packages ' +
-        'need to be released, since oao uses tags to detect package changes');
-      const { confirm } = await inquirer.prompt([{
-        name: 'confirm',
-        type: 'confirm',
-        message: 'Continue?',
-        default: false,
-      }]);
+      mainStory.warn(
+        `Last tagged version ${chalk.cyan.bold(
+          tagVersion
+        )} does not match package.json version ${chalk.cyan.bold(
+          masterVersion
+        )}`
+      );
+      mainStory.warn(
+        'This may cause inaccuracies when determining which packages ' +
+          'need to be released, since oao uses tags to detect package changes'
+      );
+      const { confirm } = await inquirer.prompt([
+        {
+          name: 'confirm',
+          type: 'confirm',
+          message: 'Continue?',
+          default: false,
+        },
+      ]);
       if (!confirm) return null;
       if (semver.valid(tagVersion) && semver.gt(tagVersion, masterVersion)) {
         masterVersion = tagVersion;
       }
-      mainStory.warn(`Using ${chalk.cyan.bold(masterVersion)} as reference (the highest one of both)`);
+      mainStory.warn(
+        `Using ${chalk.cyan.bold(
+          masterVersion
+        )} as reference (the highest one of both)`
+      );
     }
   } else {
     mainStory.warn('Repo has no tags yet');
   }
   if (!semver.valid(masterVersion)) {
-    mainStory.error(`Master version ${chalk.cyan.bold(masterVersion)} is invalid. Please correct it manually`);
+    mainStory.error(
+      `Master version ${chalk.cyan.bold(
+        masterVersion
+      )} is invalid. Please correct it manually`
+    );
     throw new Error('INVALID_VERSION');
   }
   return masterVersion;
 };
 
 const calcNextVersion = (prevVersion: string, incrementBy = ''): string => {
-  const isPreRelease = preReleaseIncrements.indexOf(incrementBy) >= 0;
+  const isPreRelease = PRERELEASE_INCREMENTS.indexOf(incrementBy) >= 0;
   const increment = isPreRelease ? 'prerelease' : incrementBy;
   const isNewPreRelease = isPreRelease && prevVersion.indexOf(incrementBy) < 0;
-
   return isNewPreRelease
     ? `${semver.inc(prevVersion, 'major')}-${incrementBy}.0`
     : semver.inc(prevVersion, increment);
@@ -245,21 +291,25 @@ const promptNextVersion = async (prevVersion: string): Promise<string> => {
   const prerelease = semver.inc(prevVersion, 'prerelease');
   const rc = prevVersion.indexOf('rc') < 0 ? `${major}-rc.0` : prerelease;
   const beta = prevVersion.indexOf('beta') < 0 ? `${major}-beta.0` : prerelease;
-  const alpha = prevVersion.indexOf('alpha') < 0 ? `${major}-alpha.0` : prerelease;
-  const { nextVersion } = await inquirer.prompt([{
-    name: 'nextVersion',
-    type: 'list',
-    message: `Current version is ${chalk.cyan.bold(prevVersion)}. Next one?`,
-    choices: [
-      { name: `Major (${chalk.cyan.bold(major)})`, value: major },
-      { name: `Minor (${chalk.cyan.bold(minor)})`, value: minor },
-      { name: `Patch (${chalk.cyan.bold(patch)})`, value: patch },
-      { name: `Release candidate (${chalk.cyan.bold(rc)})`, value: rc },
-      { name: `Beta (${chalk.cyan.bold(beta)})`, value: beta },
-      { name: `Alpha (${chalk.cyan.bold(alpha)})`, value: alpha },
-    ],
-    defaultValue: 2,
-  }]);
+  const alpha = prevVersion.indexOf('alpha') < 0
+    ? `${major}-alpha.0`
+    : prerelease;
+  const { nextVersion } = await inquirer.prompt([
+    {
+      name: 'nextVersion',
+      type: 'list',
+      message: `Current version is ${chalk.cyan.bold(prevVersion)}. Next one?`,
+      choices: [
+        { name: `Major (${chalk.cyan.bold(major)})`, value: major },
+        { name: `Minor (${chalk.cyan.bold(minor)})`, value: minor },
+        { name: `Patch (${chalk.cyan.bold(patch)})`, value: patch },
+        { name: `Release candidate (${chalk.cyan.bold(rc)})`, value: rc },
+        { name: `Beta (${chalk.cyan.bold(beta)})`, value: beta },
+        { name: `Alpha (${chalk.cyan.bold(alpha)})`, value: alpha },
+      ],
+      defaultValue: 2,
+    },
+  ]);
   return nextVersion;
 };
 

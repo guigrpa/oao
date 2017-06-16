@@ -15,13 +15,13 @@ const runInParallel = async (items, cb, { waitForAllToResolve } = {}) => {
       for (let i = 0; i < promises.length; i++) {
         try {
           await promises[i];
-        } catch (err2) { /* ignore */ }
+        } catch (err2) {
+          /* ignore */
+        }
       }
     }
     throw err;
   }
 };
 
-export {
-  runInSeries, runInParallel,
-};
+export { runInSeries, runInParallel };

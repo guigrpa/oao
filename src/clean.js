@@ -15,18 +15,19 @@ const run = async ({ src, ignoreSrc }: Options) => {
   const pkgNames = Object.keys(allSpecs);
   await Promise.all(
     pkgNames.map(
-      pkgName => new Promise((resolve, reject) => {
-        const { pkgPath } = allSpecs[pkgName];
-        const nodeModulesPath = path.join(pkgPath, 'node_modules');
-        mainStory.info(`Removing ${chalk.cyan.bold(nodeModulesPath)}...`);
-        rimraf(nodeModulesPath, err => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve();
-        });
-      })
+      pkgName =>
+        new Promise((resolve, reject) => {
+          const { pkgPath } = allSpecs[pkgName];
+          const nodeModulesPath = path.join(pkgPath, 'node_modules');
+          mainStory.info(`Removing ${chalk.cyan.bold(nodeModulesPath)}...`);
+          rimraf(nodeModulesPath, err => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve();
+          });
+        })
     )
   );
 };

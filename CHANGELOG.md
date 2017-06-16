@@ -1,3 +1,6 @@
+* Add **`--increment-version-by` option for `oao publish`**. This allows setting the next version automatically, e.g. in a continuous deployment scheme (#41).
+* Add prettier.
+
 ## 0.8.4 (Jun. 16, 2017)
 
 * Bugfix: in parallel `oao bootstrap`, recover original subpackage `package.json` files always, even if one of the subpackages fails to install (#42).

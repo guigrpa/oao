@@ -19,10 +19,13 @@ describe('RESET_ALL_VERSIONS command', () => {
 
     // Copy original specs
     const originalSpecs = {};
-    PACKAGE_NAMES.forEach((name) => {
+    PACKAGE_NAMES.forEach(name => {
       originalSpecs[name] = require(path.join(base, `${name}/package.json`));
     });
-    originalSpecs[ROOT_PACKAGE] = require(path.join(process.cwd(), 'package.json'));
+    originalSpecs[ROOT_PACKAGE] = require(path.join(
+      process.cwd(),
+      'package.json'
+    ));
 
     // Run command
     await resetAllVersions(newVersion, {
@@ -36,7 +39,9 @@ describe('RESET_ALL_VERSIONS command', () => {
       const name = specPath === path.join(process.cwd(), 'package.json')
         ? ROOT_PACKAGE
         : specs.name;
-      expect(specs).toEqual(timmSet(originalSpecs[name], 'version', newVersion));
+      expect(specs).toEqual(
+        timmSet(originalSpecs[name], 'version', newVersion)
+      );
     });
   });
 

@@ -32,22 +32,42 @@ const gitStatus = async () => {
     const branch = await gitCurBranch();
     console.log(`    - Current branch: ${chalk.cyan.bold(branch)}`);
   } catch (err) {
-    console.log(`    - ${chalk.red.bold('Could not be determined')} (is this a git repo?)`);
+    console.log(
+      `    - ${chalk.red.bold('Could not be determined')} (is this a git repo?)`
+    );
   }
   let lastTag;
   try {
     lastTag = await gitLastTag();
-    console.log(`    - Last tag: ${lastTag != null ? chalk.cyan.bold(lastTag) : chalk.yellow.bold('NONE YET')}`);
-  } catch (err) { /* ignore */ }
+    console.log(
+      `    - Last tag: ${lastTag != null
+        ? chalk.cyan.bold(lastTag)
+        : chalk.yellow.bold('NONE YET')}`
+    );
+  } catch (err) {
+    /* ignore */
+  }
   try {
     const uncommitted = await gitUncommittedChanges();
-    console.log(`    - Uncommitted changes: ${uncommitted !== '' ? chalk.yellow.bold('YES') : chalk.cyan.bold('no')}`);
-  } catch (err) { /* ignore */ }
+    console.log(
+      `    - Uncommitted changes: ${uncommitted !== ''
+        ? chalk.yellow.bold('YES')
+        : chalk.cyan.bold('no')}`
+    );
+  } catch (err) {
+    /* ignore */
+  }
   try {
     const unpulled = await gitUnpulledChanges();
-    console.log(`    - Unpulled changes: ${unpulled !== '0' ? chalk.yellow.bold('YES') : chalk.cyan.bold('no')}`);
+    console.log(
+      `    - Unpulled changes: ${unpulled !== '0'
+        ? chalk.yellow.bold('YES')
+        : chalk.cyan.bold('no')}`
+    );
   } catch (err) {
-    console.log(`    - Unpulled changes: ${chalk.yellow.bold('UNKNOWN (no upstream?)')}`);
+    console.log(
+      `    - Unpulled changes: ${chalk.yellow.bold('UNKNOWN (no upstream?)')}`
+    );
   }
   return lastTag;
 };
@@ -57,9 +77,17 @@ const subpackageStatus = async (opts: Options, lastTag: ?string) => {
   const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   console.log('');
-  console.log(`* Subpackage status: [${chalk.cyan.bold(pkgNames.length)} package/s, incl. root]`);
+  console.log(
+    `* Subpackage status: [${chalk.cyan.bold(
+      pkgNames.length
+    )} package/s, incl. root]`
+  );
   console.log('');
-  console.log(chalk.gray('    Name                                     Version        Private Changes Dependencies'));
+  console.log(
+    chalk.gray(
+      '    Name                                     Version        Private Changes Dependencies'
+    )
+  );
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs } = allSpecs[pkgName];
@@ -67,11 +95,15 @@ const subpackageStatus = async (opts: Options, lastTag: ?string) => {
     name = field(name, 40);
     if (pkgName === ROOT_PACKAGE) name = chalk.italic(name);
     const version = chalk.cyan.bold(field(specs.version, 14));
-    const isPrivate = specs.private ? chalk.cyan.bold(field('yes', 7)) : chalk.yellow.bold(field('NO', 7));
+    const isPrivate = specs.private
+      ? chalk.cyan.bold(field('yes', 7))
+      : chalk.yellow.bold(field('NO', 7));
     let changes;
     if (pkgName !== ROOT_PACKAGE) {
       const diff = await gitDiffSinceIn(lastTag, pkgPath);
-      changes = diff !== '' ? chalk.yellow.bold(field(String(diff.split('\n').length), 7)) : chalk.gray(field('-', 7));
+      changes = diff !== ''
+        ? chalk.yellow.bold(field(String(diff.split('\n').length), 7))
+        : chalk.gray(field('-', 7));
     } else {
       changes = chalk.gray(field('N/A', 7));
     }

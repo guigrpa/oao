@@ -10,7 +10,9 @@ const gitLastTag = async (): Promise<?string> => {
     });
     commit = commit.trim();
     if (commit === '') return null;
-    let { stdout: tag } = await exec(`git describe --tags ${commit}`, { logLevel: 'trace' });
+    let { stdout: tag } = await exec(`git describe --tags ${commit}`, {
+      logLevel: 'trace',
+    });
     tag = tag.trim();
     tag = tag !== '' ? tag : null;
     return tag;
@@ -20,24 +22,39 @@ const gitLastTag = async (): Promise<?string> => {
 };
 
 const gitCurBranch = async (): Promise<string> => {
-  const { stdout } = await exec('git symbolic-ref --short HEAD', { logLevel: 'trace' });
+  const { stdout } = await exec('git symbolic-ref --short HEAD', {
+    logLevel: 'trace',
+  });
   return stdout.trim();
 };
 
 const gitUncommittedChanges = async (): Promise<string> => {
-  const { stdout } = await exec('git status --porcelain', { logLevel: 'trace' });
+  const { stdout } = await exec('git status --porcelain', {
+    logLevel: 'trace',
+  });
   return stdout.trim();
 };
 
 // Ripped off from: https://github.com/sindresorhus/np/blob/master/lib/git.js
 const gitUnpulledChanges = async (): Promise<string> => {
-  const { stdout } = await exec('git rev-list --count --left-only @{u}...HEAD', { logLevel: 'trace' });
+  const {
+    stdout,
+  } = await exec('git rev-list --count --left-only @{u}...HEAD', {
+    logLevel: 'trace',
+  });
   return stdout.trim();
 };
 
-const gitDiffSinceIn = async (sinceTag: ?string, inPath: string): Promise<string> => {
+const gitDiffSinceIn = async (
+  sinceTag: ?string,
+  inPath: string
+): Promise<string> => {
   if (sinceTag == null) return 'CHANGED';
-  const { stdout } = await exec(`git diff --name-only ${sinceTag} -- ${inPath}`, { logLevel: 'trace' });
+  const {
+    stdout,
+  } = await exec(`git diff --name-only ${sinceTag} -- ${inPath}`, {
+    logLevel: 'trace',
+  });
   return stdout.trim();
 };
 

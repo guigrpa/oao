@@ -9,12 +9,20 @@ import execa from 'execa';
 import { mainStory, chalk } from 'storyboard';
 import type { StoryT } from 'storyboard';
 
-const cp = (src: string, dst: string, { story = mainStory }: { story?: StoryT } = {}) => {
+const cp = (
+  src: string,
+  dst: string,
+  { story = mainStory }: { story?: StoryT } = {}
+) => {
   story.debug(`Copying ${chalk.cyan.bold(src)} -> ${chalk.cyan.bold(dst)}...`);
   shell.cp('-rf', path.normalize(src), path.normalize(dst));
 };
 
-const mv = (src: string, dst: string, { story = mainStory }: { story?: StoryT } = {}) => {
+const mv = (
+  src: string,
+  dst: string,
+  { story = mainStory }: { story?: StoryT } = {}
+) => {
   story.debug(`Moving ${chalk.cyan.bold(src)} -> ${chalk.cyan.bold(dst)}...`);
   shell.mv('-rf', path.normalize(src), path.normalize(dst));
 };
@@ -34,14 +42,17 @@ type ExecResult = {
   stderr: string,
 };
 
-const exec = async (cmd: string, {
-  story = mainStory,
-  createChildStory = true,
-  logLevel = 'info',
-  errorLogLevel = 'error',
-  bareLogs = false,
-  cwd,
-}: ExecOptions = {}): Promise<ExecResult> => {
+const exec = async (
+  cmd: string,
+  {
+    story = mainStory,
+    createChildStory = true,
+    logLevel = 'info',
+    errorLogLevel = 'error',
+    bareLogs = false,
+    cwd,
+  }: ExecOptions = {}
+): Promise<ExecResult> => {
   let title = `Run cmd ${chalk.green.bold(cmd)}`;
   if (cwd) title += ` at ${chalk.green(cwd)}`;
   const ownStory = createChildStory
@@ -62,24 +73,27 @@ const _exec = async (cmd, { cwd, story, errorLogLevel, bareLogs }) => {
       cwd: cwd || '.',
       // Workaround for Node.js bug: https://github.com/nodejs/node/issues/10836
       // See also: https://github.com/yarnpkg/yarn/issues/2462
-      stdio: process.platform === 'win32' ? ['ignore', 'pipe', 'pipe'] : undefined,
+      stdio: process.platform === 'win32'
+        ? ['ignore', 'pipe', 'pipe']
+        : undefined,
     });
-    child.stdout.pipe(split()).on('data', (line) => {
+    child.stdout.pipe(split()).on('data', line => {
       story.info(cmdName, `${prefix}${line}`);
     });
-    child.stderr.pipe(split()).on('data', (line) => {
+    child.stderr.pipe(split()).on('data', line => {
       if (line) story[errorLogLevel](cmdName, `${prefix}${line}`);
     });
     const { code, stdout, stderr } = await child;
-    if (code !== 0) throw new Error(`Command returned non-zero exit code: ${cmd} [${code}]`);
+    if (code !== 0) {
+      throw new Error(`Command returned non-zero exit code: ${cmd} [${code}]`);
+    }
     return { code, stdout, stderr };
   } catch (err) {
-    story[errorLogLevel](`Command '${cmd}' failed at ${cwd || '\'.\''}`, { attach: err });
+    story[errorLogLevel](`Command '${cmd}' failed at ${cwd || "'.'"}`, {
+      attach: err,
+    });
     throw new Error(`Command failed: ${cmd}`);
   }
 };
 
-export {
-  cp, mv,
-  exec,
-};
+export { cp, mv, exec };
