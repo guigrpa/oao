@@ -38,7 +38,8 @@ type Options = {
   changelog: boolean,
   changelogPath: string,
   // For unit tests
-  _date?: ?Object,
+  _date?: ?Object, // overrides the current date
+  _masterVersion?: string, // overrides the current master version
 };
 
 const run = async ({
@@ -56,6 +57,7 @@ const run = async ({
   changelog,
   changelogPath,
   _date,
+  _masterVersion,
 }: Options) => {
   const allSpecs = await readAllSpecs(src, ignoreSrc);
 
@@ -83,7 +85,8 @@ const run = async ({
   }
 
   // Determine a suitable version number
-  const masterVersion = await getMasterVersion(allSpecs, lastTag);
+  const masterVersion =
+    _masterVersion || (await getMasterVersion(allSpecs, lastTag));
   if (masterVersion == null) return;
   if (incrementVersionBy) {
     if (INCREMENTS.indexOf(incrementVersionBy) < 0) {

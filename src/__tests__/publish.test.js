@@ -20,6 +20,7 @@ const NOMINAL_OPTIONS = {
   changelog: false,
   changelogPath: 'test/fixtures/CHANGELOG.md',
   _date: new Date('2017-01-01T05:00:00Z'),
+  _masterVersion: '0.8.2',
 };
 const NUM_FIXTURE_SUBPACKAGES = 5;
 const NUM_FIXTURE_PRIVATE_SUBPACKAGES = 1;
