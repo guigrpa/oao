@@ -18,15 +18,7 @@ import all from './all';
 
 const pkg = require('../package.json');
 
-let config;
-
-try {
-  config = require(path.resolve('oao.json'));
-} catch (err) {
-  console.log(err);
-  config = {};
-}
-
+const CONFIG = require(path.resolve('package.json')).oao || {};
 const DEFAULT_SRC_DIR = 'packages/*';
 const DEFAULT_COPY_ATTRS =
   'description,keywords,author,license,homepage,bugs,repository';
@@ -36,8 +28,8 @@ program.version(pkg.version);
 
 const checkConfigOptions = (opts) =>
   Object.assign(opts, {
-    src: opts.src !== DEFAULT_SRC_DIR ? opts.src : config.src || opts.src,
-    ignoreSrc: opts.ignoreSrc || config.ignoreSrc,
+    src: opts.src !== DEFAULT_SRC_DIR ? opts.src : CONFIG.src || opts.src,
+    ignoreSrc: opts.ignoreSrc || CONFIG.ignoreSrc,
   });
 
 const createCommand = (syntax, description) =>
