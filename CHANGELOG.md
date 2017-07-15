@@ -1,3 +1,7 @@
+## 0.9.0 (Jul. 15, 2017)
+
+* Experimentally add the possibility to specify some config options in package.json (#47).
+
 ## 0.8.5 (Jun. 16, 2017)
 
 * Add **`--increment-version-by` option for `oao publish`**. This allows setting the next version automatically, e.g. in a continuous deployment scheme (#41).
