@@ -8,7 +8,7 @@ const listPaths = async (
   src: string,
   ignoreSrc?: ?string
 ): Promise<Array<string>> => {
-  const patterns = [src];
+  const patterns = Array.isArray(src) ? src : [src];
   if (ignoreSrc) patterns.push(`!${ignoreSrc}`);
   const paths = await globby(patterns);
   return paths
