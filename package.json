@@ -1,6 +1,6 @@
 {
   "name": "oao",
-  "version": "0.9.0",
+  "version": "0.10.0-beta.1",
   "description": "A Yarn-based, opinionated monorepo management tool",
   "bin": {
     "oao": "lib/index.js"
@@ -29,7 +29,8 @@
     "mono-repo",
     "yarn",
     "publish",
-    "git"
+    "git",
+    "workspaces"
   ],
   "author": "Guillermo Grau Panea",
   "license": "MIT",
