@@ -97,6 +97,17 @@ Array [
 ]
 `;
 
+exports[`ADD/REMOVE/UPGRADE commands executes ADD correctly with workspaces (one package, flags) 1`] = `
+Array [
+  Array [
+    "yarn add mady --dev",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
 exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly (external/internal deps) 1`] = `
 Array [
   Array [
@@ -130,6 +141,17 @@ Array [
 `;
 
 exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly 1`] = `
+Array [
+  Array [
+    "yarn remove mady",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes REMOVE correctly with workspaces (one package, no flags) 1`] = `
 Array [
   Array [
     "yarn remove mady",
@@ -200,6 +222,17 @@ Array [
 `;
 
 exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly (one package, no flags) 1`] = `
+Array [
+  Array [
+    "yarn upgrade mady",
+    Object {
+      "cwd": "test/fixtures/packages2/oao-b",
+    },
+  ],
+]
+`;
+
+exports[`ADD/REMOVE/UPGRADE commands executes UPGRADE correctly with workspaces (one package, no flags) 1`] = `
 Array [
   Array [
     "yarn upgrade mady",

@@ -821,6 +821,14 @@ Array [
 ]
 `;
 
+exports[`BOOTSTRAP command just runs \`yarn install\` when workspaces are configured 1`] = `
+Array [
+  Array [
+    "yarn install",
+  ],
+]
+`;
+
 exports[`BOOTSTRAP command supports scoped packages 1`] = `
 Array [
   Array [

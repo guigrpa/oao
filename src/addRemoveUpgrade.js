@@ -51,9 +51,18 @@ const run = async (
     mainStory.error(`No such package: ${pkgName}`);
     process.exit(1);
   }
-
-  const pkgNames = Object.keys(allSpecs);
   const { pkgPath, specPath, specs: prevSpecs } = allSpecs[pkgName];
+
+  // Very little to do when using yarn workspaces ;)
+  if (opts.workspaces) {
+    mainStory.info('Using yarn workspaces...');
+    const cmd = getYarnCommand(op, deps, opts);
+    await exec(cmd, { cwd: pkgPath });
+    return;
+  }
+
+  // Proceed, the old way
+  const pkgNames = Object.keys(allSpecs);
 
   // Add/remove/upgrade EXTERNAL dependencies:
   // 1. Remove internal links from package.json
@@ -74,11 +83,7 @@ const run = async (
     try {
       if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
       mainStory.info(`Executing 'yarn ${op}'...`);
-      let cmd = `yarn ${op}`;
-      if (externalDeps.length) cmd += ` ${externalDeps.join(' ')}`;
-      PASS_THROUGH_OPTS.forEach(key => {
-        if (opts[key]) cmd += ` --${kebabCase(key)}`;
-      });
+      const cmd = getYarnCommand(op, externalDeps, opts);
       await exec(cmd, { cwd: pkgPath });
       succeeded = true;
     } catch (err) {
@@ -212,6 +217,15 @@ const isLinked = (pkgNames, linkPattern, dep) => {
   if (pkgNames.indexOf(pkgName) >= 0) return true;
   if (linkPattern && new RegExp(linkPattern).test(pkgName)) return true;
   return false;
+};
+
+const getYarnCommand = (op, dependencies, options) => {
+  let cmd = `yarn ${op}`;
+  if (dependencies.length) cmd += ` ${dependencies.join(' ')}`;
+  PASS_THROUGH_OPTS.forEach(key => {
+    if (options[key]) cmd += ` --${kebabCase(key)}`;
+  });
+  return cmd;
 };
 
 export default run;

@@ -155,4 +155,32 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
       writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
     expect(finalSpecs).toMatchSnapshot();
   });
+
+  it('executes ADD correctly with workspaces (one package, flags)', async () => {
+    const helpers = require('../utils/shell');
+    await addRemoveUpgrade('oao-b', 'add', ['mady'], {
+      src: ['test/fixtures/packages2/*'],
+      workspaces: true,
+      dev: true,
+    });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
+  it('executes UPGRADE correctly with workspaces (one package, no flags)', async () => {
+    const helpers = require('../utils/shell');
+    await addRemoveUpgrade('oao-b', 'upgrade', ['mady'], {
+      src: ['test/fixtures/packages2/*'],
+      workspaces: true,
+    });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
+  it('executes REMOVE correctly with workspaces (one package, no flags)', async () => {
+    const helpers = require('../utils/shell');
+    await addRemoveUpgrade('oao-b', 'remove', ['mady'], {
+      src: ['test/fixtures/packages2/*'],
+      workspaces: true,
+    });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
 });

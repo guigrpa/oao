@@ -105,4 +105,10 @@ describe('BOOTSTRAP command', () => {
     await bootstrap({ src: 'test/fixtures/packagesScoped/*' });
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
+
+  it('just runs `yarn install` when workspaces are configured', async () => {
+    const helpers = require('../utils/shell');
+    await bootstrap({ src: ['test/fixtures/packages/*'], workspaces: true });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
 });

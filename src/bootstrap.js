@@ -25,11 +25,21 @@ type Options = {
   pureLockfile?: boolean,
   frozenLockfile?: boolean,
   parallel?: boolean,
+  workspaces?: boolean,
 };
 
 const run = async (opts: Options) => {
   const { src, ignoreSrc, link: linkPattern } = opts;
   const production = opts.production || process.env.NODE_ENV === 'production';
+
+  // Almost nothing to do when using yarn workspaces ;)
+  if (opts.workspaces) {
+    mainStory.info('Using yarn workspaces...');
+    await exec('yarn install');
+    return;
+  }
+
+  // Proceed, the old way
   const allSpecs = await readAllSpecs(src, ignoreSrc);
   const pkgNames = Object.keys(allSpecs);
   const allRemovedDepsByPackage = {};

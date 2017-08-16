@@ -4,7 +4,7 @@
 
 import 'babel-polyfill';
 import path from 'path';
-import { addDefaults } from 'timm';
+import { addDefaults, merge } from 'timm';
 import program from 'commander';
 import './utils/initConsole';
 import status from './status';
@@ -19,17 +19,34 @@ import all from './all';
 
 const pkg = require('../package.json');
 
-const CONFIG = require(path.resolve('package.json')).oao || {};
-const DEFAULT_SRC_DIR = CONFIG.src || 'packages/*';
+const monorepoPkg = require(path.resolve('package.json'));
+
+const OAO_CONFIG = monorepoPkg.oao || {};
+const DEFAULT_SRC_DIR = OAO_CONFIG.src || 'packages/*';
 const DEFAULT_COPY_ATTRS =
   'description,keywords,author,license,homepage,bugs,repository';
 const DEFAULT_CHANGELOG = 'CHANGELOG.md';
 
 program.version(pkg.version);
 
-const processOptions = options =>
-  addDefaults(options, { ignoreSrc: CONFIG.ignoreSrc });
+// =========================================
+// Helpers
+// =========================================
+const processOptions = options0 => {
+  let options = options0;
 
+  // If workspaces are enabled in the monorepo, some configuration is
+  // overriden by the monorepo package.json
+  if (monorepoPkg.workspaces) {
+    options = merge(options, { src: monorepoPkg.workspaces, workspaces: true });
+  }
+
+  // Add extra configuration in the `oao` field of the monorepo package.json
+  options = addDefaults(options, { ignoreSrc: OAO_CONFIG.ignoreSrc });
+  return options;
+};
+
+// Create a command with common options
 const createCommand = (syntax, description) =>
   program
     .command(syntax)
@@ -48,6 +65,9 @@ const createCommand = (syntax, description) =>
       'regex pattern for dependencies that should be linked, not installed'
     );
 
+// =========================================
+// Commands
+// =========================================
 createCommand('status', 'Show an overview of the monorepo status').action(cmd =>
   status(processOptions(cmd.opts()))
 );
@@ -185,7 +205,9 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
+// Syntax error -> show CLI help
 program.command('*', '', { noHelp: true }).action(() => program.outputHelp());
 if (process.argv.length <= 2) program.outputHelp();
 
+// Let's go!
 program.parse(process.argv);
