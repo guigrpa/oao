@@ -7,9 +7,10 @@ A Yarn-based, opinionated monorepo management tool.
 
 ## Why? :sparkles:
 
-* Works with **yarn**, hence (relatively) **fast**.
+* Works with **yarn**, hence (relatively) **fast!**.
 * **Simple to use** and extend (hope so!).
 * Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
+* Supports **yarn workspaces**, optimising the monorepo dependency tree as a whole and simplifying bootstrap as well as dependency add/upgrade/remove.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
 * Runs a command on all sub-packages, **serially or in parallel**.
 * Provides an easy-to-read, **detailed status overview**.
@@ -27,15 +28,19 @@ As stated in the tagline, *oao* is somewhat opinionated and makes the following 
 
 ## Installation
 
-If *yarn* is not installed in your system, please [install it first](https://yarnpkg.com/en/docs/install).
+If *yarn* is not installed in your system, please [install it first](https://yarnpkg.com/en/docs/install). If you want to use [**yarn workspaces**](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/) (available since yarn 0.28), enable them by running `yarn config set workspaces-experimental true` and configure the following in your monorepo package.json (replace the glob patterns for your subpackages/workspaces as needed):
+
+```
+"workspaces": [
+  'packages/*'
+]
+```
 
 Add **oao** to your development dependencies:
 
 ```sh
 $ yarn add oao --dev
 ```
-
-*Note: If you value command-line convenience higher than tight dependency control, consider a global installation (e.g. `npm install --global oao`).*
 
 
 ## Usage
@@ -93,6 +98,17 @@ Options:
 
 ## Main commands
 
+In recent versions of npm, remember that you can run oao commands conveniently with the `npx` tool:
+
+```sh
+$ npx oao bootstrap
+$ npx oao add my-subpackage my-new-dependency --dev
+$ npx oao publish
+```
+
+This uses the local oao package inside your monorepo.
+
+
 ### `oao status`
 
 Provides lots of information on the git repo (current branch, last tag, uncommitted/unpulled changes) and subpackage status (version, private flag, changes since last tag, dependencies).
@@ -102,7 +118,7 @@ Provides lots of information on the git repo (current branch, last tag, uncommit
 
 ### `oao bootstrap`
 
-Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself (and custom links specified with the `--link` option) are `yarn link`ed.
+Installs all sub-package dependencies using **yarn**. External dependencies are installed normally, whereas those belonging to the monorepo itself (and custom links specified with the `--link` option) are `yarn link`ed. Note that dependencies may end up in different places depending on whether you use [yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/) or not (see above).
 
 Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`. Other flags that are passed through to `yarn install` include `--frozen-lockfile`, `--pure-lockfile` and `--no-lockfile`.
 

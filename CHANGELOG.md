@@ -1,3 +1,5 @@
+* Add support for **yarn workspaces**. This mode is enabled automatically when the root package.json has a `workspaces` field, which overrides any other `src` option.
+
 ## 0.9.0 (Jul. 15, 2017)
 
 * Experimentally add the possibility to specify some config options in package.json (#47).
