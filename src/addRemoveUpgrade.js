@@ -43,9 +43,8 @@ const run = async (
   opts: Options
 ) => {
   const { src, ignoreSrc, link: linkPattern } = opts;
-  const pkgName = pkgName0 === '.' || pkgName0 === 'ROOT'
-    ? ROOT_PACKAGE
-    : pkgName0;
+  const pkgName =
+    pkgName0 === '.' || pkgName0 === 'ROOT' ? ROOT_PACKAGE : pkgName0;
   const allSpecs = await readAllSpecs(src, ignoreSrc);
   if (!allSpecs[pkgName]) {
     mainStory.error(`No such package: ${pkgName}`);

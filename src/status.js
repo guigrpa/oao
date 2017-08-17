@@ -101,9 +101,10 @@ const subpackageStatus = async (opts: Options, lastTag: ?string) => {
     let changes;
     if (pkgName !== ROOT_PACKAGE) {
       const diff = await gitDiffSinceIn(lastTag, pkgPath);
-      changes = diff !== ''
-        ? chalk.yellow.bold(field(String(diff.split('\n').length), 7))
-        : chalk.gray(field('-', 7));
+      changes =
+        diff !== ''
+          ? chalk.yellow.bold(field(String(diff.split('\n').length), 7))
+          : chalk.gray(field('-', 7));
     } else {
       changes = chalk.gray(field('N/A', 7));
     }

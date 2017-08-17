@@ -73,9 +73,8 @@ const _exec = async (cmd, { cwd, story, errorLogLevel, bareLogs }) => {
       cwd: cwd || '.',
       // Workaround for Node.js bug: https://github.com/nodejs/node/issues/10836
       // See also: https://github.com/yarnpkg/yarn/issues/2462
-      stdio: process.platform === 'win32'
-        ? ['ignore', 'pipe', 'pipe']
-        : undefined,
+      stdio:
+        process.platform === 'win32' ? ['ignore', 'pipe', 'pipe'] : undefined,
     });
     child.stdout.pipe(split()).on('data', line => {
       story.info(cmdName, `${prefix}${line}`);

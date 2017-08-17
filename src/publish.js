@@ -114,7 +114,7 @@ const run = async ({
         type: 'confirm',
         message:
           `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
-            `v${chalk.cyan.bold(nextVersion)})?`,
+          `v${chalk.cyan.bold(nextVersion)})?`,
         default: false,
       },
     ]);
@@ -294,9 +294,8 @@ const promptNextVersion = async (prevVersion: string): Promise<string> => {
   const prerelease = semver.inc(prevVersion, 'prerelease');
   const rc = prevVersion.indexOf('rc') < 0 ? `${major}-rc.0` : prerelease;
   const beta = prevVersion.indexOf('beta') < 0 ? `${major}-beta.0` : prerelease;
-  const alpha = prevVersion.indexOf('alpha') < 0
-    ? `${major}-alpha.0`
-    : prerelease;
+  const alpha =
+    prevVersion.indexOf('alpha') < 0 ? `${major}-alpha.0` : prerelease;
   const { nextVersion } = await inquirer.prompt([
     {
       name: 'nextVersion',

@@ -79,7 +79,11 @@
     "clearMocks": true,
     "testRegex": "src/.*__tests__/.*\\.(test|spec)\\.(js|jsx)$",
     "coverageDirectory": ".nyc_output",
-    "coverageReporters": ["json", "text", "html"],
+    "coverageReporters": [
+      "json",
+      "text",
+      "html"
+    ],
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/index.js",

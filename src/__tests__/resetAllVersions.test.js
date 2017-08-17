@@ -36,9 +36,10 @@ describe('RESET_ALL_VERSIONS command', () => {
     // Checks
     expect(writeSpecs.mock.calls).toHaveLength(PACKAGE_NAMES.length + 1);
     writeSpecs.mock.calls.forEach(([specPath, specs]) => {
-      const name = specPath === path.join(process.cwd(), 'package.json')
-        ? ROOT_PACKAGE
-        : specs.name;
+      const name =
+        specPath === path.join(process.cwd(), 'package.json')
+          ? ROOT_PACKAGE
+          : specs.name;
       expect(specs).toEqual(
         timmSet(originalSpecs[name], 'version', newVersion)
       );

@@ -33,10 +33,10 @@ const run = async (
         type: 'confirm',
         message:
           'Are you sure you want to reset the version number of all packages, ' +
-            `including the monorepo root, to ${chalk.cyan.yellow(version)} ` +
-            `(${chalk.cyan.bold(
-              pkgNames.length
-            )} package/s, including monorepo)?`,
+          `including the monorepo root, to ${chalk.cyan.yellow(version)} ` +
+          `(${chalk.cyan.bold(
+            pkgNames.length
+          )} package/s, including monorepo)?`,
         default: false,
       },
     ]);
