@@ -57,4 +57,9 @@ describe('readAllSpecs', () => {
       if (err.message !== 'INVALID_DIR_NAME') throw err;
     }
   });
+
+  it('supports an empty array', async () => {
+    const allSpecs = await readAllSpecs([]);
+    expect(Object.keys(allSpecs).length).toEqual(1); // just the monorepo root
+  });
 });

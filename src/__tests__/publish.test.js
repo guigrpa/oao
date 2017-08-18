@@ -103,7 +103,6 @@ describe('PUBLISH command', () => {
 
   it('increments version by major when incrementVersionBy is "major" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-
     const options = Object.assign({}, NOMINAL_OPTIONS, {
       newVersion: undefined,
       incrementVersionBy: 'major',
@@ -117,7 +116,6 @@ describe('PUBLISH command', () => {
 
   it('increments version by minor when incrementVersionBy is "minor" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-
     const options = Object.assign({}, NOMINAL_OPTIONS, {
       newVersion: undefined,
       incrementVersionBy: 'minor',
@@ -131,7 +129,6 @@ describe('PUBLISH command', () => {
 
   it('increments version by patch when incrementVersionBy is "patch" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-
     const options = Object.assign({}, NOMINAL_OPTIONS, {
       newVersion: undefined,
       incrementVersionBy: 'patch',
@@ -145,7 +142,6 @@ describe('PUBLISH command', () => {
 
   it('increments version by prerelease when incrementVersionBy is "rc" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-
     const options = Object.assign({}, NOMINAL_OPTIONS, {
       newVersion: undefined,
       incrementVersionBy: 'rc',
@@ -159,7 +155,6 @@ describe('PUBLISH command', () => {
 
   it('increments version by prerelease when incrementVersionBy is "beta" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-
     const options = Object.assign({}, NOMINAL_OPTIONS, {
       newVersion: undefined,
       incrementVersionBy: 'beta',
@@ -173,7 +168,6 @@ describe('PUBLISH command', () => {
 
   it('increments version by prerelease when incrementVersionBy is "alpha" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-
     const options = Object.assign({}, NOMINAL_OPTIONS, {
       newVersion: undefined,
       incrementVersionBy: 'alpha',
@@ -225,5 +219,14 @@ describe('PUBLISH command', () => {
       fs.writeFileSync = writeFileSync;
     }
     expect(calls).toMatchSnapshot();
+  });
+
+  it('publishes non-monorepo packages', async () => {
+    const { exec } = require('../utils/shell');
+    await publish(merge(NOMINAL_OPTIONS, { src: [], single: true }));
+    expect(exec).toHaveBeenCalledTimes(1);
+    exec.mock.calls.forEach(([cmd]) => {
+      expect(cmd).toEqual('npm publish');
+    });
   });
 });

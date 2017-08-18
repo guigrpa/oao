@@ -37,6 +37,7 @@ type Options = {
   publishTag?: string,
   changelog: boolean,
   changelogPath: string,
+  single: boolean,
   // For unit tests
   _date?: ?Object, // overrides the current date
   _masterVersion?: string, // overrides the current master version
@@ -56,6 +57,7 @@ const run = async ({
   incrementVersionBy,
   changelog,
   changelogPath,
+  single,
   _date,
   _masterVersion,
 }: Options) => {
@@ -78,9 +80,9 @@ const run = async ({
 
   // Get last tag and find packages requiring updates
   const lastTag = await gitLastTag();
-  const dirty = await findPackagesToUpdate(allSpecs, lastTag);
+  const dirty = await findPackagesToUpdate(allSpecs, lastTag, single);
   if (!dirty.length) {
-    mainStory.info('No sub-packages have been updated');
+    mainStory.info('No packages have been updated');
     return;
   }
 
@@ -122,7 +124,7 @@ const run = async ({
   }
 
   // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
-  const dirtyPlusRoot = dirty.concat(ROOT_PACKAGE);
+  const dirtyPlusRoot = single ? dirty : dirty.concat(ROOT_PACKAGE);
   for (let i = 0; i < dirtyPlusRoot.length; i++) {
     const pkgName = dirtyPlusRoot[i];
     const { specPath, specs } = allSpecs[pkgName];
@@ -208,12 +210,12 @@ const prepublishChecks = async ({
   }
 };
 
-const findPackagesToUpdate = async (allSpecs, lastTag) => {
+const findPackagesToUpdate = async (allSpecs, lastTag, single) => {
   const pkgNames = Object.keys(allSpecs);
   const dirty = [];
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
-    if (pkgName === ROOT_PACKAGE) continue;
+    if (pkgName === ROOT_PACKAGE && !single) continue;
     const { pkgPath, specs } = allSpecs[pkgName];
     const diff = await gitDiffSinceIn(lastTag, pkgPath);
     if (diff !== '') {

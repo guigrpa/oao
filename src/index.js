@@ -35,14 +35,22 @@ program.version(pkg.version);
 const processOptions = options0 => {
   let options = options0;
 
-  // If workspaces are enabled in the monorepo, some configuration is
-  // overriden by the monorepo package.json
-  if (monorepoPkg.workspaces) {
-    options = merge(options, { src: monorepoPkg.workspaces, workspaces: true });
+  if (options.single) {
+    options = merge(options, { src: [] });
+  } else {
+    // If workspaces are enabled in the monorepo, some configuration is
+    // overriden by the monorepo package.json
+    if (monorepoPkg.workspaces) {
+      options = merge(options, {
+        src: monorepoPkg.workspaces,
+        workspaces: true,
+      });
+    }
+
+    // Add extra configuration in the `oao` field of the monorepo package.json
+    options = addDefaults(options, { ignoreSrc: OAO_CONFIG.ignoreSrc });
   }
 
-  // Add extra configuration in the `oao` field of the monorepo package.json
-  options = addDefaults(options, { ignoreSrc: OAO_CONFIG.ignoreSrc });
   return options;
 };
 
@@ -63,7 +71,8 @@ const createCommand = (syntax, description) =>
     .option(
       '-l --link <regex>',
       'regex pattern for dependencies that should be linked, not installed'
-    );
+    )
+    .option('--single', 'no subpackages, just the root one');
 
 // =========================================
 // Commands
