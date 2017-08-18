@@ -5,7 +5,7 @@ import path from 'path';
 import globby from 'globby';
 
 const listPaths = async (
-  src: string,
+  src: string | Array<string>,
   ignoreSrc?: ?string
 ): Promise<Array<string>> => {
   const patterns = Array.isArray(src) ? src : [src];
