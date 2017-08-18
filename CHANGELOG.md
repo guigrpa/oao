@@ -2,8 +2,8 @@
 
 * Add support for **non-monorepo publishing** Use the `oao publish --single` to indicate that your root package is *not* a monorepo, and you can benefit from oao's features even in normal packages: publishing checks, automatic tagging, interactive version selection, etc.
 
-## 0.10.0-beta.2 (Ago. 17, 2017)
-## 0.10.0-beta.1 (Ago. 16, 2017)
+## 0.10.0-beta.2 (2017-8-17)
+## 0.10.0-beta.1 (2017-8-16)
 
 * Add support for **yarn workspaces**. This mode is enabled automatically when the root package.json has a `workspaces` field, which overrides any other `src` option.
 

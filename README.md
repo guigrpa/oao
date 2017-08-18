@@ -9,11 +9,12 @@ A Yarn-based, opinionated monorepo management tool.
 
 * Works with **yarn**, hence (relatively) **fast!**.
 * **Simple to use** and extend (hope so!).
-* Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, etc.
+* Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, updating the changelog, etc.
 * Supports **yarn workspaces**, optimising the monorepo dependency tree as a whole and simplifying bootstrap as well as dependency add/upgrade/remove.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
 * Runs a command on all sub-packages, **serially or in parallel**.
 * Provides an easy-to-read, **detailed status overview**.
+* Support for **non-monorepo publishing**: benefit from *oao*'s pre-publish checks, tagging, version selection, changelog updates, etc. also in your single-package, non-monorepos.
 
 
 ## Assumptions :thought_balloon:
