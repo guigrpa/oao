@@ -81,6 +81,23 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
     expect(finalSpecs).toMatchSnapshot();
   });
 
+  it('executes ADD correctly (internal scoped dep)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade(
+      '@guigrpa/example-package',
+      'add',
+      ['@guigrpa/example-package-b'],
+      {
+        src: 'test/fixtures/packagesScoped/*',
+      }
+    );
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const finalSpecs =
+      writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
+  });
+
   it('executes REMOVE correctly', async () => {
     const helpers = require('../utils/shell');
     await addRemoveUpgrade('oao-b', 'remove', ['mady'], {
@@ -113,6 +130,23 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
     const finalSpecs =
       writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
     expect(finalSpecs.dependencies.oao).toBeUndefined();
+  });
+
+  it('executes REMOVE correctly (internal scoped dep)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade(
+      '@guigrpa/example-package-b',
+      'remove',
+      ['@guigrpa/example-package'],
+      {
+        src: 'test/fixtures/packagesScoped/*',
+      }
+    );
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const finalSpecs =
+      writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
   });
 
   it('executes UPGRADE correctly (one package, no flags)', async () => {
@@ -150,6 +184,23 @@ describe('ADD/REMOVE/UPGRADE commands', () => {
     await addRemoveUpgrade('oao-c', 'upgrade', [], {
       src: 'test/fixtures/packages2/*',
     });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+    const finalSpecs =
+      writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];
+    expect(finalSpecs).toMatchSnapshot();
+  });
+
+  it('executes UPGRADE correctly (internal scoped dep)', async () => {
+    const helpers = require('../utils/shell');
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await addRemoveUpgrade(
+      '@guigrpa/example-package-b',
+      'upgrade',
+      ['@guigrpa/example-package@2'],
+      {
+        src: 'test/fixtures/packagesScoped/*',
+      }
+    );
     expect(helpers.exec.mock.calls).toMatchSnapshot();
     const finalSpecs =
       writeSpecs.mock.calls[writeSpecs.mock.calls.length - 1][1];

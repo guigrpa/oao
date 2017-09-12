@@ -138,7 +138,7 @@ const run = async (
 const addInternal = async (prevSpecs, deps, pkgPath, allSpecs, opts) => {
   let nextSpecs = prevSpecs;
   for (let i = 0; i < deps.length; i++) {
-    const [depName, depVersion0] = deps[i].split('@');
+    const { name: depName, version: depVersion0 } = parseDep(deps[i]);
     try {
       mainStory.info(`Linking ${chalk.cyan.bold(depName)}...`);
       await exec(`yarn link ${depName}`, {
@@ -170,7 +170,7 @@ const addInternal = async (prevSpecs, deps, pkgPath, allSpecs, opts) => {
 const removeInternal = async (prevSpecs, deps, pkgPath) => {
   let nextSpecs = prevSpecs;
   for (let i = 0; i < deps.length; i++) {
-    const [depName] = deps[i].split('@');
+    const { name: depName } = parseDep(deps[i]);
     try {
       mainStory.info(`Unlinking ${chalk.cyan.bold(depName)}...`);
       await exec(`yarn unlink ${depName}`, {
@@ -195,7 +195,7 @@ const upgradeInternal = (prevSpecs, deps, allSpecs, linkPattern) => {
   let nextSpecs = prevSpecs;
   const targetVersions = {};
   deps.forEach(dep => {
-    const [name, version] = dep.split('@');
+    const { name, version } = parseDep(dep);
     targetVersions[name] = version;
   });
   DEP_TYPES.forEach(type => {
@@ -212,10 +212,19 @@ const upgradeInternal = (prevSpecs, deps, allSpecs, linkPattern) => {
 };
 
 const isLinked = (pkgNames, linkPattern, dep) => {
-  const [pkgName] = dep.split('@');
+  const { name: pkgName } = parseDep(dep);
   if (pkgNames.indexOf(pkgName) >= 0) return true;
   if (linkPattern && new RegExp(linkPattern).test(pkgName)) return true;
   return false;
+};
+
+const parseDep = dep => {
+  // Extract package name from the dependency specs
+  // (forget about the first character, for compatibility with scoped packages)
+  const idx = dep.indexOf('@', 1);
+  const name = idx >= 1 ? dep.slice(0, idx) : dep;
+  const version = idx >= 1 ? dep.slice(idx + 1) : '';
+  return { name, version };
 };
 
 const getYarnCommand = (op, dependencies, options) => {
