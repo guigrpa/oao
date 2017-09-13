@@ -1,5 +1,6 @@
-## 0.10.0 (2017-8-23)
+* Bugfix: in `oao add|remove|upgrade`, fix handling of scoped packages (#45).
 
+## 0.10.0 (2017-8-23)
 ## 0.10.0-beta.3 (2017-8-18)
 
 * Add support for **non-monorepo publishing** Use the `oao publish --single` to indicate that your root package is *not* a monorepo, and you can benefit from oao's features even in normal packages: publishing checks, automatic tagging, interactive version selection, etc.
