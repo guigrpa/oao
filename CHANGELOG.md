@@ -1,3 +1,5 @@
+## 0.10.1 (2017-9-13)
+
 * Bugfix: in `oao add|remove|upgrade`, fix handling of scoped packages (#45).
 
 ## 0.10.0 (2017-8-23)
