@@ -40,6 +40,7 @@ const run = async (opts: Options) => {
         cwd: pkgPath,
         story,
         createChildStory: false,
+        ignoreErrorCode: true,
         logLevel: 'trace',
       });
     } catch (err) {

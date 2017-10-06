@@ -1,3 +1,5 @@
+* Ignore `yarn outdated`'s non-zero error code when it finds outdated packages (#50).
+
 ## 0.10.1 (2017-9-13)
 
 * Bugfix: in `oao add|remove|upgrade`, fix handling of scoped packages (#45).

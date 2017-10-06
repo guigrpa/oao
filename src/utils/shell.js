@@ -32,6 +32,7 @@ type ExecOptions = {|
   createChildStory?: boolean,
   logLevel?: *,
   errorLogLevel?: string,
+  ignoreErrorCode?: boolean,
   cwd?: string,
   bareLogs?: boolean,
 |};
@@ -49,6 +50,7 @@ const exec = async (
     createChildStory = true,
     logLevel = 'info',
     errorLogLevel = 'error',
+    ignoreErrorCode = false,
     bareLogs = false,
     cwd,
   }: ExecOptions = {}
@@ -59,13 +61,22 @@ const exec = async (
     ? story.child({ title, level: logLevel })
     : story || mainStory;
   try {
-    return await _exec(cmd, { cwd, story: ownStory, errorLogLevel, bareLogs });
+    return await _exec(cmd, {
+      cwd,
+      story: ownStory,
+      errorLogLevel,
+      bareLogs,
+      ignoreErrorCode,
+    });
   } finally {
     if (createChildStory) ownStory.close();
   }
 };
 
-const _exec = async (cmd, { cwd, story, errorLogLevel, bareLogs }) => {
+const _exec = async (
+  cmd,
+  { cwd, story, errorLogLevel, bareLogs, ignoreErrorCode }
+) => {
   try {
     const prefix = bareLogs ? '' : '| ';
     const cmdName = cmd.split(' ')[0].slice(0, 10);
@@ -83,11 +94,15 @@ const _exec = async (cmd, { cwd, story, errorLogLevel, bareLogs }) => {
       if (line) story[errorLogLevel](cmdName, `${prefix}${line}`);
     });
     const { code, stdout, stderr } = await child;
-    if (code !== 0) {
+    if (code !== 0 && !ignoreErrorCode) {
       throw new Error(`Command returned non-zero exit code: ${cmd} [${code}]`);
     }
     return { code, stdout, stderr };
   } catch (err) {
+    if (err.code && ignoreErrorCode) {
+      const { code, stdout, stderr } = err;
+      return { code, stdout, stderr };
+    }
     story[errorLogLevel](`Command '${cmd}' failed at ${cwd || "'.'"}`, {
       attach: err,
     });
