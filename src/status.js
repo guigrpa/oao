@@ -74,7 +74,15 @@ const gitStatus = async () => {
 
 const subpackageStatus = async (opts: Options, lastTag: ?string) => {
   const { src, ignoreSrc } = opts;
-  const allSpecs = await readAllSpecs(src, ignoreSrc);
+  let allSpecs;
+  try {
+    allSpecs = await readAllSpecs(src, ignoreSrc);
+  } catch (err) {
+    if (err.message === 'INVALID_DIR_NAME') {
+      console.error(`INVALID_DIR_NAME - ${err.details}`);
+    }
+    throw err;
+  }
   const pkgNames = Object.keys(allSpecs);
   console.log('');
   console.log(

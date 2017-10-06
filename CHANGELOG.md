@@ -1,3 +1,5 @@
+* Improve error detail when running `oao status` and some package has an invalid `name` in its `package.json` (#40).
+
 ## 0.10.2 (2017-10-6)
 
 * Set `process.env.YARN_SILENT` to 0, so that yarn's output is not removed in some cases (#50, see also https://github.com/yarnpkg/yarn/pull/3536, https://github.com/yarnpkg/yarn/issues/4615).

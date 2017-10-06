@@ -57,10 +57,11 @@ const validatePkgName = (pkgPath: string, name: PackageName): void => {
   if (pkgPath === '.') return;
   const segments = pkgPath.split('/');
   if (name[0] !== '@' && name !== segments[segments.length - 1]) {
-    mainStory.error(
-      `Package name (${name}) does not match directory name ${pkgPath}`
-    );
-    throw new Error('INVALID_DIR_NAME');
+    const errMsg = `Package name (${name}) does not match directory name ${pkgPath}`;
+    mainStory.error(errMsg);
+    const err = new Error('INVALID_DIR_NAME');
+    err.details = errMsg;
+    throw err;
   }
 };
 
