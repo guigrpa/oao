@@ -17,6 +17,8 @@ import publish from './publish';
 import resetAllVersions from './resetAllVersions';
 import all from './all';
 
+process.env.YARN_SILENT = 0;
+
 const pkg = require('../package.json');
 
 const monorepoPkg = require(path.resolve('package.json'));

@@ -1,3 +1,4 @@
+* Set `process.env.YARN_SILENT` to 0, so that yarn's output is not removed in some cases (#50, see also https://github.com/yarnpkg/yarn/pull/3536, https://github.com/yarnpkg/yarn/issues/4615).
 * Ignore `yarn outdated`'s non-zero error code when it finds outdated packages (#50).
 
 ## 0.10.1 (2017-9-13)
