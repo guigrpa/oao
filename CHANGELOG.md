@@ -1,3 +1,5 @@
+## 0.10.3 (2017-10-6)
+
 * Improve error detail when running `oao status` and some package has an invalid `name` in its `package.json` (#40).
 
 ## 0.10.2 (2017-10-6)
