@@ -95,7 +95,7 @@ const _exec = async (
     });
     const { code, stdout, stderr } = await child;
     if (code !== 0 && !ignoreErrorCode) {
-      throw new Error(`Command returned non-zero exit code: ${cmd} [${code}]`);
+      throw new Error(buildExecErrorMessage(cmd, cwd, code));
     }
     return { code, stdout, stderr };
   } catch (err) {
@@ -103,11 +103,14 @@ const _exec = async (
       const { code, stdout, stderr } = err;
       return { code, stdout, stderr };
     }
-    story[errorLogLevel](`Command '${cmd}' failed at ${cwd || "'.'"}`, {
-      attach: err,
-    });
-    throw new Error(`Command failed: ${cmd}`);
+    const errorMsg = buildExecErrorMessage(cmd, cwd, err.code);
+    story[errorLogLevel](errorMsg);
+    throw new Error(errorMsg);
   }
 };
+
+const buildExecErrorMessage = (cmd, cwd, code) =>
+  `Command '${cmd}' failed ${code != null ? `[${code}]` : ''} at ${cwd ||
+    "'.'"}`;
 
 export { cp, mv, exec };
