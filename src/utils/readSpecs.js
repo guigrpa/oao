@@ -60,6 +60,7 @@ const validatePkgName = (pkgPath: string, name: PackageName): void => {
     const errMsg = `Package name (${name}) does not match directory name ${pkgPath}`;
     mainStory.error(errMsg);
     const err = new Error('INVALID_DIR_NAME');
+    // $FlowFixMe (piggyback on exception)
     err.details = errMsg;
     throw err;
   }
