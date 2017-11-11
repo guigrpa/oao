@@ -19,10 +19,13 @@ type AllSpecs = { [key: PackageName]: OaoSpecs };
 
 const readAllSpecs = async (
   src: string | Array<string>,
-  ignoreSrc?: ?string
+  ignoreSrc?: ?string,
+  includeRootPkg: boolean = true
 ): Promise<AllSpecs> => {
   const pkgPaths = await listPaths(src, ignoreSrc);
-  pkgPaths.push('.');
+  if (includeRootPkg) {
+    pkgPaths.push('.');
+  }
   const allSpecs = {};
   mainStory.info('Reading all package.json files...');
   pkgPaths.forEach(pkgPath => {
@@ -45,8 +48,7 @@ const readOneSpec = (pkgPath: string): OaoSpecs => {
   const name = pkgPath === '.' ? ROOT_PACKAGE : pkg.specs.name;
   validatePkgName(pkgPath, name);
   pkg.name = name;
-  const displayName = name === ROOT_PACKAGE ? 'MONOREPO ROOT' : name;
-  pkg.displayName = displayName;
+  pkg.displayName = name === ROOT_PACKAGE ? 'MONOREPO ROOT' : name;
   return pkg;
 };
 

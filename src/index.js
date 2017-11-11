@@ -16,6 +16,7 @@ import prepublish from './prepublish';
 import publish from './publish';
 import resetAllVersions from './resetAllVersions';
 import all from './all';
+import runScript from './runScript';
 
 process.env.YARN_SILENT = 0;
 
@@ -206,6 +207,20 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
   )
   .action((command, cmd) => {
     all(command, processOptions(cmd.opts()));
+  });
+
+createCommand('run-script <command>', 'Run a given script on all sub-packages')
+  .option('--parallel', 'run script in parallel on all sub-packages')
+  .option(
+    '--no-parallel-logs',
+    'use chronological logging, even in parallel mode'
+  )
+  .option(
+    '--ignore-errors',
+    'do not stop even if there are errors in some packages'
+  )
+  .action((command, cmd) => {
+    runScript(command, processOptions(cmd.opts()));
   });
 
 process.on('unhandledRejection', err => {

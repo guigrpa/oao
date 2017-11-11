@@ -210,6 +210,17 @@ $ oao all "yarn run compileWatch" --parallel
 
 **Note: some terminals may have problems with parallel logs (based on [terminal-kit](https://github.com/cronvel/terminal-kit)). If you experience issues, use the `--no-parallel-logs` flag. If you're using the default terminal or Hyper on OS X or Windows, you should be fine.**
 
+### `oao run-script <script>`
+
+Executes the specified (package) script on all sub-packages. Missing scripts will be skipped. Examples:
+
+```sh
+$ oao run-script start
+$ oao run-script start --parallel
+
+```
+
+By default, `oao run-script` runs sequentially. Use `--parallel` to run the scripts in parallel.
 
 ## Credits :clap:
 

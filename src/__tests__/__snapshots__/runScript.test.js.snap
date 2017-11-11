@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RUN-SCRIPT command executes the specified script on all sub-packages 1`] = `
+Array [
+  Array [
+    "yarn run start",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages/oao-b",
+    },
+  ],
+  Array [
+    "yarn run start",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages/oao-c",
+    },
+  ],
+]
+`;

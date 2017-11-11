@@ -13,5 +13,8 @@
     "xxl": "1.x",
     "oao-b": "*"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "ls -al"
+  }
 }

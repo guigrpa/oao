@@ -12,5 +12,6 @@
     "oao-c": "*"
   },
   "peerDependencies": {},
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {}
 }

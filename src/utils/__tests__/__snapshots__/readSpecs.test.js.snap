@@ -25,6 +25,9 @@ Object {
       "license": "MIT",
       "main": "index.js",
       "name": "oao-b",
+      "scripts": Object {
+        "start": "ls -al",
+      },
       "version": "0.1.0",
     },
   },
@@ -47,6 +50,9 @@ Object {
       "peerDependencies": Object {
         "oao-b": "*",
       },
+      "scripts": Object {
+        "start": "ls -al",
+      },
       "version": "0.1.0",
     },
   },
@@ -68,6 +74,7 @@ Object {
       "main": "index.js",
       "name": "oao-d",
       "peerDependencies": Object {},
+      "scripts": Object {},
       "version": "0.1.0",
     },
   },
@@ -121,6 +128,9 @@ Object {
       "license": "MIT",
       "main": "index.js",
       "name": "oao-b",
+      "scripts": Object {
+        "start": "ls -al",
+      },
       "version": "0.1.0",
     },
   },
@@ -143,6 +153,9 @@ Object {
       "peerDependencies": Object {
         "oao-b": "*",
       },
+      "scripts": Object {
+        "start": "ls -al",
+      },
       "version": "0.1.0",
     },
   },
@@ -164,6 +177,7 @@ Object {
       "main": "index.js",
       "name": "oao-d",
       "peerDependencies": Object {},
+      "scripts": Object {},
       "version": "0.1.0",
     },
   },
@@ -223,6 +237,7 @@ Object {
       "main": "index.js",
       "name": "oao-d",
       "peerDependencies": Object {},
+      "scripts": Object {},
       "version": "0.1.0",
     },
   },
