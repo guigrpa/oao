@@ -212,7 +212,7 @@ $ oao all "yarn run compileWatch" --parallel
 
 ### `oao run-script <script>`
 
-Executes the specified (package) script on all sub-packages. Examples:
+Executes the specified (package) script on all sub-packages. Missing scripts will be skipped. Examples:
 
 ```sh
 $ oao run-script start
