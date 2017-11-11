@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ALL command executes the specified script on all sub-packages 1`] = `
+exports[`RUN-SCRIPT command executes the specified script on all sub-packages 1`] = `
 Array [
   Array [
     "yarn run start",
