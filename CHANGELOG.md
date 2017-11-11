@@ -1,3 +1,5 @@
+* Add **`oao run-script`** (#55, @kevroadrunner).
+
 ## 0.10.4 (2017-10-10)
 
 * Log error code when external command fails and prevent some log redundancy (#52).
