@@ -11,7 +11,7 @@ type Options = {
   ignoreSrc?: string,
   parallel?: boolean,
   parallelLogs?: boolean,
-  ignoreErrors?: boolean
+  ignoreErrors?: boolean,
 };
 
 const run = async (
@@ -29,7 +29,10 @@ const run = async (
     const pkgName = pkgNames[i];
     const { pkgPath, specs: prevSpecs } = allSpecs[pkgName];
     if (prevSpecs.scripts && prevSpecs.scripts[script]) {
-      let promise = exec(`yarn run ${script}`, { cwd: pkgPath, bareLogs: parallelLogs });
+      let promise = exec(`yarn run ${script}`, {
+        cwd: pkgPath,
+        bareLogs: parallelLogs,
+      });
       if (ignoreErrors) promise = promise.catch(() => {});
       if (!parallel) {
         await promise;
