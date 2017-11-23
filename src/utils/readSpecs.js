@@ -3,19 +3,10 @@
 import path from 'path';
 import fs from 'fs';
 import { mainStory } from 'storyboard';
+import type { OaoSpecs, AllSpecs } from './types';
 import listPaths from './listPaths';
 
 const ROOT_PACKAGE = '__ROOT_PACKAGE__';
-
-type PackageName = string;
-type OaoSpecs = {
-  pkgPath: string,
-  specPath: string, // including .package.json
-  name: string,
-  displayName: string,
-  specs: Object,
-};
-type AllSpecs = { [key: PackageName]: OaoSpecs };
 
 const readAllSpecs = async (
   src: string | Array<string>,
@@ -23,9 +14,7 @@ const readAllSpecs = async (
   includeRootPkg: boolean = true
 ): Promise<AllSpecs> => {
   const pkgPaths = await listPaths(src, ignoreSrc);
-  if (includeRootPkg) {
-    pkgPaths.push('.');
-  }
+  if (includeRootPkg) pkgPaths.push('.');
   const allSpecs = {};
   mainStory.info('Reading all package.json files...');
   pkgPaths.forEach(pkgPath => {
@@ -59,7 +48,9 @@ const validatePkgName = (pkgPath: string, name: PackageName): void => {
   if (pkgPath === '.') return;
   const segments = pkgPath.split('/');
   if (name[0] !== '@' && name !== segments[segments.length - 1]) {
-    const errMsg = `Package name (${name}) does not match directory name ${pkgPath}`;
+    const errMsg = `Package name (${name}) does not match directory name ${
+      pkgPath
+    }`;
     mainStory.error(errMsg);
     const err = new Error('INVALID_DIR_NAME');
     // $FlowFixMe (piggyback on exception)
