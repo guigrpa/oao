@@ -22,12 +22,12 @@ const listPaths = async (
         return false;
       }
     })
-    .map(filePath => {
-      if (filePath === '/' || filePath[filePath.length - 1] !== '/') {
-        return filePath;
-      }
-      return filePath.slice(0, -1);
-    });
+    .map(
+      filePath =>
+        filePath === '/' || filePath[filePath.length - 1] !== '/'
+          ? filePath
+          : filePath.slice(0, -1)
+    );
 };
 
 export default listPaths;
