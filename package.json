@@ -10,16 +10,23 @@
     "travis": "yarn test",
     "lint": "eslint src",
     "flow": "flow check || exit 0",
-    "compile": "rm -rf lib && babel src -d lib --ignore \"**/__mocks__/**\",\"**/__tests__/**\"",
-    "jest": "jest --watch --coverage --verbose",
+    "compile":
+      "rm -rf lib && babel src -d lib --ignore \"**/__mocks__/**\",\"**/__tests__/**\"",
+    "jest": "jest --watch --coverage",
     "test": "yarn testCovFull",
     "testFast": "jest",
-    "testCovFull": "yarn _testCovPrepare && yarn _testDev && yarn _testCovReport",
-    "_testCovPrepare": "rm -rf ./coverage .nyc_output .nyc_tmp && mkdir .nyc_tmp",
-    "_testCovReport": "cp -r .nyc_tmp .nyc_output && nyc report --reporter=html --reporter=lcov --reporter=text",
-    "_testDev": "yarn _testCov && mv .nyc_tmp/coverage-final.json .nyc_tmp/coverage-dev.json",
-    "_testCov": "jest --coverage && mv .nyc_output/coverage-final.json .nyc_tmp && rm -rf .nyc_output",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write \"src/**/*.js\"",
+    "testCovFull":
+      "yarn _testCovPrepare && yarn _testDev && yarn _testCovReport",
+    "_testCovPrepare":
+      "rm -rf ./coverage .nyc_output .nyc_tmp && mkdir .nyc_tmp",
+    "_testCovReport":
+      "cp -r .nyc_tmp .nyc_output && nyc report --reporter=html --reporter=lcov --reporter=text",
+    "_testDev":
+      "yarn _testCov && mv .nyc_tmp/coverage-final.json .nyc_tmp/coverage-dev.json",
+    "_testCov":
+      "jest --coverage && mv .nyc_output/coverage-final.json .nyc_tmp && rm -rf .nyc_output",
+    "prettier":
+      "prettier --single-quote --trailing-comma es5 --write \"src/**/*.js\"",
     "xxl": "xxl"
   },
   "repository": "guigrpa/oao",
@@ -79,11 +86,7 @@
     "clearMocks": true,
     "testRegex": "src/.*__tests__/.*\\.(test|spec)\\.(js|jsx)$",
     "coverageDirectory": ".nyc_output",
-    "coverageReporters": [
-      "json",
-      "text",
-      "html"
-    ],
+    "coverageReporters": ["json", "text", "html"],
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/index.js",
