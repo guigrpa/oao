@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildGraph calculates a directed acyclic graph correctly when no cycles are present 1`] = `
+Array [
+  "b",
+  "d",
+  "c",
+  "a",
+]
+`;
+
+exports[`buildGraph handles cycles correctly 1`] = `
+Array [
+  "b",
+  "d",
+  "e",
+  "c",
+  "a",
+]
+`;
