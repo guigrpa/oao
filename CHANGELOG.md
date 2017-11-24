@@ -1,3 +1,6 @@
+* Remove subpackage prefix in logs generated with `oao all` and `oao run-script`
+  when not running in parallel.
+
 ## 1.2.0 (2017-11-24)
 
 * Improve error logging with `oao all` and `oao run-script` in parallel mode --

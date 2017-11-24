@@ -30,7 +30,8 @@ const run = async (
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs: prevSpecs } = allSpecs[pkgName];
-    const storySrc = parallelLogs ? undefined : shortenName(pkgName, 20);
+    const storySrc =
+      parallel && !parallelLogs ? shortenName(pkgName, 20) : undefined;
     if (prevSpecs.scripts && prevSpecs.scripts[script]) {
       let promise = exec(`yarn run ${script}`, {
         cwd: pkgPath,

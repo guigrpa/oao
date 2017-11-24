@@ -30,7 +30,8 @@ const run = async (
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
     const { pkgPath } = allSpecs[pkgName];
-    const storySrc = parallelLogs ? undefined : shortenName(pkgName, 20);
+    const storySrc =
+      parallel && !parallelLogs ? shortenName(pkgName, 20) : undefined;
     let promise = exec(cmd, { cwd: pkgPath, bareLogs: parallelLogs, storySrc });
     if (ignoreErrors) promise = promise.catch(() => {});
     if (!parallel) {
