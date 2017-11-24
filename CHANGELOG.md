@@ -1,4 +1,4 @@
-* Add `--tree` to `oao all` and `oao run-script` (follows dependency tree, starting with the tree leaves and going upwards) (issue #58).
+* Add `--tree` to `oao all` and `oao run-script` (follows dependency tree, starting with the tree leaves and going upwards) (closes issue #58).
 
 ## 1.0.0 (2017-11-11)
 
