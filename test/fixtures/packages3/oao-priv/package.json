@@ -1,0 +1,20 @@
+{
+  "name": "oao-priv",
+  "private": true,
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "timm": "1.x",
+    "oao": "*"
+  },
+  "devDependencies": {
+    "xxl": "1.x",
+    "oao-b": "*",
+    "oao-c": "*"
+  },
+  "peerDependencies": {},
+  "license": "MIT",
+  "scripts": {
+    "start": "ls -al"
+  }
+}

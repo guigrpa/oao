@@ -1,5 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ALL command can do it following the dependency tree 1`] = `
+Array [
+  Array [
+    "ls",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages3/oao-b",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages3/oao",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages3/oao-c",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages3/oao-d",
+    },
+  ],
+  Array [
+    "ls",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages3/oao-priv",
+    },
+  ],
+]
+`;
+
 exports[`ALL command executes the specified command on all sub-packages 1`] = `
 Array [
   Array [

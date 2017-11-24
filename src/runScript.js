@@ -2,13 +2,14 @@
 
 import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
-
 import { readAllSpecs } from './utils/readSpecs';
 import { exec } from './utils/shell';
+import calcGraph from './utils/calcGraph';
 
 type Options = {
   src: string,
   ignoreSrc?: string,
+  tree?: boolean,
   parallel?: boolean,
   parallelLogs?: boolean,
   ignoreErrors?: boolean,
@@ -16,15 +17,15 @@ type Options = {
 
 const run = async (
   script: string,
-  { src, ignoreSrc, parallel, parallelLogs, ignoreErrors }: Options
+  { src, ignoreSrc, tree, parallel, parallelLogs, ignoreErrors }: Options
 ) => {
   if (parallel && parallelLogs) {
     removeAllListeners();
     addListener(parallelConsoleListener);
   }
   const allSpecs = await readAllSpecs(src, ignoreSrc, false);
+  const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
   const allPromises = [];
-  const pkgNames = Object.keys(allSpecs);
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs: prevSpecs } = allSpecs[pkgName];
