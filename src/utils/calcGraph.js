@@ -7,8 +7,20 @@ const calcGraph = (allSpecs: AllSpecs): Array<string> => {
   const out = [];
   const pkgNames = Object.keys(allSpecs);
   if (!pkgNames.length) return out;
-  buildGraph(allSpecs, allSpecs[pkgNames[0]], pkgNames, out);
-  return out;
+
+  // Build virtual root node
+  const virtualRootDeps = {};
+  pkgNames.forEach(name => {
+    virtualRootDeps[name] = true;
+  });
+  const virtualRootNode = {
+    name: '__VIRTUAL_ROOT__',
+    specs: { dependencies: virtualRootDeps },
+  };
+
+  // Build graph starting from virtual root node, then remove it
+  buildGraph(allSpecs, virtualRootNode, pkgNames, out);
+  return out.slice(0, out.length - 1);
 };
 
 const buildGraph = (

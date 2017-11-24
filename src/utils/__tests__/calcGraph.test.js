@@ -60,14 +60,25 @@ const ALL_SPECS_CYCLE = {
   },
 };
 
+const ALL_SPECS_MULTI_ROOT = {
+  a: { name: 'a', specs: {} },
+  b: { name: 'b', specs: {} },
+  c: { name: 'c', specs: {} },
+};
+
 describe('buildGraph', () => {
   it('calculates a directed acyclic graph correctly when no cycles are present', () => {
     const dag = calcGraph(ALL_SPECS_NO_CYCLE);
-    expect(dag).toMatchSnapshot();
+    expect(dag).toEqual(['b', 'd', 'c', 'a']);
+  });
+
+  it('handles multiple roots correctly', () => {
+    const dag = calcGraph(ALL_SPECS_MULTI_ROOT);
+    expect(dag).toEqual(['a', 'b', 'c']);
   });
 
   it('handles cycles correctly', () => {
     const dag = calcGraph(ALL_SPECS_CYCLE);
-    expect(dag).toMatchSnapshot();
+    expect(dag).toEqual(['b', 'd', 'e', 'c', 'a']);
   });
 });
