@@ -1,3 +1,5 @@
+## 1.2.1 (2017-11-24)
+
 * Remove subpackage prefix in logs generated with `oao all` and `oao run-script`
   when not running in parallel.
 
