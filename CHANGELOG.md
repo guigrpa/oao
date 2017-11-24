@@ -1,3 +1,5 @@
+* Improve error logging with `oao all` and `oao run-script` in parallel mode --
+  re-print the whole stderr contents at the end (#57).
 * Add subpackage prefix to all logs in `oao all` and `oao run-script` (related
   to #57).
 

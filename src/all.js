@@ -30,7 +30,7 @@ const run = async (
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
     const { pkgPath } = allSpecs[pkgName];
-    const storySrc = shortenName(pkgName, 20);
+    const storySrc = parallelLogs ? undefined : shortenName(pkgName, 20);
     let promise = exec(cmd, { cwd: pkgPath, bareLogs: parallelLogs, storySrc });
     if (ignoreErrors) promise = promise.catch(() => {});
     if (!parallel) {
@@ -40,9 +40,21 @@ const run = async (
     }
   }
 
-  // If parallel logs are enabled, we have to manually exit
+  // If parallel logs are enabled, we have to manually exit.
+  // We should also show the error again, since the parallel console
+  // most probably swallowed it or only showed the final part.
   if (parallel && parallelLogs) {
-    await Promise.all(allPromises);
+    try {
+      await Promise.all(allPromises);
+    } catch (err) {
+      if (err.stderr) {
+        console.error(err.message); // eslint-disable-line
+        console.error(err.stderr); // eslint-disable-line
+        throw new Error(err.message);
+      } else {
+        throw err;
+      }
+    }
     process.exit(0);
   }
 };

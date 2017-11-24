@@ -98,7 +98,7 @@ const _exec = async (
     });
     const { code, stdout, stderr } = await child;
     if (code !== 0 && !ignoreErrorCode) {
-      throw new Error(buildExecErrorMessage(cmd, cwd, code));
+      throw execError(cmd, cwd, code, stdout, stderr);
     }
     return { code, stdout, stderr };
   } catch (err) {
@@ -106,14 +106,21 @@ const _exec = async (
       const { code, stdout, stderr } = err;
       return { code, stdout, stderr };
     }
-    const errorMsg = buildExecErrorMessage(cmd, cwd, err.code);
-    story[errorLogLevel](errorMsg);
-    throw new Error(errorMsg);
+    const err2 = execError(cmd, cwd, err.code, err.stdout, err.stderr);
+    story[errorLogLevel](err2.message);
+    throw err2;
   }
 };
 
-const buildExecErrorMessage = (cmd, cwd, code) =>
-  `Command '${cmd}' failed ${code != null ? `[${code}]` : ''} at ${cwd ||
-    "'.'"}`;
+const execError = (cmd, cwd, code, stdout, stderr) => {
+  const errorMsg = `Command '${cmd}' failed ${
+    code != null ? `[${code}]` : ''
+  } at ${cwd || "'.'"}`;
+  const err = new Error(errorMsg);
+  err.code = code;
+  err.stdout = stdout;
+  err.stderr = stderr;
+  return err;
+};
 
 export { cp, mv, exec };
