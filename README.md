@@ -12,7 +12,7 @@ A Yarn-based, opinionated monorepo management tool.
 * Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, updating the changelog, etc.
 * Supports **yarn workspaces**, optimising the monorepo dependency tree as a whole and simplifying bootstrap as well as dependency add/upgrade/remove.
 * **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
-* Runs a command on all sub-packages, **serially or in parallel**.
+* Runs a command or `package.json` script on all sub-packages, **serially or in parallel**, optionally following the inverse dependency tree.
 * Provides an easy-to-read, **detailed status overview**.
 * Support for **non-monorepo publishing**: benefit from *oao*'s pre-publish checks, tagging, version selection, changelog updates, etc. also in your single-package, non-monorepos.
 
@@ -51,6 +51,11 @@ To see all CLI options, run `oao --help`:
 ```
 Usage: oao [options] [command]
 
+Options:
+
+  -V, --version  output the version number
+  -h, --help     output usage information
+
 Commands:
 
   status [options]                               Show an overview of the monorepo status
@@ -64,11 +69,7 @@ Commands:
   publish [options]                              Publish updated sub-packages
   reset-all-versions [options] <version>         Reset all versions (incl. monorepo package) to the specified one
   all [options] <command>                        Run a given command on all sub-packages
-
-Options:
-
-  -h, --help     output usage information
-  -V, --version  output the version number
+  run-script [options] <command>                 Run a given script on all sub-packages
 ```
 
 You can also get help from particular commands, which may have additional options, e.g. `oao publish --help`:
@@ -80,20 +81,22 @@ Publish updated sub-packages
 
 Options:
 
-  -h, --help               output usage information
-  -s --src <glob>          glob pattern for sub-package paths [packages/*]
-  -i --ignore-src <glob>   glob pattern for sub-package paths that should be ignored
-  -l --link <regex>        regex pattern for dependencies that should be linked, not installed
-  --no-master              allow publishing from a non-master branch
-  --no-check-uncommitted   skip uncommitted check
-  --no-check-unpulled      skip unpulled check
-  --no-confirm             do not ask for confirmation before publishing
-  --no-git-commit          skip the commit-tag-push step before publishing
-  --no-npm-publish         skip the npm publish step
-  --new-version <version>  use this version for publishing, instead of asking
-  --publish-tag <tag>      publish with a custom tag (instead of `latest`)
-  --changelog-path <path>  changelog path [CHANGELOG.md]
-  --no-changelog           skip changelog updates
+  -s --src <glob>                                           glob pattern for sub-package paths [packages/*]
+  -i --ignore-src <glob>                                    glob pattern for sub-package paths that should be ignored
+  -l --link <regex>                                         regex pattern for dependencies that should be linked, not installed
+  --single                                                  no subpackages, just the root one
+  --no-master                                               allow publishing from a non-master branch
+  --no-check-uncommitted                                    skip uncommitted check
+  --no-check-unpulled                                       skip unpulled check
+  --no-confirm                                              do not ask for confirmation before publishing
+  --no-git-commit                                           skip the commit-tag-push step before publishing
+  --no-npm-publish                                          skip the npm publish step
+  --new-version <version>                                   use this version for publishing, instead of asking
+  --increment-version-by <major|minor|patch|rc|beta|alpha>  increment version by this, instead of asking
+  --publish-tag <tag>                                       publish with a custom tag (instead of `latest`)
+  --changelog-path <path>                                   changelog path [CHANGELOG.md]
+  --no-changelog                                            skip changelog updates
+  -h, --help                                                output usage information
 ```
 
 
@@ -200,6 +203,7 @@ Executes the specified command on all sub-packages (private ones included), with
 $ oao all ls
 $ oao all "ls -al"
 $ oao all "yarn run compile"
+$ oao all --tree "yarn run compile"
 ```
 
 By default, `oao all` runs sequentially. Sometimes you must run commands in parallel, for example when you want to compile all sub-packages with a *watch* option:
@@ -210,17 +214,19 @@ $ oao all "yarn run compileWatch" --parallel
 
 **Note: some terminals may have problems with parallel logs (based on [terminal-kit](https://github.com/cronvel/terminal-kit)). If you experience issues, use the `--no-parallel-logs` flag. If you're using the default terminal or Hyper on OS X or Windows, you should be fine.**
 
+Use `--tree` if you want to follow the inverse dependency tree (starting from the tree leaves).
+
 ### `oao run-script <script>`
 
-Executes the specified (package) script on all sub-packages. Missing scripts will be skipped. Examples:
+Similar to `oao all <command>`, it executes the specified (package) script on all sub-packages. Missing scripts will be skipped. Examples:
 
 ```sh
 $ oao run-script start
 $ oao run-script start --parallel
-
+$ oao run-script start --tree
 ```
 
-By default, `oao run-script` runs sequentially. Use `--parallel` to run the scripts in parallel.
+By default, `oao run-script` runs sequentially. Use `--parallel` to run the scripts in parallel, and `--tree` if you want to follow the inverse dependency tree (starting from the tree leaves).
 
 ## Credits :clap:
 
