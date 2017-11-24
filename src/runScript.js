@@ -4,6 +4,7 @@ import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
 import { readAllSpecs } from './utils/readSpecs';
 import { exec } from './utils/shell';
+import { shortenName } from './utils/helpers';
 import calcGraph from './utils/calcGraph';
 
 type Options = {
@@ -29,10 +30,12 @@ const run = async (
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs: prevSpecs } = allSpecs[pkgName];
+    const storySrc = shortenName(pkgName, 20);
     if (prevSpecs.scripts && prevSpecs.scripts[script]) {
       let promise = exec(`yarn run ${script}`, {
         cwd: pkgPath,
         bareLogs: parallelLogs,
+        storySrc,
       });
       if (ignoreErrors) promise = promise.catch(() => {});
       if (!parallel) {

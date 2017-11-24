@@ -7,6 +7,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages3/oao-b",
+      "storySrc": "oao-b",
     },
   ],
   Array [
@@ -14,6 +15,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages3/oao",
+      "storySrc": "oao",
     },
   ],
   Array [
@@ -21,6 +23,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages3/oao-c",
+      "storySrc": "oao-c",
     },
   ],
   Array [
@@ -28,6 +31,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages3/oao-d",
+      "storySrc": "oao-d",
     },
   ],
   Array [
@@ -35,6 +39,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages3/oao-priv",
+      "storySrc": "oao-priv",
     },
   ],
 ]
@@ -47,6 +52,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages/oao-b",
+      "storySrc": "oao-b",
     },
   ],
   Array [
@@ -54,6 +60,7 @@ Array [
     Object {
       "bareLogs": undefined,
       "cwd": "test/fixtures/packages/oao-c",
+      "storySrc": "oao-c",
     },
   ],
 ]

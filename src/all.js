@@ -4,6 +4,7 @@ import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
 import { readAllSpecs } from './utils/readSpecs';
 import { exec } from './utils/shell';
+import { shortenName } from './utils/helpers';
 import calcGraph from './utils/calcGraph';
 
 type Options = {
@@ -29,7 +30,8 @@ const run = async (
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
     const { pkgPath } = allSpecs[pkgName];
-    let promise = exec(cmd, { cwd: pkgPath, bareLogs: parallelLogs });
+    const storySrc = shortenName(pkgName, 20);
+    let promise = exec(cmd, { cwd: pkgPath, bareLogs: parallelLogs, storySrc });
     if (ignoreErrors) promise = promise.catch(() => {});
     if (!parallel) {
       await promise;
