@@ -116,7 +116,7 @@ const execError = (cmd, cwd, code, stdout, stderr) => {
   const errorMsg = `Command '${cmd}' failed ${
     code != null ? `[${code}]` : ''
   } at ${cwd || "'.'"}`;
-  const err = new Error(errorMsg);
+  const err: any = new Error(errorMsg);
   err.code = code;
   err.stdout = stdout;
   err.stderr = stderr;
