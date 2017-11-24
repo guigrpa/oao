@@ -1,6 +1,5 @@
 // @flow
 
-type PackageName = string;
 export type OaoSpecs = {
   pkgPath: string,
   specPath: string, // including .package.json
@@ -8,4 +7,4 @@ export type OaoSpecs = {
   displayName: string,
   specs: Object,
 };
-export type AllSpecs = { [key: PackageName]: OaoSpecs };
+export type AllSpecs = { [key: string]: OaoSpecs };

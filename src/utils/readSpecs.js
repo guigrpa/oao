@@ -41,7 +41,7 @@ const readOneSpec = (pkgPath: string): OaoSpecs => {
   return pkg;
 };
 
-const validatePkgName = (pkgPath: string, name: PackageName): void => {
+const validatePkgName = (pkgPath: string, name: string): void => {
   if (name == null || name === '') {
     throw new Error(`Package has no name (${pkgPath})`);
   }

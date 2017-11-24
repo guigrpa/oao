@@ -13,7 +13,7 @@ const calcGraph = (allSpecs: AllSpecs): Array<string> => {
   pkgNames.forEach(name => {
     virtualRootDeps[name] = true;
   });
-  const virtualRootNode = {
+  const virtualRootNode: any = {
     name: '__VIRTUAL_ROOT__',
     specs: { dependencies: virtualRootDeps },
   };
