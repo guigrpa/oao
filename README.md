@@ -55,7 +55,7 @@ Commands:
 
   status [options]                               Show an overview of the monorepo status
   bootstrap [options]                            Install external dependencies and create internal links
-  clean [options]                                Delete all node_modules directories from sub-packages
+  clean [options]                                Delete all node_modules directories from sub-packages and the root package
   add [options] <sub-package> <packages...>      Add dependencies to a sub-package
   remove [options] <sub-package> <packages...>   Remove dependencies from a sub-package
   upgrade [options] <sub-package> [packages...]  Upgrade some/all dependencies of a package

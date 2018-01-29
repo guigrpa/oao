@@ -106,7 +106,7 @@ createCommand(
 
 createCommand(
   'clean',
-  'Delete all node_modules directories from sub-packages'
+  'Delete all node_modules directories from sub-packages and the root package'
 ).action(cmd => clean(processOptions(cmd.opts())));
 
 createCommand(
