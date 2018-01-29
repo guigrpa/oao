@@ -1,13 +1,7 @@
 // @flow
 
 import { omit, set as timmSet } from 'timm';
-
-const DEP_TYPES = [
-  'dependencies',
-  'devDependencies',
-  'peerDependencies',
-  'optionalDependencies',
-];
+import { DEP_TYPES } from './constants';
 
 type PkgVersionMap = { [pkgName: string]: string };
 

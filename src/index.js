@@ -196,6 +196,7 @@ createCommand(
   });
 
 createCommand('all <command>', 'Run a given command on all sub-packages')
+  .option('--tree', 'follow dependency tree (starting from the tree leaves)')
   .option('--parallel', 'run command in parallel on all sub-packages')
   .option(
     '--no-parallel-logs',
@@ -210,6 +211,7 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
   });
 
 createCommand('run-script <command>', 'Run a given script on all sub-packages')
+  .option('--tree', 'follow dependency tree (starting from the tree leaves)')
   .option('--parallel', 'run script in parallel on all sub-packages')
   .option(
     '--no-parallel-logs',

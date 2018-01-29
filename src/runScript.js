@@ -2,13 +2,15 @@
 
 import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
-
 import { readAllSpecs } from './utils/readSpecs';
 import { exec } from './utils/shell';
+import { shortenName } from './utils/helpers';
+import calcGraph from './utils/calcGraph';
 
 type Options = {
   src: string,
   ignoreSrc?: string,
+  tree?: boolean,
   parallel?: boolean,
   parallelLogs?: boolean,
   ignoreErrors?: boolean,
@@ -16,22 +18,25 @@ type Options = {
 
 const run = async (
   script: string,
-  { src, ignoreSrc, parallel, parallelLogs, ignoreErrors }: Options
+  { src, ignoreSrc, tree, parallel, parallelLogs, ignoreErrors }: Options
 ) => {
   if (parallel && parallelLogs) {
     removeAllListeners();
     addListener(parallelConsoleListener);
   }
   const allSpecs = await readAllSpecs(src, ignoreSrc, false);
+  const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
   const allPromises = [];
-  const pkgNames = Object.keys(allSpecs);
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs: prevSpecs } = allSpecs[pkgName];
+    const storySrc =
+      parallel && !parallelLogs ? shortenName(pkgName, 20) : undefined;
     if (prevSpecs.scripts && prevSpecs.scripts[script]) {
       let promise = exec(`yarn run ${script}`, {
         cwd: pkgPath,
         bareLogs: parallelLogs,
+        storySrc,
       });
       if (ignoreErrors) promise = promise.catch(() => {});
       if (!parallel) {
@@ -42,9 +47,21 @@ const run = async (
     }
   }
 
-  // If parallel logs are enabled, we have to manually exit
+  // If parallel logs are enabled, we have to manually exit.
+  // We should also show the error again, since the parallel console
+  // most probably swallowed it or only showed the final part.
   if (parallel && parallelLogs) {
-    await Promise.all(allPromises);
+    try {
+      await Promise.all(allPromises);
+    } catch (err) {
+      if (err.stderr) {
+        console.error(err.message); // eslint-disable-line
+        console.error(err.stderr); // eslint-disable-line
+        throw new Error(err.message);
+      } else {
+        throw err;
+      }
+    }
     process.exit(0);
   }
 };

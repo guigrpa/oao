@@ -12,6 +12,7 @@ rules:
   no-nested-ternary: off
   no-cond-assign: ['error', 'except-parens']
   no-underscore-dangle: off
+  no-confusing-arrow: off
   comma-dangle:
     - error
     - arrays: always-multiline

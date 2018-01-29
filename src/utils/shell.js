@@ -29,6 +29,7 @@ const mv = (
 
 type ExecOptions = {|
   story?: StoryT,
+  storySrc?: string,
   createChildStory?: boolean,
   logLevel?: *,
   errorLogLevel?: string,
@@ -47,6 +48,7 @@ const exec = async (
   cmd: string,
   {
     story = mainStory,
+    storySrc,
     createChildStory = true,
     logLevel = 'info',
     errorLogLevel = 'error',
@@ -64,6 +66,7 @@ const exec = async (
     return await _exec(cmd, {
       cwd,
       story: ownStory,
+      storySrc,
       errorLogLevel,
       bareLogs,
       ignoreErrorCode,
@@ -75,11 +78,11 @@ const exec = async (
 
 const _exec = async (
   cmd,
-  { cwd, story, errorLogLevel, bareLogs, ignoreErrorCode }
+  { cwd, story, storySrc, errorLogLevel, bareLogs, ignoreErrorCode }
 ) => {
   try {
     const prefix = bareLogs ? '' : '| ';
-    const cmdName = cmd.split(' ')[0].slice(0, 10);
+    const src = storySrc || cmd.split(' ')[0].slice(0, 10);
     const child = execa.shell(cmd, {
       cwd: cwd || '.',
       // Workaround for Node.js bug: https://github.com/nodejs/node/issues/10836
@@ -88,14 +91,14 @@ const _exec = async (
         process.platform === 'win32' ? ['ignore', 'pipe', 'pipe'] : undefined,
     });
     child.stdout.pipe(split()).on('data', line => {
-      story.info(cmdName, `${prefix}${line}`);
+      story.info(src, `${prefix}${line}`);
     });
     child.stderr.pipe(split()).on('data', line => {
-      if (line) story[errorLogLevel](cmdName, `${prefix}${line}`);
+      if (line) story[errorLogLevel](src, `${prefix}${line}`);
     });
     const { code, stdout, stderr } = await child;
     if (code !== 0 && !ignoreErrorCode) {
-      throw new Error(buildExecErrorMessage(cmd, cwd, code));
+      throw execError(cmd, cwd, code, stdout, stderr);
     }
     return { code, stdout, stderr };
   } catch (err) {
@@ -103,14 +106,21 @@ const _exec = async (
       const { code, stdout, stderr } = err;
       return { code, stdout, stderr };
     }
-    const errorMsg = buildExecErrorMessage(cmd, cwd, err.code);
-    story[errorLogLevel](errorMsg);
-    throw new Error(errorMsg);
+    const err2 = execError(cmd, cwd, err.code, err.stdout, err.stderr);
+    story[errorLogLevel](err2.message);
+    throw err2;
   }
 };
 
-const buildExecErrorMessage = (cmd, cwd, code) =>
-  `Command '${cmd}' failed ${code != null ? `[${code}]` : ''} at ${cwd ||
-    "'.'"}`;
+const execError = (cmd, cwd, code, stdout, stderr) => {
+  const errorMsg = `Command '${cmd}' failed ${
+    code != null ? `[${code}]` : ''
+  } at ${cwd || "'.'"}`;
+  const err: any = new Error(errorMsg);
+  err.code = code;
+  err.stdout = stdout;
+  err.stderr = stderr;
+  return err;
+};
 
 export { cp, mv, exec };
