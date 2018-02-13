@@ -14,6 +14,7 @@ const NOMINAL_OPTIONS = {
   checkUncommitted: true,
   checkUnpulled: true,
   confirm: false,
+  checks: true,
   gitCommit: true,
   npmPublish: true,
   newVersion: '99.99.99',
@@ -30,6 +31,14 @@ describe('PUBLISH command', () => {
   beforeEach(() => {
     git = require('../utils/git');
     git._initStubs();
+  });
+
+  it('allows all kind of errors if --no-checks is enabled', async () => {
+    git._setBranch('non-master');
+    git._setUncommitted('SOMETHING_HAS_NOT_YET_BEEN_COMMITTED');
+    git._setUnpulled('SOMETHING_HAS_NOT_YET_BEEN_PULLED');
+    await publish(merge(NOMINAL_OPTIONS, { checks: false }));
+    expect(git.gitPushWithTags).toHaveBeenCalled();
   });
 
   it('throws when current branch is not master', async () => {

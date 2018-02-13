@@ -30,6 +30,7 @@ type Options = {
   master: boolean,
   checkUncommitted: boolean,
   checkUnpulled: boolean,
+  checks: boolean,
   confirm: boolean,
   gitCommit: boolean,
   newVersion?: string,
@@ -49,6 +50,7 @@ const run = async ({
   master,
   checkUncommitted,
   checkUnpulled,
+  checks,
   confirm,
   gitCommit,
   newVersion,
@@ -76,7 +78,9 @@ const run = async ({
     if (!confirmBuild) return;
   }
   // Prepublish checks
-  await prepublishChecks({ master, checkUncommitted, checkUnpulled });
+  if (checks) {
+    await prepublishChecks({ master, checkUncommitted, checkUnpulled });
+  }
 
   // Get last tag and find packages requiring updates
   const lastTag = await gitLastTag();
