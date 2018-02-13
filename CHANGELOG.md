@@ -1,3 +1,5 @@
+## 1.3.1 (2018-2-13)
+
 * Add `--no-checks` for `oao publish` (removes all prepublish checks),
   useful in some cases (#62).
 
