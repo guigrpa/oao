@@ -1,3 +1,5 @@
+## 1.3.0 (2018-2-13)
+
 * Add support for extra arguments in `oao all`, e.g. `oao all ls -- -al` is
   now equivalent to `oao all 'ls -al'` (#61).
 
