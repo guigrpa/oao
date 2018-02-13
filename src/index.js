@@ -207,7 +207,16 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
     'do not stop even if there are errors in some packages'
   )
   .action((command, cmd) => {
-    all(command, processOptions(cmd.opts()));
+    // Extract arguments following the first separator (`--`) and
+    // add them to the command to be executed
+    const { rawArgs } = cmd.parent;
+    const idxSeparator = rawArgs.indexOf('--');
+    const finalCommand =
+      idxSeparator >= 0
+        ? [command].concat(rawArgs.slice(idxSeparator + 1)).join(' ')
+        : command;
+    // Run the `all` command
+    all(finalCommand, processOptions(cmd.opts()));
   });
 
 createCommand('run-script <command>', 'Run a given script on all sub-packages')

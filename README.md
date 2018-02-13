@@ -216,6 +216,8 @@ $ oao all "yarn run compileWatch" --parallel
 
 Use `--tree` if you want to follow the inverse dependency tree (starting from the tree leaves).
 
+You can also pass extra arguments to the command separating them with a `--`: `oao all ls -- -al` is equivalent to `oao all 'ls -al'`. This can be useful for adding extra commands to scripts in `package.json`.
+
 ### `oao run-script <script>`
 
 Similar to `oao all <command>`, it executes the specified (package) script on all sub-packages. Missing scripts will be skipped. Examples:

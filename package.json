@@ -11,6 +11,7 @@
     "lint": "eslint src",
     "flow": "flow check || exit 0",
     "compile": "rm -rf lib && babel src -d lib --ignore \"**/__mocks__/**\",\"**/__tests__/**\"",
+    "compileWatch": "yarn compile --watch",
     "jest": "jest --watch --coverage",
     "test": "yarn testCovFull",
     "testFast": "jest",
@@ -20,6 +21,7 @@
     "_testDev": "yarn _testCov && mv .nyc_tmp/coverage-final.json .nyc_tmp/coverage-dev.json",
     "_testCov": "jest --coverage && mv .nyc_output/coverage-final.json .nyc_tmp && rm -rf .nyc_output",
     "prettier": "prettier --single-quote --trailing-comma es5 --write \"src/**/*.js\"",
+    "example": "node lib all --src \"test/fixtures/packages/*\" ls",
     "xxl": "xxl"
   },
   "repository": "guigrpa/oao",

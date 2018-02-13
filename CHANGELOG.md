@@ -1,3 +1,6 @@
+* Add support for extra arguments in `oao all`, e.g. `oao all ls -- -al` is
+  now equivalent to `oao all 'ls -al'` (#61).
+
 ## 1.2.1 (2017-11-24)
 
 * Remove subpackage prefix in logs generated with `oao all` and `oao run-script`
