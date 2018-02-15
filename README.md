@@ -195,7 +195,7 @@ Carries out a number of steps:
 
 There are lots of custom options for `oao publish`. Chances are, you can disable each one of the previous steps by means of one of those options. Check them all with `oao publish --help`.
 
-**Note: There is a problem when running `npm publish` as a script run with `yarn`. As a workaround, either run `oao publish` manually from the command line, or put it in a script and run it with `npm`, not `yarn`.**
+**Note: There is a problem when running `oao publish` as a script run with `yarn`. As a workaround, either run `oao publish` manually from the command line, or put it in a script and run it with `npm`, not `yarn`.**
 
 ### `oao all <command>`
 
