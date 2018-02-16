@@ -1,3 +1,5 @@
+## 1.4.0 (2018-2-16)
+
 * Add `--relative-time` to all commands, shortening the date column in logs by
   14 characters (#64).
 
