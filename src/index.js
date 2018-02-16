@@ -6,7 +6,7 @@ import 'babel-polyfill';
 import path from 'path';
 import { addDefaults, merge } from 'timm';
 import program from 'commander';
-import './utils/initConsole';
+import initConsole from './utils/initConsole';
 import status from './status';
 import bootstrap from './bootstrap';
 import clean from './clean';
@@ -75,13 +75,17 @@ const createCommand = (syntax, description) =>
       '-l --link <regex>',
       'regex pattern for dependencies that should be linked, not installed'
     )
-    .option('--single', 'no subpackages, just the root one');
+    .option('--single', 'no subpackages, just the root one')
+    .option('--relative-time', 'shorten log dates');
 
 // =========================================
 // Commands
 // =========================================
-createCommand('status', 'Show an overview of the monorepo status').action(cmd =>
-  status(processOptions(cmd.opts()))
+createCommand('status', 'Show an overview of the monorepo status').action(
+  cmd => {
+    const options = processOptions(cmd.opts());
+    return status(options);
+  }
 );
 
 createCommand(
@@ -102,12 +106,20 @@ createCommand(
     '--no-parallel',
     "don't run yarn install in parallel (use it to debug errors, since parallel logs may be hard to read)"
   )
-  .action(cmd => bootstrap(processOptions(cmd.opts())));
+  .action(cmd => {
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return bootstrap(options);
+  });
 
 createCommand(
   'clean',
   'Delete all node_modules directories from sub-packages and the root package'
-).action(cmd => clean(processOptions(cmd.opts())));
+).action(cmd => {
+  const options = processOptions(cmd.opts());
+  initConsole(options);
+  return clean(options);
+});
 
 createCommand(
   'add <sub-package> <packages...>',
@@ -124,29 +136,37 @@ createCommand(
     '-T --tilde',
     'install the most recent release with the same minor version'
   )
-  .action((subpackage, deps, cmd) =>
-    addRemoveUpgrade(subpackage, 'add', deps, processOptions(cmd.opts()))
-  );
+  .action((subpackage, deps, cmd) => {
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return addRemoveUpgrade(subpackage, 'add', deps, options);
+  });
 
 createCommand(
   'remove <sub-package> <packages...>',
   'Remove dependencies from a sub-package'
-).action((subpackage, deps, cmd) =>
-  addRemoveUpgrade(subpackage, 'remove', deps, processOptions(cmd.opts()))
-);
+).action((subpackage, deps, cmd) => {
+  const options = processOptions(cmd.opts());
+  initConsole(options);
+  return addRemoveUpgrade(subpackage, 'remove', deps, options);
+});
 
 createCommand(
   'upgrade <sub-package> [packages...]',
   'Upgrade some/all dependencies of a package'
 )
   .option('--ignore-engines', 'disregard engines check during upgrade')
-  .action((subpackage, deps, cmd) =>
-    addRemoveUpgrade(subpackage, 'upgrade', deps, processOptions(cmd.opts()))
-  );
+  .action((subpackage, deps, cmd) => {
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return addRemoveUpgrade(subpackage, 'upgrade', deps, options);
+  });
 
-createCommand('outdated', 'Check for outdated dependencies').action(cmd =>
-  outdated(processOptions(cmd.opts()))
-);
+createCommand('outdated', 'Check for outdated dependencies').action(cmd => {
+  const options = processOptions(cmd.opts());
+  initConsole(options);
+  return outdated(options);
+});
 
 createCommand(
   'prepublish',
@@ -157,7 +177,11 @@ createCommand(
     `copy these package.json attrs to sub-packages [${DEFAULT_COPY_ATTRS}]`,
     DEFAULT_COPY_ATTRS
   )
-  .action(cmd => prepublish(processOptions(cmd.opts())));
+  .action(cmd => {
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return prepublish(options);
+  });
 
 createCommand('publish', 'Publish updated sub-packages')
   .option('--no-master', 'allow publishing from a non-master branch')
@@ -185,7 +209,11 @@ createCommand('publish', 'Publish updated sub-packages')
     DEFAULT_CHANGELOG
   )
   .option('--no-changelog', 'skip changelog updates')
-  .action(cmd => publish(processOptions(cmd.opts())));
+  .action(cmd => {
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return publish(options);
+  });
 
 createCommand(
   'reset-all-versions <version>',
@@ -193,7 +221,9 @@ createCommand(
 )
   .option('--no-confirm', 'do not ask for confirmation')
   .action((version, cmd) => {
-    resetAllVersions(version, processOptions(cmd.opts()));
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return resetAllVersions(version, options);
   });
 
 createCommand('all <command>', 'Run a given command on all sub-packages')
@@ -217,7 +247,9 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
         ? [command].concat(rawArgs.slice(idxSeparator + 1)).join(' ')
         : command;
     // Run the `all` command
-    all(finalCommand, processOptions(cmd.opts()));
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return all(finalCommand, options);
   });
 
 createCommand('run-script <command>', 'Run a given script on all sub-packages')
@@ -232,7 +264,9 @@ createCommand('run-script <command>', 'Run a given script on all sub-packages')
     'do not stop even if there are errors in some packages'
   )
   .action((command, cmd) => {
-    runScript(command, processOptions(cmd.opts()));
+    const options = processOptions(cmd.opts());
+    initConsole(options);
+    return runScript(command, options);
   });
 
 process.on('unhandledRejection', err => {

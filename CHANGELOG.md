@@ -1,12 +1,15 @@
+* Add `--relative-time` to all commands, shortening the date column in logs by
+  14 characters (#64).
+
 ## 1.3.1 (2018-2-13)
 
-* Add `--no-checks` for `oao publish` (removes all prepublish checks),
-  useful in some cases (#62).
+* Add `--no-checks` for `oao publish` (removes all prepublish checks), useful in
+  some cases (#62).
 
 ## 1.3.0 (2018-2-13)
 
-* Add support for extra arguments in `oao all`, e.g. `oao all ls -- -al` is
-  now equivalent to `oao all 'ls -al'` (#61).
+* Add support for extra arguments in `oao all`, e.g. `oao all ls -- -al` is now
+  equivalent to `oao all 'ls -al'` (#61).
 
 ## 1.2.1 (2017-11-24)
 

@@ -3,4 +3,9 @@
 import { addListener } from 'storyboard';
 import consoleListener from 'storyboard-listener-console';
 
-addListener(consoleListener);
+const initConsole = (options = {}) => {
+  const { relativeTime } = options;
+  addListener(consoleListener, { relativeTime });
+};
+
+export default initConsole;

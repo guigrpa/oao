@@ -14,15 +14,24 @@ type Options = {
   parallel?: boolean,
   parallelLogs?: boolean,
   ignoreErrors?: boolean,
+  relativeTime?: boolean,
 };
 
 const run = async (
   cmd: string,
-  { src, ignoreSrc, tree, parallel, parallelLogs, ignoreErrors }: Options
+  {
+    src,
+    ignoreSrc,
+    tree,
+    parallel,
+    parallelLogs,
+    ignoreErrors,
+    relativeTime,
+  }: Options
 ) => {
   if (parallel && parallelLogs) {
     removeAllListeners();
-    addListener(parallelConsoleListener);
+    addListener(parallelConsoleListener, { relativeTime });
   }
   const allSpecs = await readAllSpecs(src, ignoreSrc, false);
   const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
