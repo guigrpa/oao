@@ -7,6 +7,7 @@ import path from 'path';
 import { addDefaults, merge } from 'timm';
 import program from 'commander';
 import initConsole from './utils/initConsole';
+import { isObject } from './utils/helpers';
 import status from './status';
 import bootstrap from './bootstrap';
 import clean from './clean';
@@ -44,10 +45,12 @@ const processOptions = options0 => {
     // If workspaces are enabled in the monorepo, some configuration is
     // overriden by the monorepo package.json
     if (monorepoPkg.workspaces) {
-      options = merge(options, {
-        src: monorepoPkg.workspaces,
-        workspaces: true,
-      });
+      let src = monorepoPkg.workspaces;
+      if (isObject(src)) src = src.packages;
+      if (!src) {
+        throw new Error('Could not find correct config for Yarn workspaces');
+      }
+      options = merge(options, { src, workspaces: true });
     }
 
     // Add extra configuration in the `oao` field of the monorepo package.json

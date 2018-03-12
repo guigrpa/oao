@@ -5,4 +5,6 @@ const shortenName = (name: string, maxLen: number): string => {
   return `${name.slice(0, 2)}…${name.slice(-(maxLen - 3))}`;
 };
 
-export { shortenName };
+const isObject = o => !!o && o.constructor === Object;
+
+export { shortenName, isObject };
