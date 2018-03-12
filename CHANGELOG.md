@@ -1,3 +1,5 @@
+## 1.4.1 (2018-3-12)
+
 * Fix issues caused by new yarn `workspaces` semantics (#71, #67).
 
 ## 1.4.0 (2018-2-16)
