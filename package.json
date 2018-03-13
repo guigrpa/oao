@@ -47,6 +47,7 @@
     "globby": "6.1.0",
     "inquirer": "3.2.1",
     "kebab-case": "1.0.0",
+    "minimatch": "^3.0.4",
     "rimraf": "2.6.1",
     "semver": "5.4.1",
     "shelljs": "0.7.8",

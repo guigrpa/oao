@@ -1,5 +1,6 @@
 // @flow
 
+import minimatch from 'minimatch';
 import multiRun from './utils/multiRun';
 
 type Options = {
@@ -13,8 +14,11 @@ type Options = {
 
 const run = (script: string, options: Options) =>
   multiRun(options, specs => {
-    if (!specs.scripts || !specs.scripts[script]) return null;
-    return `yarn run ${script}`;
+    const { scripts } = specs;
+    if (!scripts) return [];
+    const scriptNames = Object.keys(scripts).filter(o => minimatch(o, script));
+    if (!scriptNames.length) return [];
+    return scriptNames.map(o => `yarn run ${o}`);
   });
 
 export default run;

@@ -29,28 +29,37 @@ const multiRun = async (
     ignoreErrors,
     relativeTime,
   }: Options,
-  getCommandForSubpackage: JobCreator
+  getCommandsForSubpackage: JobCreator
 ) => {
   if (parallel && parallelLogs) {
     removeAllListeners();
     addListener(parallelConsoleListener, { relativeTime });
   }
+
+  // Gather all jobs
   const allSpecs = await readAllSpecs(src, ignoreSrc, false);
   const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
-  const allPromises = [];
+  const allJobs = [];
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs } = allSpecs[pkgName];
     const storySrc =
       parallel && !parallelLogs ? shortenName(pkgName, 20) : undefined;
-    const cmd = getCommandForSubpackage(specs);
-    if (cmd == null) continue;
-    let promise = exec(cmd, { cwd: pkgPath, bareLogs: parallelLogs, storySrc });
+    getCommandsForSubpackage(specs).forEach(cmd => {
+      allJobs.push({ cmd, cwd: pkgPath, bareLogs: parallelLogs, storySrc });
+    });
+  }
+
+  // Run in serial or parallel mode
+  const allPromises = [];
+  for (let i = 0; i < allJobs.length; i++) {
+    const { cmd, cwd, bareLogs, storySrc } = allJobs[i];
+    let promise = exec(cmd, { cwd, bareLogs, storySrc });
     if (ignoreErrors) promise = promise.catch(() => {});
-    if (!parallel) {
-      await promise;
-    } else {
+    if (parallel) {
       allPromises.push(promise);
+    } else {
+      await promise;
     }
   }
 

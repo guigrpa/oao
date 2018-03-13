@@ -12,6 +12,12 @@ describe('RUN-SCRIPT command', () => {
     expect(helpers.exec.mock.calls).toMatchSnapshot();
   });
 
+  it('executes the specified script with wildcards on all sub-packages', async () => {
+    const helpers = require('../utils/shell');
+    await runScript('st*', { src: 'test/fixtures/packages/*' });
+    expect(helpers.exec.mock.calls).toMatchSnapshot();
+  });
+
   it('can do it following the dependency tree', async () => {
     const helpers = require('../utils/shell');
     await runScript('start', { src: 'test/fixtures/packages3/*', tree: true });

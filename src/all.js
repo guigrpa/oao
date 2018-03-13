@@ -12,6 +12,6 @@ type Options = {
   relativeTime?: boolean,
 };
 
-const run = (cmd: string, options: Options) => multiRun(options, () => cmd);
+const run = (cmd: string, options: Options) => multiRun(options, () => [cmd]);
 
 export default run;
