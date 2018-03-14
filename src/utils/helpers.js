@@ -7,4 +7,9 @@ const shortenName = (name: string, maxLen: number): string => {
 
 const isObject = (o: any) => !!o && o.constructor === Object;
 
-export { shortenName, isObject };
+const delay = ms =>
+  new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+
+export { shortenName, isObject, delay };

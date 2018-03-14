@@ -236,6 +236,7 @@ createCommand('all <command>', 'Run a given command on all sub-packages')
     '--no-parallel-logs',
     'use chronological logging, even in parallel mode'
   )
+  .option('--parallel-limit <#processes>', 'max number of processes to launch')
   .option(
     '--ignore-errors',
     'do not stop even if there are errors in some packages'
@@ -262,6 +263,7 @@ createCommand('run-script <command>', 'Run a given script on all sub-packages')
     '--no-parallel-logs',
     'use chronological logging, even in parallel mode'
   )
+  .option('--parallel-limit <#processes>', 'max number of processes to launch')
   .option(
     '--ignore-errors',
     'do not stop even if there are errors in some packages'

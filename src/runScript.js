@@ -9,6 +9,7 @@ type Options = {
   tree?: boolean,
   parallel?: boolean,
   parallelLogs?: boolean,
+  parallelLimit?: number,
   ignoreErrors?: boolean,
   relativeTime?: boolean,
 };

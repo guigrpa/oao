@@ -1,10 +1,12 @@
 // @flow
 
+/* eslint-disable no-constant-condition */
+
 import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
 import { readAllSpecs } from './readSpecs';
 import { exec } from './shell';
-import { shortenName } from './helpers';
+import { shortenName, delay } from './helpers';
 import calcGraph from './calcGraph';
 
 type Options = {
@@ -13,6 +15,7 @@ type Options = {
   tree?: boolean,
   parallel?: boolean,
   parallelLogs?: boolean,
+  parallelLimit?: number,
   ignoreErrors?: boolean,
   relativeTime?: boolean,
 };
@@ -20,14 +23,16 @@ type Options = {
 type Job = {
   cmd: string,
   cwd: string,
-  bareLogs: ?boolean,
-  storySrc: string,
+  bareLogs: boolean,
+  storySrc: ?string,
   status: 'idle' | 'running' | 'done',
   pkgName: string,
   preconditions: Array<string>, // jobs for these subpackages should have finished
-  promise: Promise<any>,
+  promise?: Promise<any>,
 };
 type JobCreator = (specs: Object) => Array<string>;
+
+const DELAY_MAIN_LOOP = 20; // [ms]
 
 // ------------------------------------------------
 // Main
@@ -39,6 +44,7 @@ const multiRun = async (
     tree,
     parallel,
     parallelLogs,
+    parallelLimit,
     ignoreErrors,
     relativeTime,
   }: Options,
@@ -76,7 +82,7 @@ const multiRun = async (
   if (!parallel) {
     await runSerially(allJobs, { ignoreErrors });
   } else {
-    await runInParallel(allJobs, { ignoreErrors, parallelLogs });
+    await runInParallel(allJobs, { ignoreErrors, parallelLogs, parallelLimit });
   }
 };
 
@@ -85,28 +91,42 @@ const multiRun = async (
 // ------------------------------------------------
 const runSerially = async (allJobs, { ignoreErrors }) => {
   for (let i = 0; i < allJobs.length; i++) {
-    const { cmd, cwd, bareLogs, storySrc } = allJobs[i];
-    let promise = exec(cmd, { cwd, bareLogs, storySrc });
-    if (ignoreErrors) promise = promise.catch(() => {});
-    await promise;
+    await executeJob(allJobs[i], { ignoreErrors });
   }
 };
 
-const runInParallel = async (allJobs, { ignoreErrors, parallelLogs }) => {
-  const allPromises = [];
-  for (let i = 0; i < allJobs.length; i++) {
-    const { cmd, cwd, bareLogs, storySrc } = allJobs[i];
-    let promise = exec(cmd, { cwd, bareLogs, storySrc });
-    if (ignoreErrors) promise = promise.catch(() => {});
-    allPromises.push(promise);
+const runInParallel = async (
+  allJobs,
+  { ignoreErrors, parallelLogs, parallelLimit }
+) => {
+  const maxConcurrency = parallelLimit || Infinity;
+  while (true) {
+    const runningJobCount = getRunningJobs(allJobs).length;
+    if (runningJobCount >= maxConcurrency) {
+      await delay(DELAY_MAIN_LOOP);
+      continue;
+    }
+    const job = getNextJob(allJobs);
+    if (job) {
+      executeJob(job, { ignoreErrors });
+    } else if (getIdleJobs(allJobs).length === 0) {
+      break;
+    } else {
+      // We may still have pending jobs, but cannot run yet (they depend on
+      // others). Wait a bit...
+      await delay(DELAY_MAIN_LOOP);
+    }
   }
 
-  // If parallel logs are enabled, we have to manually exit.
+  // If parallel logs are enabled, we have to manually exit (`process.exit`).
   // We should also show the error again, since the parallel console
   // most probably swallowed it or only showed the final part.
   if (parallelLogs) {
+    const pendingPromises = allJobs
+      .filter(o => o.status !== 'done')
+      .map(job => job.promise);
     try {
-      await Promise.all(allPromises);
+      await Promise.all(pendingPromises);
     } catch (err) {
       if (err.stderr) {
         console.error(err.message); // eslint-disable-line
@@ -119,6 +139,33 @@ const runInParallel = async (allJobs, { ignoreErrors, parallelLogs }) => {
     process.exit(0);
   }
 };
+
+// ------------------------------------------------
+// Helpers
+// ------------------------------------------------
+/* eslint-disable no-param-reassign */
+const executeJob = (job, { ignoreErrors }) => {
+  job.promise = _executeJob(job, { ignoreErrors });
+};
+
+const _executeJob = async (job, { ignoreErrors }) => {
+  const { cmd, cwd, bareLogs, storySrc } = job;
+  const promise = exec(cmd, { cwd, bareLogs, storySrc });
+  job.status = 'running';
+  try {
+    await promise;
+    job.status = 'done';
+  } catch (err) {
+    job.status = 'done';
+    if (!ignoreErrors) throw err;
+  }
+};
+/* eslint-enable no-param-reassign */
+
+const getNextJob = jobs =>
+  jobs.find(job => job.status !== 'done' && job.status !== 'running');
+const getRunningJobs = jobs => jobs.filter(job => job.status === 'running');
+const getIdleJobs = jobs => jobs.filter(job => job.status === 'idle');
 
 // ------------------------------------------------
 // Public

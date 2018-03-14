@@ -1,4 +1,5 @@
-* `oao run-script`: add the possibility to generate more than one job per subpackage (e.g. `oao run-script test:*`).
+* Add `--parallel-limit <#processes>` to `oao all` and `oao run-script`, to limit concurrency when running things in parallel (#69).
+* `oao run-script`: add the possibility to generate more than one job per subpackage (e.g. `oao run-script test:*`) (#70).
 
 ## 1.4.1 (2018-3-12)
 
