@@ -101,18 +101,20 @@ const runInParallel = async (
 ) => {
   const maxConcurrency = parallelLimit || Infinity;
   while (true) {
-    const runningJobCount = getRunningJobs(allJobs).length;
-    if (runningJobCount >= maxConcurrency) {
-      await delay(DELAY_MAIN_LOOP);
-      continue;
-    }
+    // No pending idle jobs? We end the loop; Node will wait for them
+    // to finish
+    if (getIdleJobs(allJobs).length === 0) break;
+
+    // Get a job!
     const job = getNextJob(allJobs);
     if (job) {
+      if (getRunningJobs(allJobs).length >= maxConcurrency) {
+        await delay(DELAY_MAIN_LOOP);
+        continue;
+      }
       executeJob(job, { ignoreErrors });
-    } else if (getIdleJobs(allJobs).length === 0) {
-      break;
     } else {
-      // We may still have pending jobs, but cannot run yet (they depend on
+      // We still have pending jobs, but cannot run yet (they depend on
       // others). Wait a bit...
       await delay(DELAY_MAIN_LOOP);
     }
@@ -162,8 +164,7 @@ const _executeJob = async (job, { ignoreErrors }) => {
 };
 /* eslint-enable no-param-reassign */
 
-const getNextJob = jobs =>
-  jobs.find(job => job.status !== 'done' && job.status !== 'running');
+const getNextJob = jobs => jobs.find(job => job.status === 'idle');
 const getRunningJobs = jobs => jobs.filter(job => job.status === 'running');
 const getIdleJobs = jobs => jobs.filter(job => job.status === 'idle');
 
