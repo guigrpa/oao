@@ -29,7 +29,7 @@ const mv = (
 
 type ExecOptions = {|
   story?: StoryT,
-  storySrc?: string,
+  storySrc?: ?string,
   createChildStory?: boolean,
   logLevel?: *,
   errorLogLevel?: string,

@@ -10,6 +10,7 @@ type Options = {
   parallel?: boolean,
   parallelLogs?: boolean,
   ignoreErrors?: boolean,
+  relativeTime?: boolean,
 };
 
 const run = (script: string, options: Options) =>
