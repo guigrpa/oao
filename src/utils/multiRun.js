@@ -4,9 +4,10 @@
 
 import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
+import type { OaoSpecs } from './types';
 import { readAllSpecs } from './readSpecs';
 import { exec } from './shell';
-import { shortenName, delay } from './helpers';
+import { shortenName, delay, dependsOn } from './helpers';
 import calcGraph from './calcGraph';
 
 type Options = {
@@ -24,15 +25,15 @@ type Job = {
   cmd: string,
   cwd: string,
   bareLogs: boolean,
-  storySrc: ?string,
+  storySrc?: ?string,
   status: 'idle' | 'running' | 'done',
-  pkgName: string,
-  preconditions: Array<string>, // jobs for these subpackages should have finished
+  pkg: OaoSpecs,
   promise?: Promise<any>,
 };
 type JobCreator = (specs: Object) => Array<string>;
 
 const DELAY_MAIN_LOOP = 20; // [ms]
+const PLACEHOLDER_COMMAND = '__OAO_PLACEHOLDER_COMMAND__';
 
 // ------------------------------------------------
 // Main
@@ -61,21 +62,36 @@ const multiRun = async (
   const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
-    const { pkgPath, specs } = allSpecs[pkgName];
+    const pkg = allSpecs[pkgName];
+    const { pkgPath } = pkg;
     const storySrc =
       parallel && !parallelLogs ? shortenName(pkgName, 20) : undefined;
-    // TODO: create pre-conditions
-    getCommandsForSubpackage(specs).forEach(cmd => {
-      allJobs.push({
-        cmd,
-        cwd: pkgPath,
-        bareLogs: !!parallelLogs,
-        storySrc,
-        status: 'idle',
-        pkgName,
-        preconditions: [],
+    const commands = getCommandsForSubpackage(pkg.specs);
+    if (commands.length) {
+      commands.forEach(cmd => {
+        allJobs.push({
+          cmd,
+          cwd: pkgPath,
+          bareLogs: !!parallelLogs,
+          storySrc,
+          status: 'idle',
+          pkg,
+        });
       });
-    });
+    } else if (tree) {
+      // Suppose A --> B --> C (where --> means "depends on"),
+      // and B generates no jobs, whilst A and C do.
+      // Creating a placeholder job for B simplifies getNextJob(),
+      // since it will only need to check direct dependencies between
+      // subpackages
+      allJobs.push({
+        cmd: PLACEHOLDER_COMMAND,
+        cwd: pkgPath,
+        bareLogs: false,
+        status: 'idle',
+        pkg,
+      });
+    }
   }
 
   // Run in serial or parallel mode
@@ -152,6 +168,10 @@ const executeJob = (job, { ignoreErrors }) => {
 
 const _executeJob = async (job, { ignoreErrors }) => {
   const { cmd, cwd, bareLogs, storySrc } = job;
+  if (cmd === PLACEHOLDER_COMMAND) {
+    job.status = 'done';
+    return;
+  }
   const promise = exec(cmd, { cwd, bareLogs, storySrc });
   job.status = 'running';
   try {
@@ -164,7 +184,29 @@ const _executeJob = async (job, { ignoreErrors }) => {
 };
 /* eslint-enable no-param-reassign */
 
-const getNextJob = jobs => jobs.find(job => job.status === 'idle');
+const getNextJob = jobs => {
+  for (let i = 0; i < jobs.length; i++) {
+    const candidateJob = jobs[i];
+    if (candidateJob.status !== 'idle') continue;
+    const { pkg: candidateJobPkg } = candidateJob;
+    let isFound = true;
+    // Check whether a previous job that hasn't finished
+    // belongs to a direct dependency of the candidate (notice
+    // that we have _placeholder_ jobs, so we don't need to worry
+    // about packages that are indirect dependencies.
+    for (let k = 0; k < i; k++) {
+      const previousJob = jobs[k];
+      if (previousJob.status === 'done') continue;
+      const { pkg: previousJobPkg } = previousJob;
+      if (dependsOn(candidateJobPkg, previousJobPkg.name)) {
+        isFound = false;
+        break;
+      }
+    }
+    if (isFound) return candidateJob;
+  }
+  return null;
+};
 const getRunningJobs = jobs => jobs.filter(job => job.status === 'running');
 const getIdleJobs = jobs => jobs.filter(job => job.status === 'idle');
 

@@ -1,4 +1,5 @@
 * Add `--parallel-limit <#processes>` to `oao all` and `oao run-script`, to limit concurrency when running things in parallel (#69).
+* Allow simultaneous usage of `--parallel` and `--tree` for `oao all` and `oao run-script`. In this case, jobs may block if other jobs associated to dependent subpackages are still pending (#68).
 * `oao run-script`: add the possibility to generate more than one job per subpackage (e.g. `oao run-script test:*`) (#70).
 
 ## 1.4.1 (2018-3-12)
