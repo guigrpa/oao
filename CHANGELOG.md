@@ -1,3 +1,5 @@
+* `oao run-script`: add the possibility to generate more than one job per subpackage (e.g. `oao run-script test:*`).
+
 ## 1.4.1 (2018-3-12)
 
 * Fix issues caused by new yarn `workspaces` semantics (#71, #67).

@@ -8,6 +8,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "ls -al"
+    "start": "ls -al",
+    "start2": "ls"
   }
 }

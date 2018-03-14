@@ -27,6 +27,7 @@ Object {
       "name": "oao-b",
       "scripts": Object {
         "start": "ls -al",
+        "start2": "ls",
       },
       "version": "0.1.0",
     },
@@ -130,6 +131,7 @@ Object {
       "name": "oao-b",
       "scripts": Object {
         "start": "ls -al",
+        "start2": "ls",
       },
       "version": "0.1.0",
     },

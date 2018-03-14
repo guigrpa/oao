@@ -77,6 +77,14 @@ Array [
     },
   ],
   Array [
+    "yarn run start2",
+    Object {
+      "bareLogs": undefined,
+      "cwd": "test/fixtures/packages/oao-b",
+      "storySrc": undefined,
+    },
+  ],
+  Array [
     "yarn run start",
     Object {
       "bareLogs": undefined,

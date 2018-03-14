@@ -232,6 +232,8 @@ $ oao run-script start --tree
 
 By default, `oao run-script` runs sequentially. Use `--parallel` to run the scripts in parallel, and `--tree` if you want to follow the inverse dependency tree (starting from the tree leaves).
 
+You can also run all scripts matching a given glob pattern: `oao run-script test:*`.
+
 ## Credits :clap:
 
 * [lerna](https://github.com/lerna/lerna): for general inspiration.
