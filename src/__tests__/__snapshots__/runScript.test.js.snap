@@ -5,7 +5,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages3/oao-b",
       "storySrc": undefined,
     },
@@ -13,7 +13,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages3/oao",
       "storySrc": undefined,
     },
@@ -21,7 +21,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages3/oao-c",
       "storySrc": undefined,
     },
@@ -29,7 +29,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages3/oao-d",
       "storySrc": undefined,
     },
@@ -37,7 +37,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages3/oao-priv",
       "storySrc": undefined,
     },
@@ -50,7 +50,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages/oao-b",
       "storySrc": undefined,
     },
@@ -58,7 +58,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages/oao-c",
       "storySrc": undefined,
     },
@@ -71,7 +71,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages/oao-b",
       "storySrc": undefined,
     },
@@ -79,7 +79,7 @@ Array [
   Array [
     "yarn run start2",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages/oao-b",
       "storySrc": undefined,
     },
@@ -87,7 +87,7 @@ Array [
   Array [
     "yarn run start",
     Object {
-      "bareLogs": undefined,
+      "bareLogs": false,
       "cwd": "test/fixtures/packages/oao-c",
       "storySrc": undefined,
     },

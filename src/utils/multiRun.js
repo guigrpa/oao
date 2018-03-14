@@ -17,8 +17,21 @@ type Options = {
   relativeTime?: boolean,
 };
 
-type JobCreator = (specs: Object) => string;
+type Job = {
+  cmd: string,
+  cwd: string,
+  bareLogs: ?boolean,
+  storySrc: string,
+  status: 'idle' | 'running' | 'done',
+  pkgName: string,
+  preconditions: Array<string>, // jobs for these subpackages should have finished
+  promise: Promise<any>,
+};
+type JobCreator = (specs: Object) => Array<string>;
 
+// ------------------------------------------------
+// Main
+// ------------------------------------------------
 const multiRun = async (
   {
     src,
@@ -37,36 +50,61 @@ const multiRun = async (
   }
 
   // Gather all jobs
+  const allJobs: Array<Job> = [];
   const allSpecs = await readAllSpecs(src, ignoreSrc, false);
   const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
-  const allJobs = [];
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
     const { pkgPath, specs } = allSpecs[pkgName];
     const storySrc =
       parallel && !parallelLogs ? shortenName(pkgName, 20) : undefined;
+    // TODO: create pre-conditions
     getCommandsForSubpackage(specs).forEach(cmd => {
-      allJobs.push({ cmd, cwd: pkgPath, bareLogs: parallelLogs, storySrc });
+      allJobs.push({
+        cmd,
+        cwd: pkgPath,
+        bareLogs: !!parallelLogs,
+        storySrc,
+        status: 'idle',
+        pkgName,
+        preconditions: [],
+      });
     });
   }
 
   // Run in serial or parallel mode
+  if (!parallel) {
+    await runSerially(allJobs, { ignoreErrors });
+  } else {
+    await runInParallel(allJobs, { ignoreErrors, parallelLogs });
+  }
+};
+
+// ------------------------------------------------
+// Serial and parallel runners
+// ------------------------------------------------
+const runSerially = async (allJobs, { ignoreErrors }) => {
+  for (let i = 0; i < allJobs.length; i++) {
+    const { cmd, cwd, bareLogs, storySrc } = allJobs[i];
+    let promise = exec(cmd, { cwd, bareLogs, storySrc });
+    if (ignoreErrors) promise = promise.catch(() => {});
+    await promise;
+  }
+};
+
+const runInParallel = async (allJobs, { ignoreErrors, parallelLogs }) => {
   const allPromises = [];
   for (let i = 0; i < allJobs.length; i++) {
     const { cmd, cwd, bareLogs, storySrc } = allJobs[i];
     let promise = exec(cmd, { cwd, bareLogs, storySrc });
     if (ignoreErrors) promise = promise.catch(() => {});
-    if (parallel) {
-      allPromises.push(promise);
-    } else {
-      await promise;
-    }
+    allPromises.push(promise);
   }
 
   // If parallel logs are enabled, we have to manually exit.
   // We should also show the error again, since the parallel console
   // most probably swallowed it or only showed the final part.
-  if (parallel && parallelLogs) {
+  if (parallelLogs) {
     try {
       await Promise.all(allPromises);
     } catch (err) {
@@ -82,4 +120,7 @@ const multiRun = async (
   }
 };
 
+// ------------------------------------------------
+// Public
+// ------------------------------------------------
 export default multiRun;
