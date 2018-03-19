@@ -21,8 +21,8 @@ describe('BUMP command', () => {
       src: 'test/fixtures/packagesCustomLinks/*',
     });
     expect(writeSpecs.mock.calls).toHaveLength(2);
-    expect(writeSpecs.mock.calls[0]).toMatchSnapshot();
-    expect(writeSpecs.mock.calls[1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[1][1]).toMatchSnapshot();
   });
 
   it('modifies a dep version everywhere it may appear', async () => {
@@ -31,7 +31,7 @@ describe('BUMP command', () => {
       src: 'test/fixtures/packagesCustomLinks/*',
     });
     expect(writeSpecs.mock.calls).toHaveLength(1);
-    expect(writeSpecs.mock.calls[0]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();
   });
 
   it('modifies multiple deps', async () => {
@@ -40,8 +40,8 @@ describe('BUMP command', () => {
       src: 'test/fixtures/packagesCustomLinks/*',
     });
     expect(writeSpecs.mock.calls).toHaveLength(2);
-    expect(writeSpecs.mock.calls[0]).toMatchSnapshot();
-    expect(writeSpecs.mock.calls[1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[1][1]).toMatchSnapshot();
   });
 
   it('uses current version for internal deps', async () => {
@@ -50,7 +50,7 @@ describe('BUMP command', () => {
       src: 'test/fixtures/packages/*',
     });
     expect(writeSpecs.mock.calls).toHaveLength(2);
-    expect(writeSpecs.mock.calls[0]).toMatchSnapshot();
-    expect(writeSpecs.mock.calls[1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[0][1]).toMatchSnapshot();
+    expect(writeSpecs.mock.calls[1][1]).toMatchSnapshot();
   });
 });
