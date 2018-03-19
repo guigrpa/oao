@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BUMP command modifies a dep version everywhere it may appear 1`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packagesCustomLinks/oao-c/package.json",
+  Object {
+    "dependencies": Object {
+      "ext-one": "*",
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "devDependencies": Object {
+      "ext-two": "18",
+      "oao-b": "*",
+      "xxl": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-c",
+    "peerDependencies": Object {
+      "ext-two": "18",
+      "oao-b": "*",
+    },
+    "version": "0.1.0",
+  },
+]
+`;
+
+exports[`BUMP command modifies multiple deps 1`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packagesCustomLinks/oao-b/package.json",
+  Object {
+    "dependencies": Object {
+      "ext-one": "18",
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-b",
+    "version": "0.1.0",
+  },
+]
+`;
+
+exports[`BUMP command modifies multiple deps 2`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packagesCustomLinks/oao-c/package.json",
+  Object {
+    "dependencies": Object {
+      "ext-one": "18",
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "devDependencies": Object {
+      "ext-two": "18",
+      "oao-b": "*",
+      "xxl": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-c",
+    "peerDependencies": Object {
+      "ext-two": "18",
+      "oao-b": "*",
+    },
+    "version": "0.1.0",
+  },
+]
+`;
+
+exports[`BUMP command modifies package.json if it depends on dep 1`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packagesCustomLinks/oao-b/package.json",
+  Object {
+    "dependencies": Object {
+      "ext-one": "18",
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-b",
+    "version": "0.1.0",
+  },
+]
+`;
+
+exports[`BUMP command modifies package.json if it depends on dep 2`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packagesCustomLinks/oao-c/package.json",
+  Object {
+    "dependencies": Object {
+      "ext-one": "18",
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "devDependencies": Object {
+      "ext-two": "*",
+      "oao-b": "*",
+      "xxl": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-c",
+    "peerDependencies": Object {
+      "ext-two": "*",
+      "oao-b": "*",
+    },
+    "version": "0.1.0",
+  },
+]
+`;
+
+exports[`BUMP command uses current version for internal deps 1`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packages/oao-d/package.json",
+  Object {
+    "dependencies": Object {
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "devDependencies": Object {
+      "oao-b": "*",
+      "oao-c": "^0.1.0",
+      "xxl": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-d",
+    "peerDependencies": Object {},
+    "scripts": Object {},
+    "version": "0.1.0",
+  },
+]
+`;
+
+exports[`BUMP command uses current version for internal deps 2`] = `
+Array [
+  "/Users/guillermo/Prog/guigrpa/oao/test/fixtures/packages/oao-priv/package.json",
+  Object {
+    "dependencies": Object {
+      "oao": "*",
+      "timm": "1.x",
+    },
+    "devDependencies": Object {
+      "oao-b": "*",
+      "oao-c": "^0.1.0",
+      "xxl": "1.x",
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "oao-priv",
+    "peerDependencies": Object {},
+    "private": true,
+    "version": "0.1.0",
+  },
+]
+`;
