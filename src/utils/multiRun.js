@@ -42,7 +42,7 @@ const multiRun = async (
   {
     src,
     ignoreSrc,
-    tree,
+    tree: useTree,
     parallel,
     parallelLogs,
     parallelLimit,
@@ -59,7 +59,7 @@ const multiRun = async (
   // Gather all jobs
   const allJobs: Array<Job> = [];
   const allSpecs = await readAllSpecs(src, ignoreSrc, false);
-  const pkgNames = tree ? calcGraph(allSpecs) : Object.keys(allSpecs);
+  const pkgNames = useTree ? calcGraph(allSpecs) : Object.keys(allSpecs);
   for (let i = 0; i < pkgNames.length; i += 1) {
     const pkgName = pkgNames[i];
     const pkg = allSpecs[pkgName];
@@ -78,7 +78,7 @@ const multiRun = async (
           pkg,
         });
       });
-    } else if (tree) {
+    } else if (useTree) {
       // Suppose A --> B --> C (where --> means "depends on"),
       // and B generates no jobs, whilst A and C do.
       // Creating a placeholder job for B simplifies getNextJob(),
@@ -98,7 +98,12 @@ const multiRun = async (
   if (!parallel) {
     await runSerially(allJobs, { ignoreErrors });
   } else {
-    await runInParallel(allJobs, { ignoreErrors, parallelLogs, parallelLimit });
+    await runInParallel(allJobs, {
+      ignoreErrors,
+      parallelLogs,
+      parallelLimit,
+      useTree,
+    });
   }
 };
 
@@ -113,7 +118,7 @@ const runSerially = async (allJobs, { ignoreErrors }) => {
 
 const runInParallel = async (
   allJobs,
-  { ignoreErrors, parallelLogs, parallelLimit }
+  { ignoreErrors, parallelLogs, parallelLimit, useTree }
 ) => {
   const maxConcurrency = parallelLimit || Infinity;
   while (true) {
@@ -122,7 +127,7 @@ const runInParallel = async (
     if (getIdleJobs(allJobs).length === 0) break;
 
     // Get a job!
-    const job = getNextJob(allJobs);
+    const job = getNextJob(allJobs, { useTree });
     if (job) {
       if (getRunningJobs(allJobs).length >= maxConcurrency) {
         await delay(DELAY_MAIN_LOOP);
@@ -184,23 +189,25 @@ const _executeJob = async (job, { ignoreErrors }) => {
 };
 /* eslint-enable no-param-reassign */
 
-const getNextJob = jobs => {
+const getNextJob = (jobs, { useTree }) => {
   for (let i = 0; i < jobs.length; i++) {
     const candidateJob = jobs[i];
     if (candidateJob.status !== 'idle') continue;
     const { pkg: candidateJobPkg } = candidateJob;
     let isFound = true;
-    // Check whether a previous job that hasn't finished
-    // belongs to a direct dependency of the candidate (notice
-    // that we have _placeholder_ jobs, so we don't need to worry
-    // about packages that are indirect dependencies.
-    for (let k = 0; k < i; k++) {
-      const previousJob = jobs[k];
-      if (previousJob.status === 'done') continue;
-      const { pkg: previousJobPkg } = previousJob;
-      if (dependsOn(candidateJobPkg, previousJobPkg.name)) {
-        isFound = false;
-        break;
+    if (useTree) {
+      // Check whether a previous job that hasn't finished
+      // belongs to a direct dependency of the candidate (notice
+      // that we have _placeholder_ jobs, so we don't need to worry
+      // about packages that are indirect dependencies.
+      for (let k = 0; k < i; k++) {
+        const previousJob = jobs[k];
+        if (previousJob.status === 'done') continue;
+        const { pkg: previousJobPkg } = previousJob;
+        if (dependsOn(candidateJobPkg, previousJobPkg.name)) {
+          isFound = false;
+          break;
+        }
       }
     }
     if (isFound) return candidateJob;
