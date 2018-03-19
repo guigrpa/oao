@@ -25,7 +25,7 @@ const dependsOn = (pkg: OaoSpecs, possibleDep: string) => {
   return false;
 };
 
-const parseDep = dep => {
+const parseDep = (dep: string) => {
   // Extract package name from the dependency specs
   // (forget about the first character, for compatibility with scoped packages)
   const idx = dep.indexOf('@', 1);
