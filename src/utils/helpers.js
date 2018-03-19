@@ -25,4 +25,13 @@ const dependsOn = (pkg: OaoSpecs, possibleDep: string) => {
   return false;
 };
 
-export { shortenName, isObject, delay, dependsOn };
+const parseDep = dep => {
+  // Extract package name from the dependency specs
+  // (forget about the first character, for compatibility with scoped packages)
+  const idx = dep.indexOf('@', 1);
+  const name = idx >= 1 ? dep.slice(0, idx) : dep;
+  const version = idx >= 1 ? dep.slice(idx + 1) : '';
+  return { name, version };
+};
+
+export { shortenName, isObject, delay, dependsOn, parseDep };

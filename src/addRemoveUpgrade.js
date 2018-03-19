@@ -4,6 +4,8 @@ import { merge, set as timmSet, setIn } from 'timm';
 import { mainStory, chalk } from 'storyboard';
 import kebabCase from 'kebab-case';
 import { readAllSpecs, readOneSpec, ROOT_PACKAGE } from './utils/readSpecs';
+import { DEP_TYPES } from './utils/constants';
+import { parseDep } from './utils/helpers';
 import removeInternalLinks from './utils/removeInternalLinks';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
@@ -15,12 +17,6 @@ const PASS_THROUGH_OPTS = [
   'exact',
   'tilde',
   'ignoreEngines',
-];
-const DEP_TYPES = [
-  'dependencies',
-  'devDependencies',
-  'peerDependencies',
-  'optionalDependencies',
 ];
 
 type Operation = 'add' | 'remove' | 'upgrade';
@@ -216,15 +212,6 @@ const isLinked = (pkgNames, linkPattern, dep) => {
   if (pkgNames.indexOf(pkgName) >= 0) return true;
   if (linkPattern && new RegExp(linkPattern).test(pkgName)) return true;
   return false;
-};
-
-const parseDep = dep => {
-  // Extract package name from the dependency specs
-  // (forget about the first character, for compatibility with scoped packages)
-  const idx = dep.indexOf('@', 1);
-  const name = idx >= 1 ? dep.slice(0, idx) : dep;
-  const version = idx >= 1 ? dep.slice(idx + 1) : '';
-  return { name, version };
 };
 
 const getYarnCommand = (op, dependencies, options) => {

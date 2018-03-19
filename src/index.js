@@ -12,6 +12,7 @@ import status from './status';
 import bootstrap from './bootstrap';
 import clean from './clean';
 import addRemoveUpgrade from './addRemoveUpgrade';
+import bump from './bump';
 import outdated from './outdated';
 import prepublish from './prepublish';
 import publish from './publish';
@@ -164,6 +165,16 @@ createCommand(
     initConsole(options);
     return addRemoveUpgrade(subpackage, 'upgrade', deps, options);
   });
+
+createCommand(
+  'bump <packages...>',
+  'Upgrade one or several dependencies throughout the monorepo (e.g. react@next, timm)'
+).action(async (deps, cmd) => {
+  const options = processOptions(cmd.opts());
+  initConsole(options);
+  await bump(deps, options);
+  return bootstrap(options);
+});
 
 createCommand('outdated', 'Check for outdated dependencies').action(cmd => {
   const options = processOptions(cmd.opts());

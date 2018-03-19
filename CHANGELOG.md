@@ -1,3 +1,5 @@
+* Add `oao bump` (upgrades a dependency across all sub-packages) (#28).
+
 ## 1.5.0-beta.0 (2018-3-14)
 
 * Add `--parallel-limit <#processes>` to `oao all` and `oao run-script`, to limit concurrency when running things in parallel (#69).
