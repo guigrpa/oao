@@ -162,6 +162,15 @@ $ oao upgrade subpackage-2 react subpackage-1@3.1.2
 $ oao upgrade subpackage-3
 ```
 
+### `oao bump <deps...>`
+
+Upgrade one or several dependencies to either their latest version or to a specific version range. In case of internal dependencies, if no version range is given the current version will be used. It automatically runs `oao bootstrap` after upgrading the `package.json` files as needed. Examples:
+
+```sh
+$ oao bump moment
+$ oao bump react@^16 react-dom@^16
+$ oao bump subpackage-2
+```
 
 ### `oao outdated`
 

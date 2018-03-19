@@ -44,16 +44,17 @@ const run = async (deps: Array<string>, opts: Options) => {
   // Update all package.json files with this version
   pkgNames.forEach(pkgName => {
     const { specPath, specs: prevSpecs } = allSpecs[pkgName];
-    deps.forEach(depName => {
-      let nextSpecs = prevSpecs;
+    let nextSpecs = prevSpecs;
+    deps.forEach(dep => {
+      const { name: depName } = parseDep(dep);
       DEP_TYPES.forEach(type => {
         const depsOfType = nextSpecs[type] || {};
         if (depsOfType[depName] != null) {
           nextSpecs = setIn(nextSpecs, [type, depName], versions[depName]);
         }
       });
-      if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
     });
+    if (nextSpecs !== prevSpecs) writeSpecs(specPath, nextSpecs);
   });
 };
 
