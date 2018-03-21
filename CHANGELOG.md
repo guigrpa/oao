@@ -1,3 +1,5 @@
+## 1.5.1 (2018-3-21)
+
 * Fix bug in `oao all` and `oao run-script` which caused incorrect serial execution (#72).
 
 ## 1.5.0 (2018-3-19)
