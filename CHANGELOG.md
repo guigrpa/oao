@@ -1,3 +1,5 @@
+* Fix bug in `oao all` and `oao run-script` which caused incorrect serial execution (#72).
+
 ## 1.5.0 (2018-3-19)
 
 * Add `oao bump` (upgrades a dependency across all sub-packages) (#28).

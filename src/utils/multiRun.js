@@ -112,7 +112,9 @@ const multiRun = async (
 // ------------------------------------------------
 const runSerially = async (allJobs, { ignoreErrors }) => {
   for (let i = 0; i < allJobs.length; i++) {
-    await executeJob(allJobs[i], { ignoreErrors });
+    const job = allJobs[i];
+    executeJob(job, { ignoreErrors });
+    await job.promise;
   }
 };
 
