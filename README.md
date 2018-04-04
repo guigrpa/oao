@@ -37,10 +37,10 @@ If *yarn* is not installed in your system, please [install it first](https://yar
 ]
 ```
 
-Add **oao** to your development dependencies:
+Add **oao** to your development dependencies (use the `-W` flag to avoid Yarn's warning when installing dependencies on the monorepo root):
 
 ```sh
-$ yarn add oao --dev
+$ yarn add oao --dev -W
 ```
 
 
