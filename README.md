@@ -33,7 +33,7 @@ If *yarn* is not installed in your system, please [install it first](https://yar
 
 ```
 "workspaces": [
-  'packages/*'
+  "packages/*"
 ]
 ```
 
