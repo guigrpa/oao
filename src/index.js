@@ -2,7 +2,7 @@
 
 /* eslint-disable max-len, global-require, import/no-dynamic-require, no-console */
 
-import 'babel-polyfill';
+import '@babel/polyfill';
 import path from 'path';
 import { addDefaults, merge } from 'timm';
 import program from 'commander';
