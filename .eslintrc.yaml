@@ -1,5 +1,7 @@
 parser: babel-eslint
-extends: airbnb
+extends:
+  - airbnb
+  - prettier
 plugins:
   - flowtype
 rules:
