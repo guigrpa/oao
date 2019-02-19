@@ -40,9 +40,11 @@ const gitStatus = async () => {
   try {
     lastTag = await gitLastTag();
     console.log(
-      `    - Last tag: ${lastTag != null
-        ? chalk.cyan.bold(lastTag)
-        : chalk.yellow.bold('NONE YET')}`
+      `    - Last tag: ${
+        lastTag != null
+          ? chalk.cyan.bold(lastTag)
+          : chalk.yellow.bold('NONE YET')
+      }`
     );
   } catch (err) {
     /* ignore */
@@ -50,9 +52,9 @@ const gitStatus = async () => {
   try {
     const uncommitted = await gitUncommittedChanges();
     console.log(
-      `    - Uncommitted changes: ${uncommitted !== ''
-        ? chalk.yellow.bold('YES')
-        : chalk.cyan.bold('no')}`
+      `    - Uncommitted changes: ${
+        uncommitted !== '' ? chalk.yellow.bold('YES') : chalk.cyan.bold('no')
+      }`
     );
   } catch (err) {
     /* ignore */
@@ -60,9 +62,9 @@ const gitStatus = async () => {
   try {
     const unpulled = await gitUnpulledChanges();
     console.log(
-      `    - Unpulled changes: ${unpulled !== '0'
-        ? chalk.yellow.bold('YES')
-        : chalk.cyan.bold('no')}`
+      `    - Unpulled changes: ${
+        unpulled !== '0' ? chalk.yellow.bold('YES') : chalk.cyan.bold('no')
+      }`
     );
   } catch (err) {
     console.log(

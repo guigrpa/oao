@@ -37,11 +37,12 @@ const gitUncommittedChanges = async (): Promise<string> => {
 
 // Ripped off from: https://github.com/sindresorhus/np/blob/master/lib/git.js
 const gitUnpulledChanges = async (): Promise<string> => {
-  const {
-    stdout,
-  } = await exec('git rev-list --count --left-only @{u}...HEAD', {
-    logLevel: 'trace',
-  });
+  const { stdout } = await exec(
+    'git rev-list --count --left-only @{u}...HEAD',
+    {
+      logLevel: 'trace',
+    }
+  );
   return stdout.trim();
 };
 
@@ -50,11 +51,12 @@ const gitDiffSinceIn = async (
   inPath: string
 ): Promise<string> => {
   if (sinceTag == null) return 'CHANGED';
-  const {
-    stdout,
-  } = await exec(`git diff --name-only ${sinceTag} -- ${inPath}`, {
-    logLevel: 'trace',
-  });
+  const { stdout } = await exec(
+    `git diff --name-only ${sinceTag} -- ${inPath}`,
+    {
+      logLevel: 'trace',
+    }
+  );
   return stdout.trim();
 };
 
