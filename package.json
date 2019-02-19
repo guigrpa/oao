@@ -45,7 +45,7 @@
     "commander": "2.19.0",
     "execa": "0.6.3",
     "globby": "6.1.0",
-    "inquirer": "3.2.1",
+    "inquirer": "^6.2.2",
     "kebab-case": "1.0.0",
     "minimatch": "^3.0.4",
     "rimraf": "2.6.3",
