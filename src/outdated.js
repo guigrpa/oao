@@ -31,7 +31,7 @@ const run = async (opts: Options) => {
     try {
       const tmp = removeInternalLinks(prevSpecs, pkgNames, linkPattern);
       const { nextSpecs } = tmp;
-      allRemovedPackages = tmp.allRemovedPackages;
+      ({ allRemovedPackages } = tmp);
       if (nextSpecs !== prevSpecs) {
         writeSpecs(specPath, nextSpecs);
         fModified = true;

@@ -223,7 +223,7 @@ describe('PUBLISH command', () => {
     try {
       fs.writeFileSync = jest.fn();
       await publish(merge(NOMINAL_OPTIONS, { changelog: true }));
-      calls = fs.writeFileSync.mock.calls;
+      ({ calls } = fs.writeFileSync.mock);
     } finally {
       fs.writeFileSync = writeFileSync;
     }
