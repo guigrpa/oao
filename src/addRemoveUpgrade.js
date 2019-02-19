@@ -30,6 +30,7 @@ type Options = {
   exact?: boolean,
   tilde?: boolean,
   ignoreEngines?: boolean,
+  workspaces?: any,
 };
 
 const run = async (

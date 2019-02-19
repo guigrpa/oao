@@ -10,7 +10,7 @@ const shortenName = (name: string, maxLen: number): string => {
 
 const isObject = (o: any) => !!o && o.constructor === Object;
 
-const delay = (ms: number) =>
+const delay = (ms: number): Promise<*> =>
   new Promise(resolve => {
     setTimeout(resolve, ms);
   });
