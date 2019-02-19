@@ -48,9 +48,7 @@ const validatePkgName = (pkgPath: string, name: string): void => {
   if (pkgPath === '.') return;
   const segments = pkgPath.split('/');
   if (name[0] !== '@' && name !== segments[segments.length - 1]) {
-    const errMsg = `Package name (${name}) does not match directory name ${
-      pkgPath
-    }`;
+    const errMsg = `Package name (${name}) does not match directory name ${pkgPath}`;
     mainStory.error(errMsg);
     const err = new Error('INVALID_DIR_NAME');
     // $FlowFixMe (piggyback on exception)
