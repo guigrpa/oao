@@ -1,3 +1,5 @@
+## 1.6.0 (2019-2-20)
+
 - Add `oao remove-all` (removes a dependency throughout the monorepo) (#80).
 
 ## 1.5.1 (2018-3-21)
