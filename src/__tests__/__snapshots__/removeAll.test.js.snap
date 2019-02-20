@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`REMOVE-ALL command modifies package.json if it depends on dep 1`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-b",
+  "version": "0.1.0",
+}
+`;
+
+exports[`REMOVE-ALL command modifies package.json if it depends on dep 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "devDependencies": Object {
+    "ext-two": "*",
+    "oao-b": "*",
+    "xxl": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "peerDependencies": Object {
+    "ext-two": "*",
+    "oao-b": "*",
+  },
+  "version": "0.1.0",
+}
+`;
+
+exports[`REMOVE-ALL command removes a dep everywhere it may appear 1`] = `
+Object {
+  "dependencies": Object {
+    "ext-one": "*",
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "devDependencies": Object {
+    "oao-b": "*",
+    "xxl": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "peerDependencies": Object {
+    "oao-b": "*",
+  },
+  "version": "0.1.0",
+}
+`;
+
+exports[`REMOVE-ALL command removes multiple deps 1`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-b",
+  "version": "0.1.0",
+}
+`;
+
+exports[`REMOVE-ALL command removes multiple deps 2`] = `
+Object {
+  "dependencies": Object {
+    "oao": "*",
+    "timm": "1.x",
+  },
+  "devDependencies": Object {
+    "oao-b": "*",
+    "xxl": "1.x",
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "oao-c",
+  "peerDependencies": Object {
+    "oao-b": "*",
+  },
+  "version": "0.1.0",
+}
+`;

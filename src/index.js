@@ -12,6 +12,7 @@ import status from './status';
 import bootstrap from './bootstrap';
 import clean from './clean';
 import addRemoveUpgrade from './addRemoveUpgrade';
+import removeAll from './removeAll';
 import bump from './bump';
 import outdated from './outdated';
 import prepublish from './prepublish';
@@ -153,6 +154,16 @@ createCommand(
   const options = processOptions(cmd.opts());
   initConsole(options);
   return addRemoveUpgrade(subpackage, 'remove', deps, options);
+});
+
+createCommand(
+  'remove-all <packages...>',
+  'Remove one or several dependencies throughout the monorepo'
+).action(async (deps, cmd) => {
+  const options = processOptions(cmd.opts());
+  initConsole(options);
+  await removeAll(deps, options);
+  return bootstrap(options);
 });
 
 createCommand(
