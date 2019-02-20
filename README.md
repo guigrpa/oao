@@ -4,32 +4,29 @@
 
 A Yarn-based, opinionated monorepo management tool.
 
-
 ## Why? :sparkles:
 
-* Works with **yarn**, hence (relatively) **fast!**.
-* **Simple to use** and extend (hope so!).
-* Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, updating the changelog, etc.
-* Supports **yarn workspaces**, optimising the monorepo dependency tree as a whole and simplifying bootstrap as well as dependency add/upgrade/remove.
-* **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
-* Runs a command or `package.json` script on all sub-packages, **serially or in parallel**, optionally following the inverse dependency tree.
-* Provides an easy-to-read, **detailed status overview**.
-* Support for **non-monorepo publishing**: benefit from *oao*'s pre-publish checks, tagging, version selection, changelog updates, etc. also in your single-package, non-monorepos.
-
+- Works with **yarn**, hence (relatively) **fast!**.
+- **Simple to use** and extend (hope so!).
+- Provides a number of monorepo **workflow enhancers**: installing all dependencies, adding/removing/upgrading sub-package dependencies, validating version numbers, determining updated sub-packages, publishing everything at once, updating the changelog, etc.
+- Supports **yarn workspaces**, optimising the monorepo dependency tree as a whole and simplifying bootstrap as well as dependency add/upgrade/remove.
+- **Prevents some typical publish errors** (using a non-master branch, uncommitted/non-pulled changes).
+- Runs a command or `package.json` script on all sub-packages, **serially or in parallel**, optionally following the inverse dependency tree.
+- Provides an easy-to-read, **detailed status overview**.
+- Support for **non-monorepo publishing**: benefit from _oao_'s pre-publish checks, tagging, version selection, changelog updates, etc. also in your single-package, non-monorepos.
 
 ## Assumptions :thought_balloon:
 
-As stated in the tagline, *oao* is somewhat opinionated and makes the following assumptions on your monorepo:
+As stated in the tagline, _oao_ is somewhat opinionated and makes the following assumptions on your monorepo:
 
-* It uses a **synchronized versioning scheme**. In other words: a *master version* is configured in the root-level `package.json`, and sub-packages will be in sync with that version (whenever they are updated). Some sub-packages can be *left behind* version-wise if they're not updated, but they'll jump to the master version when they get some love.
-* You use **git** for version control and have already initialised your repo.
-* **Git tags** are used for releases (and *only* for releases), and follow semver: `v0.1.3`, `v2.3.5`, `v3.1.0-rc.1` and so on.
-* Some sub-packages may be public, others private (flagged `"private": true` in `package.json`). OK, *no assumption here*: rest assured that no private sub-packages will be published by mistake.
-
+- It uses a **synchronized versioning scheme**. In other words: a _master version_ is configured in the root-level `package.json`, and sub-packages will be in sync with that version (whenever they are updated). Some sub-packages can be _left behind_ version-wise if they're not updated, but they'll jump to the master version when they get some love.
+- You use **git** for version control and have already initialised your repo.
+- **Git tags** are used for releases (and _only_ for releases), and follow semver: `v0.1.3`, `v2.3.5`, `v3.1.0-rc.1` and so on.
+- Some sub-packages may be public, others private (flagged `"private": true` in `package.json`). OK, _no assumption here_: rest assured that no private sub-packages will be published by mistake.
 
 ## Installation
 
-If *yarn* is not installed in your system, please [install it first](https://yarnpkg.com/en/docs/install). If you want to use [**yarn workspaces**](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/) (available since yarn 0.28), enable them by running `yarn config set workspaces-experimental true` and configure the following in your monorepo package.json (replace the glob patterns for your subpackages/workspaces as needed):
+If _yarn_ is not installed in your system, please [install it first](https://yarnpkg.com/en/docs/install). If you want to use [**yarn workspaces**](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/) (available since yarn 0.28), enable them by running `yarn config set workspaces-experimental true` and configure the following in your monorepo package.json (replace the glob patterns for your subpackages/workspaces as needed):
 
 ```
 "workspaces": [
@@ -42,7 +39,6 @@ Add **oao** to your development dependencies (use the `-W` flag to avoid Yarn's 
 ```sh
 $ yarn add oao --dev -W
 ```
-
 
 ## Usage
 
@@ -99,7 +95,6 @@ Options:
   -h, --help                                                output usage information
 ```
 
-
 ## Main commands
 
 In recent versions of npm, remember that you can run oao commands conveniently with the `npx` tool:
@@ -112,13 +107,11 @@ $ npx oao publish
 
 This uses the local oao package inside your monorepo.
 
-
 ### `oao status`
 
 Provides lots of information on the git repo (current branch, last tag, uncommitted/unpulled changes) and subpackage status (version, private flag, changes since last tag, dependencies).
 
 ![oao status](https://raw.githubusercontent.com/guigrpa/oao/master/docs/status.png)
-
 
 ### `oao bootstrap`
 
@@ -126,11 +119,9 @@ Installs all sub-package dependencies using **yarn**. External dependencies are 
 
 Development-only dependencies can be skipped by enabling the `--production` option, or setting the `NODE_ENV` environment variable to `production`. Other flags that are passed through to `yarn install` include `--frozen-lockfile`, `--pure-lockfile` and `--no-lockfile`.
 
-
 ### `oao clean`
 
 Removes `node_modules` directories from all sub-packages, as well as from the root package.
-
 
 ### `oao add <sub-package> <deps...>`
 
@@ -141,7 +132,6 @@ $ oao add subpackage-1 jest --dev
 $ oao add subpackage-2 react subpackage-1 --exact
 ```
 
-
 ### `oao remove <sub-package> <deps...>`
 
 Removes one or several dependencies from a sub-package. Examples:
@@ -151,6 +141,14 @@ $ oao remove subpackage-1 jest
 $ oao remove subpackage-2 react subpackage-1
 ```
 
+### `oao remove-all <deps...>`
+
+Remove one or deveral dependencies from the monorepo (root and subpackages). It automatically runs `oao bootstrap` after upgrading the `package.json` files as needed. Examples:
+
+```sh
+$ oao remove-all leftpad
+$ oao remove-all leftpad rightpad centerpad
+```
 
 ### `oao upgrade <sub-package> [deps...]`
 
@@ -176,31 +174,29 @@ $ oao bump subpackage-2
 
 Runs `yarn outdated` on all sub-packages, as well as the root package.
 
-
 ### `oao prepublish`
 
 Carries out a number of chores that are needed before publishing:
 
-* Checks that all version numbers are valid and <= the master version.
-* Copies `<root>/README.md` to the *main* sub-package (the one having the same name as the monorepo).
-* Copies `<root>/README-LINK.md` to all other sub-packages.
-* Copies several fields from the root `package.json` to all other `package.json` files: `description`, `keywords`, `author`, `license`, `homepage`, `bugs`, `repository`.
-
+- Checks that all version numbers are valid and <= the master version.
+- Copies `<root>/README.md` to the _main_ sub-package (the one having the same name as the monorepo).
+- Copies `<root>/README-LINK.md` to all other sub-packages.
+- Copies several fields from the root `package.json` to all other `package.json` files: `description`, `keywords`, `author`, `license`, `homepage`, `bugs`, `repository`.
 
 ### `oao publish`
 
 Carries out a number of steps:
 
-* Asks the user for confirmation that it has *built* all sub-packages for publishing (using something like `yarn build`).
-* Performs a number of checks:
-    - The current branch should be `master`.
-    - No uncommitted changes should remain in the working directory.
-    - No unpulled changes should remain.
-* Determines which sub-packages need publishing (those which have changed with respect to the last tagged version).
-* Asks the user for an incremented master version (major, minor, patch or pre-release major), that will be used for the root package as well as all updated sub-packages.
-* Asks the user for final confirmation before publishing.
-* Updates versions in `package.json` files, commits the updates, adds a tag and pushes all the changes.
-* Publishes updated sub-packages.
+- Asks the user for confirmation that it has _built_ all sub-packages for publishing (using something like `yarn build`).
+- Performs a number of checks:
+  - The current branch should be `master`.
+  - No uncommitted changes should remain in the working directory.
+  - No unpulled changes should remain.
+- Determines which sub-packages need publishing (those which have changed with respect to the last tagged version).
+- Asks the user for an incremented master version (major, minor, patch or pre-release major), that will be used for the root package as well as all updated sub-packages.
+- Asks the user for final confirmation before publishing.
+- Updates versions in `package.json` files, commits the updates, adds a tag and pushes all the changes.
+- Publishes updated sub-packages.
 
 There are lots of custom options for `oao publish`. Chances are, you can disable each one of the previous steps by means of one of those options. Check them all with `oao publish --help`.
 
@@ -208,7 +204,7 @@ There are lots of custom options for `oao publish`. Chances are, you can disable
 
 ### `oao all <command>`
 
-Executes the specified command on all sub-packages (private ones included), with the sub-package's root as *current working directory*. Examples:
+Executes the specified command on all sub-packages (private ones included), with the sub-package's root as _current working directory_. Examples:
 
 ```sh
 $ oao all ls
@@ -217,7 +213,7 @@ $ oao all "yarn run compile"
 $ oao all --tree "yarn run compile"
 ```
 
-By default, `oao all` runs sequentially. Sometimes you must run commands in parallel, for example when you want to compile all sub-packages with a *watch* option:
+By default, `oao all` runs sequentially. Sometimes you must run commands in parallel, for example when you want to compile all sub-packages with a _watch_ option:
 
 ```sh
 $ oao all "yarn run compileWatch" --parallel
@@ -245,18 +241,15 @@ You can also run all scripts matching a given glob pattern: `oao run-script test
 
 ## Credits :clap:
 
-* [lerna](https://github.com/lerna/lerna): for general inspiration.
-* [yarn](https://yarnpkg.com): for a fast, secure and reliable way to do dependency management.
-* [np](https://github.com/sindresorhus/np): for the prepublish checks.
+- [lerna](https://github.com/lerna/lerna): for general inspiration.
+- [yarn](https://yarnpkg.com): for a fast, secure and reliable way to do dependency management.
+- [np](https://github.com/sindresorhus/np): for the prepublish checks.
 
+## Why _oao_? :sunglasses:
 
-## Why *oao*? :sunglasses:
-
-Basically, many other names I could come up with were either too boring (*mono-repo*), or already taken. *oao* stands for *one and only* :grimacing:, which is a reference to the individual nature of monorepos, as well as a beautiful song by Adele. Yes, I agree it's far-fetched, but extremely short and convenient!
-
+Basically, many other names I could come up with were either too boring (_mono-repo_), or already taken. _oao_ stands for _one and only_ :grimacing:, which is a reference to the individual nature of monorepos, as well as a beautiful song by Adele. Yes, I agree it's far-fetched, but extremely short and convenient!
 
 ## [Changelog](https://github.com/guigrpa/oao/blob/master/CHANGELOG.md) :scroll:
-
 
 ## License (MIT) :books:
 
