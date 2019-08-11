@@ -6,6 +6,7 @@ plugins:
   - flowtype
 rules:
   eqeqeq: ['error', 'allow-null']
+  prefer-object-spread: off
   no-unused-expressions:
     - error
     - allowShortCircuit: true
