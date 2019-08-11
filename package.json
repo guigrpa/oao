@@ -55,7 +55,7 @@
     "storyboard": "3.1.4",
     "storyboard-listener-console": "3.1.4",
     "storyboard-listener-console-parallel": "3.1.4",
-    "timm": "1.6.1"
+    "timm": "^1.6.2"
   },
   "devDependencies": {
     "@babel/cli": "7.2.3",
