@@ -1,3 +1,5 @@
+## 1.6.1 (2019-8-11)
+
 - Bump dependencies. Remove @babel/polyfill since it's not needed in Node 6+.
 
 ## 1.6.0 (2019-2-20)
