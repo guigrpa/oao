@@ -41,7 +41,6 @@
   },
   "homepage": "https://github.com/guigrpa/oao#readme",
   "dependencies": {
-    "@babel/polyfill": "7.2.5",
     "commander": "2.19.0",
     "execa": "0.6.3",
     "globby": "6.1.0",
@@ -58,11 +57,10 @@
     "timm": "^1.6.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.2.3",
-    "@babel/core": "7.3.3",
-    "@babel/preset-env": "7.3.1",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "@babel/preset-flow": "7.0.0",
-    "@babel/preset-react": "7.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.1.0",
