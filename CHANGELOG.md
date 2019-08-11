@@ -1,3 +1,5 @@
+- Bump dependencies. Remove @babel/polyfill since it's not needed in Node 6+.
+
 ## 1.6.0 (2019-2-20)
 
 - Add `oao remove-all` (removes a dependency throughout the monorepo) (#80).
