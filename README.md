@@ -77,22 +77,25 @@ Publish updated sub-packages
 
 Options:
 
-  -s --src <glob>                                           glob pattern for sub-package paths [packages/*]
-  -i --ignore-src <glob>                                    glob pattern for sub-package paths that should be ignored
-  -l --link <regex>                                         regex pattern for dependencies that should be linked, not installed
-  --single                                                  no subpackages, just the root one
-  --no-master                                               allow publishing from a non-master branch
-  --no-check-uncommitted                                    skip uncommitted check
-  --no-check-unpulled                                       skip unpulled check
-  --no-confirm                                              do not ask for confirmation before publishing
-  --no-git-commit                                           skip the commit-tag-push step before publishing
-  --no-npm-publish                                          skip the npm publish step
-  --new-version <version>                                   use this version for publishing, instead of asking
-  --increment-version-by <major|minor|patch|rc|beta|alpha>  increment version by this, instead of asking
-  --publish-tag <tag>                                       publish with a custom tag (instead of `latest`)
-  --changelog-path <path>                                   changelog path [CHANGELOG.md]
-  --no-changelog                                            skip changelog updates
-  -h, --help                                                output usage information
+-s --src <glob>                                           glob pattern for sub-package paths [packages/*] (default: "packages/*")
+-i --ignore-src <glob>                                    glob pattern for sub-package paths that should be ignored
+-l --link <regex>                                         regex pattern for dependencies that should be linked, not installed
+--single                                                  no subpackages, just the root one
+--relative-time                                           shorten log dates
+--no-master                                               allow publishing from a non-master branch
+--no-check-uncommitted                                    skip uncommitted check
+--no-check-unpulled                                       skip unpulled check
+--no-checks                                               skip all pre-publish checks
+--no-bump                                                 do not increment version numbers (also disables git commit)
+--no-confirm                                              do not ask for confirmation before publishing
+--no-git-commit                                           skip the commit-tag-push step before publishing
+--no-npm-publish                                          skip the npm publish step
+--new-version <version>                                   use this version for publishing, instead of asking
+--increment-version-by <major|minor|patch|rc|beta|alpha>  increment version by this, instead of asking
+--publish-tag <tag>                                       publish with a custom tag (instead of `latest`)
+--changelog-path <path>                                   changelog path [CHANGELOG.md] (default: "CHANGELOG.md")
+--no-changelog                                            skip changelog updates
+-h, --help                                                output usage information
 ```
 
 ## Main commands
