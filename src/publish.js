@@ -65,14 +65,12 @@ const run = async ({
 }: Options) => {
   const allSpecs = await readAllSpecs(src, ignoreSrc);
 
-  // Confirm that we have run build
+  // Confirm that we have run build and run prepublish checks
   if (confirm && !(await confirmBuild())) return;
-  // Prepublish checks
-  if (checks) {
-    await prepublishChecks({ master, checkUncommitted, checkUnpulled });
-  }
+  await prepublishChecks({ checks, master, checkUncommitted, checkUnpulled });
 
   // Get last tag and find packages requiring updates
+  // (modified since the last tag)
   const lastTag = await gitLastTag();
   const dirty = await findPackagesToUpdate(allSpecs, lastTag, single);
   if (!dirty.length) {
@@ -80,7 +78,7 @@ const run = async ({
     return;
   }
 
-  // Determine a suitable version number
+  // Determine a suitable new version number
   const masterVersion =
     _masterVersion || (await getMasterVersion(allSpecs, lastTag));
   if (masterVersion == null) return;
@@ -127,10 +125,12 @@ const run = async ({
 // Helpers
 // ------------------------------------------------
 const prepublishChecks = async ({
+  checks,
   master,
   checkUncommitted,
   checkUnpulled,
 }) => {
+  if (!checks) return;
   if (DEBUG_SKIP_CHECKS) {
     mainStory.warn('DEBUG_SKIP_CHECKS should be disabled!!');
   }
