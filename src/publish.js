@@ -66,17 +66,7 @@ const run = async ({
   const allSpecs = await readAllSpecs(src, ignoreSrc);
 
   // Confirm that we have run build
-  if (confirm) {
-    const { confirmBuild } = await inquirer.prompt([
-      {
-        name: 'confirmBuild',
-        type: 'confirm',
-        message: 'Have you built all your packages for production?',
-        default: false,
-      },
-    ]);
-    if (!confirmBuild) return;
-  }
+  if (confirm && !(await confirmBuild())) return;
   // Prepublish checks
   if (checks) {
     await prepublishChecks({ master, checkUncommitted, checkUnpulled });
@@ -94,38 +84,14 @@ const run = async ({
   const masterVersion =
     _masterVersion || (await getMasterVersion(allSpecs, lastTag));
   if (masterVersion == null) return;
-  if (incrementVersionBy) {
-    if (INCREMENTS.indexOf(incrementVersionBy) < 0) {
-      mainStory.error(
-        `Value specified for --increment-version-by: ${chalk.bold(
-          incrementVersionBy
-        )} is invalid.`
-      );
-      mainStory.error(
-        `It should be one of (${INCREMENTS.join(', ')}), or not specified.`
-      );
-      if (!DEBUG_SKIP_CHECKS) throw new Error('INVALID_INCREMENT_BY_VALUE');
-    }
-  }
+  if (incrementVersionBy) validateVersionIncrement(incrementVersionBy);
   const nextVersion =
     newVersion ||
     calcNextVersion(masterVersion, incrementVersionBy) ||
     (await promptNextVersion(masterVersion));
 
   // Confirm before proceeding
-  if (confirm) {
-    const { confirmPublish } = await inquirer.prompt([
-      {
-        name: 'confirmPublish',
-        type: 'confirm',
-        message:
-          `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
-          `v${chalk.cyan.bold(nextVersion)})?`,
-        default: false,
-      },
-    ]);
-    if (!confirmPublish) return;
-  }
+  if (confirm && !(await confirmPublish({ dirty, nextVersion }))) return;
 
   // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
   const dirtyPlusRoot = single ? dirty : dirty.concat(ROOT_PACKAGE);
@@ -211,6 +177,46 @@ const prepublishChecks = async ({
     mainStory.warn('Publishing with unpulled changes');
   } else {
     mainStory.info('Remote history matches local history');
+  }
+};
+
+const confirmBuild = async () => {
+  const { confirmBuild: out } = await inquirer.prompt([
+    {
+      name: 'confirmBuild',
+      type: 'confirm',
+      message: 'Have you built all your packages for production?',
+      default: false,
+    },
+  ]);
+  return out;
+};
+
+const confirmPublish = async ({ dirty, nextVersion }) => {
+  const { confirmPublish: out } = await inquirer.prompt([
+    {
+      name: 'confirmPublish',
+      type: 'confirm',
+      message:
+        `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
+        `v${chalk.cyan.bold(nextVersion)})?`,
+      default: false,
+    },
+  ]);
+  return out;
+};
+
+const validateVersionIncrement = incrementVersionBy => {
+  if (INCREMENTS.indexOf(incrementVersionBy) < 0) {
+    mainStory.error(
+      `Value specified for --increment-version-by: ${chalk.bold(
+        incrementVersionBy
+      )} is invalid.`
+    );
+    mainStory.error(
+      `It should be one of (${INCREMENTS.join(', ')}), or not specified.`
+    );
+    if (!DEBUG_SKIP_CHECKS) throw new Error('INVALID_INCREMENT_BY_VALUE');
   }
 };
 
