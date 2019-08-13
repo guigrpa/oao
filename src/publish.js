@@ -32,6 +32,7 @@ type Options = {
   checkUnpulled: boolean,
   checks: boolean,
   confirm: boolean,
+  bump: boolean,
   gitCommit: boolean,
   newVersion?: string,
   npmPublish: boolean,
