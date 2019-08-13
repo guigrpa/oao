@@ -1,3 +1,5 @@
+## 1.7.0 (2019-8-13)
+
 - Add `--no-bump` for `oao publish`, useful in CI/CD environments (#83).
 
 ## 1.6.1 (2019-8-11)
