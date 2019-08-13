@@ -14,6 +14,7 @@ const NOMINAL_OPTIONS = {
   checkUncommitted: true,
   checkUnpulled: true,
   confirm: false,
+  bump: true,
   checks: true,
   gitCommit: true,
   npmPublish: true,
@@ -234,6 +235,17 @@ describe('PUBLISH command', () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { src: [], single: true }));
     expect(exec).toHaveBeenCalledTimes(1);
+    exec.mock.calls.forEach(([cmd]) => {
+      expect(cmd).toEqual('npm publish');
+    });
+  });
+
+  it('does not bump versions when using --no-bump', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+    const { exec } = require('../utils/shell');
+    await publish(merge(NOMINAL_OPTIONS, { bump: false }));
+    expect(writeSpecs).not.toHaveBeenCalled();
+    expect(git.gitPushWithTags).not.toHaveBeenCalled();
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish');
     });

@@ -212,6 +212,10 @@ createCommand('publish', 'Publish updated sub-packages')
   .option('--no-check-uncommitted', 'skip uncommitted check')
   .option('--no-check-unpulled', 'skip unpulled check')
   .option('--no-checks', 'skip all pre-publish checks')
+  .option(
+    '--no-bump',
+    'do not increment version numbers (also disables git commit)'
+  )
   .option('--no-confirm', 'do not ask for confirmation before publishing')
   .option('--no-git-commit', 'skip the commit-tag-push step before publishing')
   .option('--no-npm-publish', 'skip the npm publish step')

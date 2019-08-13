@@ -52,6 +52,7 @@ const run = async ({
   checkUnpulled,
   checks,
   confirm,
+  bump,
   gitCommit,
   newVersion,
   npmPublish,
@@ -78,34 +79,37 @@ const run = async ({
     return;
   }
 
-  // Determine a suitable new version number
-  const masterVersion =
-    _masterVersion || (await getMasterVersion(allSpecs, lastTag));
-  if (masterVersion == null) return;
-  if (incrementVersionBy) validateVersionIncrement(incrementVersionBy);
-  const nextVersion =
-    newVersion ||
-    calcNextVersion(masterVersion, incrementVersionBy) ||
-    (await promptNextVersion(masterVersion));
+  if (bump) {
+    // Determine a suitable new version number
+    const masterVersion =
+      _masterVersion || (await getMasterVersion(allSpecs, lastTag));
+    if (masterVersion == null) return;
+    if (incrementVersionBy) validateVersionIncrement(incrementVersionBy);
+    const nextVersion =
+      newVersion ||
+      calcNextVersion(masterVersion, incrementVersionBy) ||
+      (await promptNextVersion(masterVersion));
 
-  // Confirm before proceeding
-  if (confirm && !(await confirmPublish({ dirty, nextVersion }))) return;
+    // Confirm before proceeding
+    if (confirm && !(await confirmPublish({ dirty, nextVersion }))) return;
 
-  // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
-  const dirtyPlusRoot = single ? dirty : dirty.concat(ROOT_PACKAGE);
-  for (let i = 0; i < dirtyPlusRoot.length; i++) {
-    const pkgName = dirtyPlusRoot[i];
-    const { specPath, specs } = allSpecs[pkgName];
-    specs.version = nextVersion;
-    writeSpecs(specPath, specs);
-  }
-  if (changelog) addVersionLine({ changelogPath, version: nextVersion, _date });
+    // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
+    const dirtyPlusRoot = single ? dirty : dirty.concat(ROOT_PACKAGE);
+    for (let i = 0; i < dirtyPlusRoot.length; i++) {
+      const pkgName = dirtyPlusRoot[i];
+      const { specPath, specs } = allSpecs[pkgName];
+      specs.version = nextVersion;
+      writeSpecs(specPath, specs);
+    }
+    if (changelog)
+      addVersionLine({ changelogPath, version: nextVersion, _date });
 
-  // Commit, tag and push
-  if (gitCommit) {
-    await gitCommitChanges(`v${nextVersion}`);
-    await gitAddTag(`v${nextVersion}`);
-    await gitPushWithTags();
+    // Commit, tag and push
+    if (gitCommit) {
+      await gitCommitChanges(`v${nextVersion}`);
+      await gitAddTag(`v${nextVersion}`);
+      await gitPushWithTags();
+    }
   }
 
   // Publish
