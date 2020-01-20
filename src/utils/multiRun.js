@@ -2,6 +2,7 @@
 
 /* eslint-disable no-constant-condition */
 
+import { cpus } from 'os';
 import { removeAllListeners, addListener } from 'storyboard';
 import parallelConsoleListener from 'storyboard-listener-console-parallel';
 import type { OaoSpecs } from './types';
@@ -122,7 +123,7 @@ const runInParallel = async (
   allJobs,
   { ignoreErrors, parallelLogs, parallelLimit, useTree }
 ) => {
-  const maxConcurrency = parallelLimit || Infinity;
+  const maxConcurrency = parallelLimit || Math.max(cpus().length - 1, 1);
   while (true) {
     // No pending idle jobs? We end the loop; Node will wait for them
     // to finish
