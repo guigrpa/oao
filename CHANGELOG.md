@@ -1,3 +1,5 @@
+## 1.8.0 (2020-1-28)
+
 - Limit `parallelLimit` by number of cpus by default (SimenB, #92).
 
 ## 1.7.0 (2019-8-13)
