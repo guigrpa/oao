@@ -82,7 +82,7 @@ Options:
 -l --link <regex>                                         regex pattern for dependencies that should be linked, not installed
 --single                                                  no subpackages, just the root one
 --relative-time                                           shorten log dates
---no-master                                               allow publishing from a non-master branch
+--no-master                                               allow publishing from a non-master or non-main branch
 --no-check-uncommitted                                    skip uncommitted check
 --no-check-unpulled                                       skip unpulled check
 --no-checks                                               skip all pre-publish checks
@@ -192,7 +192,7 @@ Carries out a number of steps:
 
 - Asks the user for confirmation that it has _built_ all sub-packages for publishing (using something like `yarn build`).
 - Performs a number of checks:
-  - The current branch should be `master`.
+  - The current branch should be `master` or `main`.
   - No uncommitted changes should remain in the working directory.
   - No unpulled changes should remain.
 - Determines which sub-packages need publishing (those which have changed with respect to the last tagged version).

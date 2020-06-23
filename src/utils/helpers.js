@@ -34,4 +34,15 @@ const parseDep = (dep: string) => {
   return { name, version };
 };
 
-export { shortenName, isObject, delay, dependsOn, parseDep };
+const masterOrMainBranch = (branch: string): boolean => {
+  return branch === 'master' || branch === 'main';
+};
+
+export {
+  shortenName,
+  isObject,
+  delay,
+  dependsOn,
+  parseDep,
+  masterOrMainBranch,
+};
