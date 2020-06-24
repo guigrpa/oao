@@ -1,3 +1,5 @@
+- Allow publishing from the `main` branch by default, in addition to `master` (jeroenptrs, #98).
+
 ## 1.8.0 (2020-1-28)
 
 - Limit `parallelLimit` by number of cpus by default (SimenB, #92).
