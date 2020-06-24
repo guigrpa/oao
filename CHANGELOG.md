@@ -1,3 +1,5 @@
+## 1.9.0 (2020-6-24)
+
 - Allow publishing from the `main` branch by default, in addition to `master` (jeroenptrs, #98).
 
 ## 1.8.0 (2020-1-28)
