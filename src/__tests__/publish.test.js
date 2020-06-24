@@ -52,6 +52,11 @@ describe('PUBLISH command', () => {
     }
   });
 
+  it('allows publishing from main', async () => {
+    git._setBranch('main');
+    await publish(merge(NOMINAL_OPTIONS));
+  });
+
   it('allows overriding the non-master check', async () => {
     git._setBranch('non-master');
     await publish(merge(NOMINAL_OPTIONS, { master: false }));

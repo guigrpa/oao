@@ -17,6 +17,7 @@ import {
   gitPushWithTags,
 } from './utils/git';
 import { addVersionLine } from './utils/changelog';
+import { masterOrMainBranch } from './utils/helpers';
 
 const DEBUG_SKIP_CHECKS = false;
 const RELEASE_INCREMENTS = ['major', 'minor', 'patch'];
@@ -142,7 +143,7 @@ const prepublishChecks = async ({
 
   // Check current branch
   const branch = await gitCurBranch();
-  if (branch !== 'master') {
+  if (!masterOrMainBranch(branch)) {
     if (master) {
       mainStory.error(
         `Can't publish from current branch: ${chalk.bold(branch)}`
@@ -150,7 +151,9 @@ const prepublishChecks = async ({
       if (!DEBUG_SKIP_CHECKS) throw new Error('BRANCH_CHECK_FAILED');
     }
     mainStory.warn(
-      `Publishing from a non-master branch: ${chalk.red.bold(branch)}`
+      `Publishing from a non-master or non-main branch: ${chalk.red.bold(
+        branch
+      )}`
     );
   } else {
     mainStory.info(`Current branch: ${chalk.yellow.bold(branch)}`);

@@ -208,7 +208,10 @@ createCommand(
   });
 
 createCommand('publish', 'Publish updated sub-packages')
-  .option('--no-master', 'allow publishing from a non-master branch')
+  .option(
+    '--no-master',
+    'allow publishing from a non-master or non-main branch'
+  )
   .option('--no-check-uncommitted', 'skip uncommitted check')
   .option('--no-check-unpulled', 'skip unpulled check')
   .option('--no-checks', 'skip all pre-publish checks')
