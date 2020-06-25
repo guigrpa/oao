@@ -216,6 +216,39 @@ describe('PUBLISH command', () => {
     });
   });
 
+  it('runs `npm publish --otp X` on dirty sub-packages', async () => {
+    const { exec } = require('../utils/shell');
+    await publish(merge(NOMINAL_OPTIONS, { otp: '123456' }));
+    expect(exec).toHaveBeenCalledTimes(
+      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
+    );
+    exec.mock.calls.forEach(([cmd]) => {
+      expect(cmd).toEqual('npm publish --otp 123456');
+    });
+  });
+
+  it('runs `npm publish --access X` on dirty sub-packages', async () => {
+    const { exec } = require('../utils/shell');
+    await publish(merge(NOMINAL_OPTIONS, { access: 'public' }));
+    expect(exec).toHaveBeenCalledTimes(
+      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
+    );
+    exec.mock.calls.forEach(([cmd]) => {
+      expect(cmd).toEqual('npm publish --access public');
+    });
+  });
+
+  it('does not run `npm publish --access X` with bogus access param', async () => {
+    const { exec } = require('../utils/shell');
+    await publish(merge(NOMINAL_OPTIONS, { access: 'bogus' }));
+    expect(exec).toHaveBeenCalledTimes(
+      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
+    );
+    exec.mock.calls.forEach(([cmd]) => {
+      expect(cmd).toEqual('npm publish');
+    });
+  });
+
   it('skips `npm publish` when using --no-npm-publish', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { npmPublish: false }));

@@ -38,6 +38,8 @@ type Options = {
   newVersion?: string,
   npmPublish: boolean,
   publishTag?: string,
+  otp?: string,
+  access?: string,
   changelog: boolean,
   changelogPath: string,
   single: boolean,
@@ -63,6 +65,8 @@ const run = async ({
   changelog,
   changelogPath,
   single,
+  otp,
+  access,
   _date,
   _masterVersion,
 }: Options) => {
@@ -122,6 +126,9 @@ const run = async ({
       if (specs.private) continue; // we don't want npm to complain :)
       let cmd = 'npm publish';
       if (publishTag != null) cmd += ` --tag ${publishTag}`;
+      if (otp != null) cmd += ` --otp ${otp}`;
+      if (access === 'public' || access === 'restricted')
+        cmd += ` --access ${access}`;
       await exec(cmd, { cwd: pkgPath });
     }
   }
