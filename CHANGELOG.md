@@ -1,3 +1,6 @@
+- Allow 2-factor auth when publishing (jeroenptrs, #99).
+- Allow publishing scoped packages publicly (jeroenptrs, #99).
+
 ## 1.9.0 (2020-6-24)
 
 - Allow publishing from the `main` branch by default, in addition to `master` (jeroenptrs, #98).
