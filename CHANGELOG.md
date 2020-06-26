@@ -1,3 +1,5 @@
+## 1.10.0 (2020-6-26)
+
 - Allow 2-factor auth when publishing (jeroenptrs, #99).
 - Allow publishing scoped packages publicly (jeroenptrs, #99).
 
