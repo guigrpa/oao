@@ -116,6 +116,68 @@ describe('PUBLISH command', () => {
     expect(git.gitPushWithTags).toHaveBeenCalledTimes(1);
   });
 
+  it('updates the version on dirty sub-packages, including dependencies', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+    await publish(NOMINAL_OPTIONS);
+    expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
+    writeSpecs.mock.calls.forEach(([, specs]) => {
+      expect(specs.version).toEqual('99.99.99');
+    });
+    expect(writeSpecs).toHaveBeenNthCalledWith(1, expect.any(String), expect.objectContaining({
+      name: "oao",
+      version: "99.99.99",
+    }));
+    expect(writeSpecs).toHaveBeenNthCalledWith(2, expect.any(String), expect.objectContaining({
+      name: "oao-b",
+      version: "99.99.99",
+      dependencies: {
+        oao: "99.99.99",
+        timm: "1.x",
+      },
+    }));
+    expect(writeSpecs).toHaveBeenNthCalledWith(3, expect.any(String), expect.objectContaining({
+      name: "oao-c",
+      version: "99.99.99",
+      dependencies: {
+        oao: "99.99.99",
+        timm: "1.x",
+      },
+      devDependencies: {
+        "oao-b": "99.99.99",
+        "xxl": "1.x",
+      },
+    }));
+    expect(writeSpecs).toHaveBeenNthCalledWith(4, expect.any(String), expect.objectContaining({
+      name: "oao-d",
+      version: "99.99.99",
+      dependencies: {
+        oao: "99.99.99",
+        timm: "1.x",
+      },
+      devDependencies: {
+        "oao-b": "99.99.99",
+        "oao-c": "99.99.99",
+        "xxl": "1.x",
+      },
+    }));
+    expect(writeSpecs).toHaveBeenNthCalledWith(5, expect.any(String), expect.objectContaining({
+      name: "oao-priv",
+      version: "99.99.99",
+      dependencies: {
+        oao: "99.99.99",
+        timm: "1.x",
+      },
+      devDependencies: {
+        "oao-b": "99.99.99",
+        "oao-c": "99.99.99",
+        "xxl": "1.x",
+      },
+    }));
+    expect(git.gitCommitChanges).toHaveBeenCalledTimes(1);
+    expect(git.gitAddTag).toHaveBeenCalledTimes(1);
+    expect(git.gitPushWithTags).toHaveBeenCalledTimes(1);
+  });
+
   it('increments version by major when incrementVersionBy is "major" and newVersion is not set', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
     const options = Object.assign({}, NOMINAL_OPTIONS, {
@@ -196,10 +258,14 @@ describe('PUBLISH command', () => {
 
   it('runs `npm publish` on dirty sub-packages (which are not private)', async () => {
     const { exec } = require('../utils/shell');
+    git.gitDiffSinceIn.mockImplementation((version, path) => {
+      // Only oao-d was modified, oao-priv dependens on it.
+      // Since oao-priv is private, that makes it one package to publish.
+      return path === "test/fixtures/packages/oao-d" ? "SOMETHING_HAS_CHANGED" : "";
+    })
     await publish(NOMINAL_OPTIONS);
-    expect(exec).toHaveBeenCalledTimes(
-      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
-    );
+    
+    expect(exec).toHaveBeenCalledTimes(1); 
     exec.mock.calls.forEach(([cmd]) => {
       expect(cmd).toEqual('npm publish');
     });
@@ -222,6 +288,22 @@ describe('PUBLISH command', () => {
       'test/fixtures/packages3/oao-c',
       'test/fixtures/packages3/oao-d',
     ]);
+  });
+
+  it('runs `npm publish` on dirty sub-packages, with dependencies (which are not private)', async () => {
+    const { exec } = require('../utils/shell');
+    
+    git.gitDiffSinceIn.mockImplementation((version, path) => {
+      // Only oao-b was changed, but since oao-c, oao-d, oao-priv depend on it, they're marked for update as well
+      // However oao-priv will not be published, so that makes it three packages to publish
+      return path === "test/fixtures/packages/oao-b" ? "SOMETHING_HAS_CHANGED" : "";
+    })
+    await publish(NOMINAL_OPTIONS);
+
+    expect(exec).toHaveBeenCalledTimes(3); 
+    exec.mock.calls.forEach(([cmd]) => {
+      expect(cmd).toEqual('npm publish');
+    });
   });
 
   it('runs `npm publish --tag X` on dirty sub-packages', async () => {

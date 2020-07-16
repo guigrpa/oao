@@ -4,6 +4,7 @@ import semver from 'semver';
 import inquirer from 'inquirer';
 import { mainStory, chalk } from 'storyboard';
 import { readAllSpecs, ROOT_PACKAGE } from './utils/readSpecs';
+import { DEP_TYPES } from './utils/constants';
 import writeSpecs from './utils/writeSpecs';
 import { exec } from './utils/shell';
 import {
@@ -108,6 +109,16 @@ const run = async ({
       const pkgName = dirtyPlusRoot[i];
       const { specPath, specs } = allSpecs[pkgName];
       specs.version = nextVersion;
+
+      // Also update dependencies to package we'll publish
+      dirty.forEach(dirtyPkgName => {
+        DEP_TYPES.forEach(type => {
+          if (specs[type] != null && specs[type][dirtyPkgName] != null) {
+            specs[type][dirtyPkgName] = nextVersion;
+          }
+        });
+      });
+
       writeSpecs(specPath, specs);
     }
     if (changelog)
@@ -241,21 +252,60 @@ const validateVersionIncrement = incrementVersionBy => {
 const findPackagesToUpdate = async (allSpecs, lastTag, single) => {
   const pkgNames = Object.keys(allSpecs);
   const dirty = [];
+  const numChanges = {};
+
+  // Collect changed packages
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     if (pkgName === ROOT_PACKAGE && !single) continue;
-    const { pkgPath, specs } = allSpecs[pkgName];
+    const { pkgPath } = allSpecs[pkgName];
     const diff = await gitDiffSinceIn(lastTag, pkgPath);
     if (diff !== '') {
-      const numChanges = diff.split('\n').length;
-      mainStory.info(
-        `- Package ${pkgName} (currently ${chalk.cyan.bold(
-          specs.version
-        )}) has changed (#files: ${numChanges})`
-      );
+      numChanges[pkgName] = diff.split('\n').length;
       dirty.push(pkgName);
     }
   }
+
+  // Collect packages dependent on dirty packages
+  let currentCount = dirty.length;
+  let lastCount = 0;
+  while (currentCount !== lastCount) {
+    pkgNames.forEach(pkgName => {
+      if (dirty.indexOf(pkgName) > -1) return;
+  
+      let hasDependency = false;
+      dirty.forEach(dirtyPkgName => {
+        DEP_TYPES.forEach(type => {
+          const specs = allSpecs[pkgName];
+          if (specs.specs[type] != null && specs.specs[type][dirtyPkgName] != null) {
+            hasDependency = true;
+          }
+        });
+      });
+  
+      if (hasDependency) {
+        dirty.push(pkgName);
+      }
+    });
+
+    // We keep the count to not fall in an infinite loop
+    lastCount = currentCount;
+    currentCount = dirty.length;
+  }
+  
+
+  dirty.forEach(pkgName => {
+    mainStory.info(
+      `- Package ${pkgName} (currently ${chalk.cyan.bold(
+        allSpecs[pkgName].version
+      )})${
+        numChanges[pkgName]
+          ? `has changed (#files: ${numChanges[pkgName]})`
+          : ''
+      }`
+    );
+  });
+
   return dirty;
 };
 
