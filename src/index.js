@@ -242,6 +242,7 @@ createCommand('publish', 'Publish updated sub-packages')
   .option('--no-changelog', 'skip changelog updates')
   .option('--otp <code>', 'use 2FA to publish your package')
   .option('--access <type>', 'publish public or restricted packages')
+  .option('--bump-dependent-reqs <range|exact|no>', 'bump dependencies ')
   .action(cmd => {
     const options = processOptions(cmd.opts());
     initConsole(options);

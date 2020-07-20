@@ -36,6 +36,7 @@ type Options = {
   checks: boolean,
   confirm: boolean,
   bump: boolean,
+  bumpDependentReqs: "range" | "exact" | "no",
   gitCommit: boolean,
   newVersion?: string,
   npmPublish: boolean,
@@ -59,6 +60,7 @@ const run = async ({
   checks,
   confirm,
   bump,
+  bumpDependentReqs,
   gitCommit,
   newVersion,
   npmPublish,
@@ -83,8 +85,8 @@ const run = async ({
   // Get last tag and find packages requiring updates
   // (modified since the last tag)
   const lastTag = await gitLastTag();
-  const dirty = await findPackagesToUpdate(allSpecs, lastTag, single);
-  if (!dirty.length) {
+  const toUpdate = await findPackagesToUpdate(allSpecs, lastTag, single);
+  if (!toUpdate.length) {
     mainStory.info('No packages have been updated');
     return;
   }
@@ -101,23 +103,27 @@ const run = async ({
       (await promptNextVersion(masterVersion));
 
     // Confirm before proceeding
-    if (confirm && !(await confirmPublish({ dirty, nextVersion }))) return;
+    if (confirm && !(await confirmPublish({ dirty: toUpdate, nextVersion }))) return;
+
+    const nextVersionForReqs = getDependencyReqVersion(bumpDependentReqs, nextVersion)
 
     // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
-    const dirtyPlusRoot = single ? dirty : dirty.concat(ROOT_PACKAGE);
+    const dirtyPlusRoot = single ? toUpdate : toUpdate.concat(ROOT_PACKAGE);
     for (let i = 0; i < dirtyPlusRoot.length; i++) {
       const pkgName = dirtyPlusRoot[i];
       const { specPath, specs } = allSpecs[pkgName];
       specs.version = nextVersion;
 
-      // Also update dependencies to package we'll publish
-      dirty.forEach(dirtyPkgName => {
-        DEP_TYPES.forEach(type => {
-          if (specs[type] != null && specs[type][dirtyPkgName] != null) {
-            specs[type][dirtyPkgName] = nextVersion;
-          }
+      // Also update dependencies to package we'll publish    
+      if (nextVersionForReqs) {
+        toUpdate.forEach(dirtyPkgName => {
+          DEP_TYPES.forEach(type => {
+            if (specs[type] != null && specs[type][dirtyPkgName] != null) {
+              specs[type][dirtyPkgName] = nextVersionForReqs;
+            }
+          });
         });
-      });
+      }
 
       writeSpecs(specPath, specs);
     }
@@ -134,8 +140,8 @@ const run = async ({
 
   // Publish
   if (npmPublish) {
-    for (let i = 0; i < dirty.length; i++) {
-      const pkgName = dirty[i];
+    for (let i = 0; i < toUpdate.length; i++) {
+      const pkgName = toUpdate[i];
       const { pkgPath, specs } = allSpecs[pkgName];
       if (specs.private) continue; // we don't want npm to complain :)
       let cmd = 'npm publish';
@@ -251,62 +257,30 @@ const validateVersionIncrement = incrementVersionBy => {
 
 const findPackagesToUpdate = async (allSpecs, lastTag, single) => {
   const pkgNames = Object.keys(allSpecs);
-  const dirty = [];
-  const numChanges = {};
+  const toUpdate = [];
 
   // Collect changed packages
   for (let i = 0; i < pkgNames.length; i++) {
     const pkgName = pkgNames[i];
     if (pkgName === ROOT_PACKAGE && !single) continue;
-    const { pkgPath } = allSpecs[pkgName];
+    const { pkgPath, specs } = allSpecs[pkgName];
     const diff = await gitDiffSinceIn(lastTag, pkgPath);
-    if (diff !== '') {
-      numChanges[pkgName] = diff.split('\n').length;
-      dirty.push(pkgName);
-    }
-  }
+    const files = diff.split('\n').length;
 
-  // Collect packages dependent on dirty packages
-  let currentCount = dirty.length;
-  let lastCount = 0;
-  while (currentCount !== lastCount) {
-    pkgNames.forEach(pkgName => {
-      if (dirty.indexOf(pkgName) > -1) return;
-  
-      let hasDependency = false;
-      dirty.forEach(dirtyPkgName => {
-        DEP_TYPES.forEach(type => {
-          const specs = allSpecs[pkgName];
-          if (specs.specs[type] != null && specs.specs[type][dirtyPkgName] != null) {
-            hasDependency = true;
-          }
-        });
-      });
-  
-      if (hasDependency) {
-        dirty.push(pkgName);
-      }
-    });
-
-    // We keep the count to not fall in an infinite loop
-    lastCount = currentCount;
-    currentCount = dirty.length;
-  }
-  
-
-  dirty.forEach(pkgName => {
     mainStory.info(
       `- Package ${pkgName} (currently ${chalk.cyan.bold(
-        allSpecs[pkgName].version
+        specs.version
       )})${
-        numChanges[pkgName]
-          ? `has changed (#files: ${numChanges[pkgName]})`
+        files > 0
+          ? ` has changed (#files: ${files})`
           : ''
       }`
     );
-  });
 
-  return dirty;
+    toUpdate.push(pkgName);
+  }
+
+  return toUpdate;
 };
 
 const getMasterVersion = async (allSpecs, lastTag) => {
@@ -357,6 +331,14 @@ const getMasterVersion = async (allSpecs, lastTag) => {
   }
   return masterVersion;
 };
+
+const getDependencyReqVersion = (bumpDependentReqs, nextVersion) => {
+  if (bumpDependentReqs === "no") {
+    return null;
+  }
+
+  return bumpDependentReqs === 'exact' ? nextVersion : `^${nextVersion}`;
+}
 
 const calcNextVersion = (prevVersion: string, incrementBy = ''): string => {
   const isPreRelease = PRERELEASE_INCREMENTS.indexOf(incrementBy) >= 0;
