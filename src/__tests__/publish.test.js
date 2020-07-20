@@ -205,6 +205,25 @@ describe('PUBLISH command', () => {
     });
   });
 
+  it('runs `npm publish` following the dependency graph by default', async () => {
+    const { exec } = require('../utils/shell');
+    await publish(
+      Object.assign({}, NOMINAL_OPTIONS, {
+        src: 'test/fixtures/packages3/*',
+      })
+    );
+    expect(exec).toHaveBeenCalledTimes(
+      NUM_FIXTURE_SUBPACKAGES - NUM_FIXTURE_PRIVATE_SUBPACKAGES
+    );
+    const paths = exec.mock.calls.map(([, { cwd }]) => cwd);
+    expect(paths).toEqual([
+      'test/fixtures/packages3/oao-b',
+      'test/fixtures/packages3/oao',
+      'test/fixtures/packages3/oao-c',
+      'test/fixtures/packages3/oao-d',
+    ]);
+  });
+
   it('runs `npm publish --tag X` on dirty sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { publishTag: 'next' }));

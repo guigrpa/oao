@@ -18,6 +18,7 @@ import {
 } from './utils/git';
 import { addVersionLine } from './utils/changelog';
 import { masterOrMainBranch } from './utils/helpers';
+import { calcGraphAndReturnAsAllSpecs } from './utils/calcGraph';
 
 const DEBUG_SKIP_CHECKS = false;
 const RELEASE_INCREMENTS = ['major', 'minor', 'patch'];
@@ -70,7 +71,9 @@ const run = async ({
   _date,
   _masterVersion,
 }: Options) => {
-  const allSpecs = await readAllSpecs(src, ignoreSrc);
+  const allSpecs = calcGraphAndReturnAsAllSpecs(
+    await readAllSpecs(src, ignoreSrc)
+  );
 
   // Confirm that we have run build and run prepublish checks
   if (confirm && !(await confirmBuild())) return;

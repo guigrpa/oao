@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildGraph returns list as an allSpecs object 1`] = `
+Object {
+  "a": Object {
+    "name": "a",
+    "specs": Object {
+      "dependencies": Object {
+        "b": "*",
+        "c": "*",
+      },
+    },
+  },
+  "b": Object {
+    "name": "b",
+    "specs": Object {
+      "dependencies": Object {
+        "ext": "*",
+      },
+    },
+  },
+  "c": Object {
+    "name": "c",
+    "specs": Object {
+      "dependencies": Object {
+        "ext": "*",
+      },
+      "devDependencies": Object {
+        "d": "*",
+      },
+    },
+  },
+  "d": Object {
+    "name": "d",
+    "specs": Object {},
+  },
+}
+`;

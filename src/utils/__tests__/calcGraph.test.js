@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import calcGraph from '../calcGraph';
+import calcGraph, { calcGraphAndReturnAsAllSpecs } from '../calcGraph';
 
 const ALL_SPECS_NO_CYCLE = {
   a: {
@@ -80,5 +80,10 @@ describe('buildGraph', () => {
   it('handles cycles correctly', () => {
     const dag = calcGraph(ALL_SPECS_CYCLE);
     expect(dag).toEqual(['b', 'd', 'e', 'c', 'a']);
+  });
+
+  it('returns list as an allSpecs object', () => {
+    const allSpecs = calcGraphAndReturnAsAllSpecs(ALL_SPECS_NO_CYCLE);
+    expect(allSpecs).toMatchSnapshot();
   });
 });

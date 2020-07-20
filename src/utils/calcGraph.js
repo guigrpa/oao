@@ -23,6 +23,15 @@ const calcGraph = (allSpecs: AllSpecs): Array<string> => {
   return out.slice(0, out.length - 1);
 };
 
+export const calcGraphAndReturnAsAllSpecs = (allSpecs: AllSpecs): AllSpecs => {
+  const newAllSpecs = {};
+  const orderedPackages = calcGraph(allSpecs);
+  orderedPackages.forEach(pkg => {
+    newAllSpecs[pkg] = allSpecs[pkg];
+  });
+  return newAllSpecs;
+};
+
 const buildGraph = (
   allSpecs: AllSpecs,
   pkg: OaoSpecs,
