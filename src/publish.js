@@ -103,23 +103,23 @@ const run = async ({
       (await promptNextVersion(masterVersion));
 
     // Confirm before proceeding
-    if (confirm && !(await confirmPublish({ dirty: toUpdate, nextVersion }))) return;
+    if (confirm && !(await confirmPublish({ toUpdate, nextVersion }))) return;
 
     const nextVersionForReqs = getDependencyReqVersion(bumpDependentReqs, nextVersion)
 
-    // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
-    const dirtyPlusRoot = single ? toUpdate : toUpdate.concat(ROOT_PACKAGE);
-    for (let i = 0; i < dirtyPlusRoot.length; i++) {
-      const pkgName = dirtyPlusRoot[i];
+    // Update package.json's for packages to update AND THE ROOT PACKAGE + changelog
+    const toUpdatePlusRoot = single ? toUpdate : toUpdate.concat(ROOT_PACKAGE);
+    for (let i = 0; i < toUpdatePlusRoot.length; i++) {
+      const pkgName = toUpdatePlusRoot[i];
       const { specPath, specs } = allSpecs[pkgName];
       specs.version = nextVersion;
 
       // Also update dependencies to package we'll publish    
       if (nextVersionForReqs) {
-        toUpdate.forEach(dirtyPkgName => {
+        toUpdate.forEach(pkgNameToUpdate => {
           DEP_TYPES.forEach(type => {
-            if (specs[type] != null && specs[type][dirtyPkgName] != null) {
-              specs[type][dirtyPkgName] = nextVersionForReqs;
+            if (specs[type] != null && specs[type][pkgNameToUpdate] != null) {
+              specs[type][pkgNameToUpdate] = nextVersionForReqs;
             }
           });
         });
@@ -227,13 +227,13 @@ const confirmBuild = async () => {
   return out;
 };
 
-const confirmPublish = async ({ dirty, nextVersion }) => {
+const confirmPublish = async ({ toUpdate, nextVersion }) => {
   const { confirmPublish: out } = await inquirer.prompt([
     {
       name: 'confirmPublish',
       type: 'confirm',
       message:
-        `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
+        `Confirm release (${chalk.yellow.bold(toUpdate.length)} package/s, ` +
         `v${chalk.cyan.bold(nextVersion)})?`,
       default: false,
     },
