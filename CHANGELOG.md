@@ -1,3 +1,5 @@
+## 2.0.0 (2020-7-25)
+
 - **Breaking**: Always publishes _all_ (non-private) sub-packages, irrespective of whether they have been updated.
 - **Breaking** (but can opt-out with `--bump-dependent-reqs no`): `oao publish` now bumps inner dependency requirements (i.e. cross-links inside the monorepo). (jeroenptrs, onigoetz, guigrpa, #100).
 - `oao publish` now always publishes in reverse-dependency order (jeroenptrs, #102).
