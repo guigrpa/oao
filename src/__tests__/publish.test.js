@@ -297,4 +297,38 @@ describe('PUBLISH command', () => {
       expect(cmd).toEqual('npm publish');
     });
   });
+
+  it('bumps cross-deps using ranges by default', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+    const { exec } = require('../utils/shell');
+    await publish(
+      merge(NOMINAL_OPTIONS, {
+        src: 'test/fixtures/packages2/*',
+        bumpDependentReqs: null,
+      })
+    );
+    expect(writeSpecs).toHaveBeenCalledTimes(6);
+    writeSpecs.mock.calls.slice(0, 4).forEach(([, specs]) => {
+      expect(specs.version).toEqual('99.99.99');
+    });
+    expect(writeSpecs.mock.calls[4][1].dependencies.oao).toEqual('^99.99.99');
+    expect(writeSpecs.mock.calls[5][1].dependencies.oao).toEqual('^99.99.99');
+  });
+
+  it('bumps cross-deps using exact versions with a flag', async () => {
+    const writeSpecs = require('../utils/writeSpecs').default;
+    const { exec } = require('../utils/shell');
+    await publish(
+      merge(NOMINAL_OPTIONS, {
+        src: 'test/fixtures/packages2/*',
+        bumpDependentReqs: 'exact',
+      })
+    );
+    expect(writeSpecs).toHaveBeenCalledTimes(6);
+    writeSpecs.mock.calls.slice(0, 4).forEach(([, specs]) => {
+      expect(specs.version).toEqual('99.99.99');
+    });
+    expect(writeSpecs.mock.calls[4][1].dependencies.oao).toEqual('99.99.99');
+    expect(writeSpecs.mock.calls[5][1].dependencies.oao).toEqual('99.99.99');
+  });
 });
