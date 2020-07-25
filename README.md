@@ -73,7 +73,7 @@ You can also get help from particular commands, which may have additional option
 ```
 Usage: publish [options]
 
-Publish updated sub-packages
+Publish all (non-private) sub-packages
 
 Options:
 
