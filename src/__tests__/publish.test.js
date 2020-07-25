@@ -93,18 +93,7 @@ describe('PUBLISH command', () => {
     }
   });
 
-  it('stops when no sub-package is dirty', async () => {
-    git._setSubpackageDiff('');
-    await publish(NOMINAL_OPTIONS);
-    expect(git.gitPushWithTags).not.toHaveBeenCalled();
-  });
-
-  it('proceeds if there are dirty sub-packages', async () => {
-    await publish(NOMINAL_OPTIONS);
-    expect(git.gitPushWithTags).toHaveBeenCalled();
-  });
-
-  it('performs a commit-tag-push on dirty sub-packages increasing the version number', async () => {
+  it('performs a commit-tag-push on all sub-packages increasing the version number', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
     await publish(NOMINAL_OPTIONS);
     expect(writeSpecs).toHaveBeenCalledTimes(1 + NUM_FIXTURE_SUBPACKAGES);
@@ -194,7 +183,7 @@ describe('PUBLISH command', () => {
     });
   });
 
-  it('runs `npm publish` on dirty sub-packages (which are not private)', async () => {
+  it('runs `npm publish` on all non-private sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(NOMINAL_OPTIONS);
     expect(exec).toHaveBeenCalledTimes(
@@ -224,7 +213,7 @@ describe('PUBLISH command', () => {
     ]);
   });
 
-  it('runs `npm publish --tag X` on dirty sub-packages', async () => {
+  it('runs `npm publish --tag X` on all sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { publishTag: 'next' }));
     expect(exec).toHaveBeenCalledTimes(
@@ -235,7 +224,7 @@ describe('PUBLISH command', () => {
     });
   });
 
-  it('runs `npm publish --otp X` on dirty sub-packages', async () => {
+  it('runs `npm publish --otp X` on all sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { otp: '123456' }));
     expect(exec).toHaveBeenCalledTimes(
@@ -246,7 +235,7 @@ describe('PUBLISH command', () => {
     });
   });
 
-  it('runs `npm publish --access X` on dirty sub-packages', async () => {
+  it('runs `npm publish --access X` on all sub-packages', async () => {
     const { exec } = require('../utils/shell');
     await publish(merge(NOMINAL_OPTIONS, { access: 'public' }));
     expect(exec).toHaveBeenCalledTimes(

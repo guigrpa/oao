@@ -79,17 +79,25 @@ const run = async ({
   if (confirm && !(await confirmBuild())) return;
   await prepublishChecks({ checks, master, checkUncommitted, checkUnpulled });
 
-  // Get last tag and find packages requiring updates
-  // (modified since the last tag)
-  const lastTag = await gitLastTag();
-  const dirty = await findPackagesToUpdate(allSpecs, lastTag, single);
-  if (!dirty.length) {
-    mainStory.info('No packages have been updated');
+  // Get list of packages to be updated. This is NOT the list of packages to
+  // be published, since some of them might be private. But all of them will
+  // be version-bumped
+  const pkgList = [];
+  let numPublic = 0;
+  Object.keys(allSpecs).forEach(pkgName => {
+    if (pkgName === ROOT_PACKAGE && !single) return;
+    pkgList.push(pkgName);
+    const { specs } = allSpecs[pkgName];
+    if (!specs.private) numPublic += 1;
+  });
+  if (!pkgList.length) {
+    mainStory.info('No packages found!');
     return;
   }
 
   if (bump) {
     // Determine a suitable new version number
+    const lastTag = await gitLastTag();
     const masterVersion =
       _masterVersion || (await getMasterVersion(allSpecs, lastTag));
     if (masterVersion == null) return;
@@ -100,18 +108,21 @@ const run = async ({
       (await promptNextVersion(masterVersion));
 
     // Confirm before proceeding
-    if (confirm && !(await confirmPublish({ dirty, nextVersion }))) return;
+    if (confirm && !(await confirmPublish({ pkgList, numPublic, nextVersion })))
+      return;
 
-    // Update package.json's for dirty packages AND THE ROOT PACKAGE + changelog
-    const dirtyPlusRoot = single ? dirty : dirty.concat(ROOT_PACKAGE);
-    for (let i = 0; i < dirtyPlusRoot.length; i++) {
-      const pkgName = dirtyPlusRoot[i];
+    // Update package.json's for pkgList packages AND THE ROOT PACKAGE
+    const pkgListPlusRoot = single ? pkgList : pkgList.concat(ROOT_PACKAGE);
+    pkgListPlusRoot.forEach(pkgName => {
       const { specPath, specs } = allSpecs[pkgName];
       specs.version = nextVersion;
       writeSpecs(specPath, specs);
-    }
-    if (changelog)
+    });
+
+    // Update changelog
+    if (changelog) {
       addVersionLine({ changelogPath, version: nextVersion, _date });
+    }
 
     // Commit, tag and push
     if (gitCommit) {
@@ -123,8 +134,8 @@ const run = async ({
 
   // Publish
   if (npmPublish) {
-    for (let i = 0; i < dirty.length; i++) {
-      const pkgName = dirty[i];
+    for (let i = 0; i < pkgList.length; i++) {
+      const pkgName = pkgList[i];
       const { pkgPath, specs } = allSpecs[pkgName];
       if (specs.private) continue; // we don't want npm to complain :)
       let cmd = 'npm publish';
@@ -210,14 +221,14 @@ const confirmBuild = async () => {
   return out;
 };
 
-const confirmPublish = async ({ dirty, nextVersion }) => {
+const confirmPublish = async ({ pkgList, numPublic, nextVersion }) => {
   const { confirmPublish: out } = await inquirer.prompt([
     {
       name: 'confirmPublish',
       type: 'confirm',
-      message:
-        `Confirm release (${chalk.yellow.bold(dirty.length)} package/s, ` +
-        `v${chalk.cyan.bold(nextVersion)})?`,
+      message: `Confirm release (${chalk.yellow.bold(
+        pkgList.length
+      )} package/s, ${numPublic} public, v${chalk.cyan.bold(nextVersion)})?`,
       default: false,
     },
   ]);
@@ -238,27 +249,6 @@ const validateVersionIncrement = incrementVersionBy => {
   }
 };
 
-const findPackagesToUpdate = async (allSpecs, lastTag, single) => {
-  const pkgNames = Object.keys(allSpecs);
-  const dirty = [];
-  for (let i = 0; i < pkgNames.length; i++) {
-    const pkgName = pkgNames[i];
-    if (pkgName === ROOT_PACKAGE && !single) continue;
-    const { pkgPath, specs } = allSpecs[pkgName];
-    const diff = await gitDiffSinceIn(lastTag, pkgPath);
-    if (diff !== '') {
-      const numChanges = diff.split('\n').length;
-      mainStory.info(
-        `- Package ${pkgName} (currently ${chalk.cyan.bold(
-          specs.version
-        )}) has changed (#files: ${numChanges})`
-      );
-      dirty.push(pkgName);
-    }
-  }
-  return dirty;
-};
-
 const getMasterVersion = async (allSpecs, lastTag) => {
   let masterVersion = allSpecs[ROOT_PACKAGE].specs.version;
   if (lastTag != null) {
@@ -271,10 +261,6 @@ const getMasterVersion = async (allSpecs, lastTag) => {
         )} does not match package.json version ${chalk.cyan.bold(
           masterVersion
         )}`
-      );
-      mainStory.warn(
-        'This may cause inaccuracies when determining which packages ' +
-          'need to be released, since oao uses tags to detect package changes'
       );
       const { confirm } = await inquirer.prompt([
         {
@@ -308,7 +294,8 @@ const getMasterVersion = async (allSpecs, lastTag) => {
   return masterVersion;
 };
 
-const calcNextVersion = (prevVersion: string, incrementBy = ''): string => {
+const calcNextVersion = (prevVersion: string, incrementBy = ''): ?string => {
+  if (!incrementBy) return null;
   const isPreRelease = PRERELEASE_INCREMENTS.indexOf(incrementBy) >= 0;
   const increment = isPreRelease ? 'prerelease' : incrementBy;
   const isNewPreRelease = isPreRelease && prevVersion.indexOf(incrementBy) < 0;
