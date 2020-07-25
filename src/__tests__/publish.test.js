@@ -15,6 +15,7 @@ const NOMINAL_OPTIONS = {
   checkUnpulled: true,
   confirm: false,
   bump: true,
+  bumpDependentReqs: 'no',
   checks: true,
   gitCommit: true,
   npmPublish: true,

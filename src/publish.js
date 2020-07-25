@@ -37,6 +37,7 @@ type Options = {
   checks: boolean,
   confirm: boolean,
   bump: boolean,
+  bumpDependentReqs: string,
   gitCommit: boolean,
   newVersion?: string,
   npmPublish: boolean,
@@ -61,6 +62,7 @@ const run = async ({
   checks,
   confirm,
   bump,
+  bumpDependentReqs,
   gitCommit,
   newVersion,
   npmPublish,
@@ -123,8 +125,12 @@ const run = async ({
     });
 
     // Bump dependent requirements
-    if (!single) {
-      const bumpList = pkgList.map(pkgName => `${pkgName}@^${nextVersion}`);
+    if (!single && bumpDependentReqs !== 'no') {
+      const bumpList = pkgList.map(pkgName =>
+        bumpDependentReqs === 'exact'
+          ? `${pkgName}@${nextVersion}`
+          : `${pkgName}@^${nextVersion}`
+      );
       await bumpDeps(bumpList, { src, ignoreSrc, link });
     }
 

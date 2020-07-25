@@ -219,6 +219,10 @@ createCommand('publish', 'Publish all (non-private) sub-packages')
     '--no-bump',
     'do not increment version numbers (also disables git commit)'
   )
+  .option(
+    '--bump-dependent-reqs <no|exact|range>',
+    'bump dependent requirements (inside the monorepo) following this approach: no bumping, exact version, version range (default: range)'
+  )
   .option('--no-confirm', 'do not ask for confirmation before publishing')
   .option('--no-git-commit', 'skip the commit-tag-push step before publishing')
   .option('--no-npm-publish', 'skip the npm publish step')
@@ -241,7 +245,10 @@ createCommand('publish', 'Publish all (non-private) sub-packages')
   )
   .option('--no-changelog', 'skip changelog updates')
   .option('--otp <code>', 'use 2-factor authentication to publish your package')
-  .option('--access <type>', 'publish "public" or "restricted" packages')
+  .option(
+    '--access <public|restricted>',
+    'publish "public" or "restricted" packages'
+  )
   .action(cmd => {
     const options = processOptions(cmd.opts());
     initConsole(options);
