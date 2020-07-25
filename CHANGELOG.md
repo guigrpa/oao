@@ -1,3 +1,7 @@
+- **Breaking**: Always publishes _all_ (non-private) sub-packages, irrespective of whether they have been updated.
+- **Breaking** (but can opt-out): Bumps all dependent requirements (i.e. cross-links inside the monorepo). (jeroenptrs, onigoetz, guigrpa, #100).
+- Publishes always in reverse-dependency order (jeroenptrs, #102).
+
 ## 1.10.0 (2020-6-26)
 
 - Allow 2-factor auth when publishing (jeroenptrs, #99).
