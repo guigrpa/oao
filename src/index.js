@@ -240,7 +240,7 @@ createCommand('publish', 'Publish updated sub-packages')
     DEFAULT_CHANGELOG
   )
   .option('--no-changelog', 'skip changelog updates')
-  .option('--otp <code>', 'use 2FA to publish your package')
+  .option('--otp <code>', 'use 2-factor authentication to publish your package')
   .option('--access <type>', 'publish public or restricted packages')
   .action(cmd => {
     const options = processOptions(cmd.opts());

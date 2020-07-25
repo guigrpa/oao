@@ -95,7 +95,7 @@ Options:
 --publish-tag <tag>                                       publish with a custom tag (instead of `latest`)
 --changelog-path <path>                                   changelog path [CHANGELOG.md] (default: "CHANGELOG.md")
 --no-changelog                                            skip changelog updates
---otp <code>                                              use 2FA to publish your package
+--otp <code>                                              use 2-factor authentication to publish your package
 --access <type>                                           publish public or restricted packages
 -h, --help                                                output usage information
 ```
