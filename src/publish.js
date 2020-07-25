@@ -11,7 +11,6 @@ import {
   gitCurBranch,
   gitUncommittedChanges,
   gitUnpulledChanges,
-  gitDiffSinceIn,
   gitCommitChanges,
   gitAddTag,
   gitPushWithTags,

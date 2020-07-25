@@ -300,7 +300,6 @@ describe('PUBLISH command', () => {
 
   it('bumps cross-deps using ranges by default', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-    const { exec } = require('../utils/shell');
     await publish(
       merge(NOMINAL_OPTIONS, {
         src: 'test/fixtures/packages2/*',
@@ -317,7 +316,6 @@ describe('PUBLISH command', () => {
 
   it('bumps cross-deps using exact versions with a flag', async () => {
     const writeSpecs = require('../utils/writeSpecs').default;
-    const { exec } = require('../utils/shell');
     await publish(
       merge(NOMINAL_OPTIONS, {
         src: 'test/fixtures/packages2/*',
