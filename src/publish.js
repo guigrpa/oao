@@ -19,6 +19,7 @@ import {
 import { addVersionLine } from './utils/changelog';
 import { masterOrMainBranch } from './utils/helpers';
 import { calcGraphAndReturnAsAllSpecs } from './utils/calcGraph';
+import bumpDeps from './bump';
 
 const DEBUG_SKIP_CHECKS = false;
 const RELEASE_INCREMENTS = ['major', 'minor', 'patch'];
@@ -28,6 +29,7 @@ const INCREMENTS = [...RELEASE_INCREMENTS, ...PRERELEASE_INCREMENTS];
 type Options = {
   src: string,
   ignoreSrc?: string,
+  link: ?string,
   incrementVersionBy?: string,
   master: boolean,
   checkUncommitted: boolean,
@@ -52,6 +54,7 @@ type Options = {
 const run = async ({
   src,
   ignoreSrc,
+  link,
   master,
   checkUncommitted,
   checkUnpulled,
@@ -118,6 +121,12 @@ const run = async ({
       specs.version = nextVersion;
       writeSpecs(specPath, specs);
     });
+
+    // Bump dependent requirements
+    if (!single) {
+      const bumpList = pkgList.map(pkgName => `${pkgName}@^${nextVersion}`);
+      await bumpDeps(bumpList, { src, ignoreSrc, link });
+    }
 
     // Update changelog
     if (changelog) {
