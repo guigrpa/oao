@@ -207,7 +207,7 @@ createCommand(
     return prepublish(options);
   });
 
-createCommand('publish', 'Publish updated sub-packages')
+createCommand('publish', 'Publish all (non-private) sub-packages')
   .option(
     '--no-master',
     'allow publishing from a non-master or non-main branch'
@@ -241,7 +241,7 @@ createCommand('publish', 'Publish updated sub-packages')
   )
   .option('--no-changelog', 'skip changelog updates')
   .option('--otp <code>', 'use 2-factor authentication to publish your package')
-  .option('--access <type>', 'publish public or restricted packages')
+  .option('--access <type>', 'publish "public" or "restricted" packages')
   .action(cmd => {
     const options = processOptions(cmd.opts());
     initConsole(options);
