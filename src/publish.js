@@ -228,7 +228,9 @@ const confirmPublish = async ({ pkgList, numPublic, nextVersion }) => {
       type: 'confirm',
       message: `Confirm release (${chalk.yellow.bold(
         pkgList.length
-      )} package/s, ${numPublic} public, v${chalk.cyan.bold(nextVersion)})?`,
+      )} package/s, ${chalk.yellow.bold(numPublic)} public, v${chalk.cyan.bold(
+        nextVersion
+      )})?`,
       default: false,
     },
   ]);
