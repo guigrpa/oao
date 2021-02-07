@@ -25,7 +25,6 @@ type Options = {
 type Job = {
   cmd: string,
   cwd: string,
-  bareLogs: boolean,
   storySrc?: ?string,
   status: 'idle' | 'running' | 'done',
   pkg: OaoSpecs,
@@ -73,7 +72,6 @@ const multiRun = async (
         allJobs.push({
           cmd,
           cwd: pkgPath,
-          bareLogs: !!parallelLogs,
           storySrc,
           status: 'idle',
           pkg,
@@ -88,7 +86,6 @@ const multiRun = async (
       allJobs.push({
         cmd: PLACEHOLDER_COMMAND,
         cwd: pkgPath,
-        bareLogs: false,
         status: 'idle',
         pkg,
       });
@@ -175,12 +172,12 @@ const executeJob = (job, { ignoreErrors }) => {
 };
 
 const _executeJob = async (job, { ignoreErrors }) => {
-  const { cmd, cwd, bareLogs, storySrc } = job;
+  const { cmd, cwd, storySrc } = job;
   if (cmd === PLACEHOLDER_COMMAND) {
     job.status = 'done';
     return;
   }
-  const promise = exec(cmd, { cwd, bareLogs, storySrc });
+  const promise = exec(cmd, { cwd, storySrc });
   job.status = 'running';
   try {
     await promise;

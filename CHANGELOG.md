@@ -1,3 +1,5 @@
+- Bump storyboard.
+
 ## 2.0.0 (2020-7-25)
 
 - **Breaking**: Always publishes _all_ (non-private) sub-packages, irrespective of whether they have been updated.

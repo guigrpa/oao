@@ -35,7 +35,6 @@ type ExecOptions = {|
   errorLogLevel?: string,
   ignoreErrorCode?: boolean,
   cwd?: string,
-  bareLogs?: boolean,
 |};
 
 type ExecResult = {
@@ -53,7 +52,6 @@ const exec = async (
     logLevel = 'info',
     errorLogLevel = 'error',
     ignoreErrorCode = false,
-    bareLogs = false,
     cwd,
   }: ExecOptions = {}
 ): Promise<ExecResult> => {
@@ -68,7 +66,6 @@ const exec = async (
       story: ownStory,
       storySrc,
       errorLogLevel,
-      bareLogs,
       ignoreErrorCode,
     });
   } finally {
@@ -78,10 +75,9 @@ const exec = async (
 
 const _exec = async (
   cmd,
-  { cwd, story, storySrc, errorLogLevel, bareLogs, ignoreErrorCode }
+  { cwd, story, storySrc, errorLogLevel, ignoreErrorCode }
 ) => {
   try {
-    const prefix = bareLogs ? '' : '| ';
     const src = storySrc || cmd.split(' ')[0].slice(0, 10);
     const child = execa.shell(cmd, {
       cwd: cwd || '.',
@@ -91,10 +87,10 @@ const _exec = async (
         process.platform === 'win32' ? ['ignore', 'pipe', 'pipe'] : undefined,
     });
     child.stdout.pipe(split()).on('data', line => {
-      story.info(src, `${prefix}${line}`);
+      story.info(src, line);
     });
     child.stderr.pipe(split()).on('data', line => {
-      if (line) story[errorLogLevel](src, `${prefix}${line}`);
+      if (line) story[errorLogLevel](src, line);
     });
     const { code, stdout, stderr } = await child;
     if (code !== 0 && !ignoreErrorCode) {
