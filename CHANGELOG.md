@@ -1,3 +1,5 @@
+## 2.0.2 (2021-4-18)
+
 - Bump shelljs (avoids lots of warnings when running various OAO commands).
 
 ## 2.0.1 (2021-2-7)
